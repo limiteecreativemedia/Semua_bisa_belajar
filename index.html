@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semua Bisa Belajar - Matematika Itu Seru!</title>
+    <title>Semua Bisa Belajar - Olimpiade Matematika SD</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Google: Nunito -->
@@ -15,255 +15,233 @@
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 selection:bg-blue-200">
+<body class="bg-slate-100 text-slate-800 selection:bg-blue-200">
 
-    <!-- Container Utama Aplikasi -->
     <div id="app" class="min-h-screen flex flex-col justify-between max-w-md mx-auto relative shadow-2xl bg-white overflow-hidden">
         
-        <!-- HEADER / TOP BAR (Dinamis) -->
-        <header id="header-container" class="hidden bg-white border-b border-gray-100 p-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
-            <button id="btn-back" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 transition">
+        <!-- HEADER / TOP BAR -->
+        <header id="header-container" class="hidden bg-white border-b border-slate-100 p-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+            <button id="btn-back" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <h1 id="header-title" class="font-black text-gray-800 text-lg uppercase tracking-wider">Level 1</h1>
+            <h1 id="header-title" class="font-black text-slate-800 text-base uppercase tracking-wider">Level 1</h1>
             <div class="flex items-center gap-1.5 font-bold text-yellow-600 bg-yellow-50 px-3 py-1.5 rounded-xl border border-yellow-200 shadow-sm">
                 ⭐ <span id="star-count">0</span>
             </div>
         </header>
 
-        <!-- KONTEN UTAMA (Dirender oleh JS) -->
+        <!-- KONTEN UTAMA -->
         <main id="main-content" class="flex-grow overflow-y-auto pb-24">
-            <!-- Konten halaman dinamis masuk ke sini -->
+            <!-- Konten halaman dinamis dimuat di sini -->
         </main>
 
         <!-- BOTTOM NAVIGATION BAR -->
-        <nav id="bottom-nav" class="hidden absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around p-3 z-50 max-w-md mx-auto pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
-            <button onclick="router('home')" id="nav-home" class="flex flex-col items-center p-2 rounded-xl text-gray-400 transition-all duration-300">
+        <nav id="bottom-nav" class="hidden absolute bottom-0 left-0 right-0 bg-white border-t border-slate-100 flex justify-around p-3 z-50 max-w-md mx-auto pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
+            <button onclick="router('home')" id="nav-home" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition-all duration-300">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 <span class="text-[10px] font-bold">Home</span>
             </button>
-            <button onclick="router('map')" id="nav-map" class="flex flex-col items-center p-2 rounded-xl text-gray-400 transition-all duration-300">
+            <button onclick="router('map')" id="nav-map" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition-all duration-300">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
                 <span class="text-[10px] font-bold">Level</span>
             </button>
-            <button onclick="router('dashboard')" id="nav-dashboard" class="flex flex-col items-center p-2 rounded-xl text-gray-400 transition-all duration-300">
+            <button onclick="router('dashboard')" id="nav-dashboard" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition-all duration-300">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 <span class="text-[10px] font-bold">Profil</span>
             </button>
         </nav>
     </div>
 
-    <!-- SCRIPT APLIKASI VANILLA JS -->
     <script>
-        // Database Data Level & Bank Soal Terkunci Final
+        // Database 10 Level Lengkap (SD 1-3 Dasar & SD 4-6 Olimpiade Menengah/Tinggi)
         const LEVELS = [
-            { id: 1, title: "LEVEL 1", name: "Math Hero Beginner", color: "bg-green-500", desc: "Pola bilangan sederhana." },
-            { id: 2, title: "LEVEL 2", name: "Number Explorer", color: "bg-blue-500", desc: "Faktor dan Bilangan Prima." },
-            { id: 3, title: "LEVEL 3", name: "Fraction Master", color: "bg-purple-500", desc: "Pecahan, Desimal, Persentase." },
-            { id: 4, title: "LEVEL 4", name: "Logic & Pattern", color: "bg-orange-500", desc: "Logika deduksi dan Analisa." },
-            { id: 5, title: "LEVEL 5", name: "Geometry Hero", color: "bg-red-500", desc: "Keliling, Luas, Sudut." },
-            { id: 6, title: "LEVEL 6", name: "Data & Speed", color: "bg-teal-500", desc: "Kecepatan, Jarak, Waktu & Data." },
-            { id: 7, title: "LEVEL 7", name: "Combination", color: "bg-indigo-500", desc: "Peluang dasar dan Kombinasi." },
-            { id: 8, title: "LEVEL 8", name: "Reverse Thinker", color: "bg-pink-500", desc: "Strategi Berpikir Mundur." },
-            { id: 9, title: "LEVEL 9", name: "Olympiad Prep", color: "bg-rose-600", desc: "Soal cerita multi-langkah." },
-            { id: 10, title: "LEVEL 10", name: "Olympiad Master", color: "bg-yellow-600", desc: "Ujian Akhir Master Olimpiade!" }
+            { id: 1, title: "LEVEL 1 (SD 1-3)", name: "Pola Bilangan Dasar", color: "bg-emerald-500", desc: "Mengenal urutan dan lompatan angka." },
+            { id: 2, title: "LEVEL 2 (SD 1-3)", name: "Penjumlahan & Pengurangan Cepat", color: "bg-teal-500", desc: "Trik hitung cepat tanpa coretan panjang." },
+            { id: 3, title: "LEVEL 3 (SD 1-3)", name: "Pecahan Piza Sederhana", color: "bg-cyan-500", desc: "Mengenal bagian utuh dan setengah." },
+            { id: 4, title: "LEVEL 4 (SD 1-3)", name: "Logika Urutan Benda", color: "bg-blue-500", desc: "Menganalisis posisi dan perbandingan." },
+            { id: 5, title: "LEVEL 5 (SD 1-3)", name: "Geometri Bentuk Dasar", color: "bg-indigo-500", desc: "Keliling petak satuan dan sudut siku." },
+            { id: 6, title: "LEVEL 6 (SD 4-6)", name: "Bilangan Prima & Faktor Lanjutan", color: "bg-violet-500", desc: "FPB, KPK, dan Karakteristik Prima." },
+            { id: 7, title: "LEVEL 7 (SD 4-6)", name: "Pecahan, Desimal & Persen Kompleks", color: "bg-purple-500", desc: "Operasi hitung campuran pecahan rumit." },
+            { id: 8, title: "LEVEL 8 (SD 4-6)", name: "Kecepatan, Jarak & Waktu", color: "bg-fuchsia-500", desc: "Analisis gerak berpapasan & menyusul." },
+            { id: 9, title: "LEVEL 9 (SD 4-6)", name: "Working Backwards (Mundur)", color: "bg-rose-500", desc: "Menyelesaikan soal cerita dari hasil akhir." },
+            { id: 10, title: "LEVEL 10 (SD 4-6)", name: "Olimpiade Master Soal Cerita OSN", color: "bg-amber-600", desc: "Ujian komprehensif tingkat tinggi OSN SD!" }
         ];
 
         const CONTENT = {
             1: {
-                lesson: { title: "Pola Bilangan Sederhana", concept: "Pola bilangan adalah urutan angka yang memiliki aturan tertentu. Coba temukan rahasia di balik deretan angka!", trick: "Jangan langsung melihat angka terakhir. Coba hitung SELISIH (perbedaan) antara dua angka yang bersebelahan.", q: "Lanjutkan pola ini: 2, 4, 6, 8, ...", think: "Dari 2 ke 4 ditambah berapa ya?", step1: "2 ke 4 (+2)", step2: "4 ke 6 (+2). Aturannya selalu ditambah 2!", ans: "Setelah 8 adalah 8 + 2 = 10." },
+                lesson: { title: "Pola Bilangan Dasar", concept: "Pola bilangan adalah urutan angka yang bertambah atau berkurang dengan aturan tetap.", trick: "Cari selisih dua angka yang berdekatan untuk mengetahui aturan polanya.", q: "Lanjutkan pola: 3, 6, 9, 12, ...", think: "Berapa selisih angka 3 dan 6?", step1: "6 - 3 = 3 (Polanya +3)", step2: "12 + 3 = 15", ans: "Angka berikutnya adalah 15." },
                 practicePool: [
-                    { question: "5, 10, 15, 20, ...", options: ["22", "25", "30", "35"], answer: "25", hints: ["Kurangi 10 dengan 5.", "Setiap angka ditambah 5."], explanation: "Polanya adalah +5." },
-                    { question: "20, 18, 16, 14, ...", options: ["10", "11", "12", "13"], answer: "12", hints: ["Angkanya mengecil.", "Dikurangi 2."], explanation: "Polanya adalah -2." },
-                    { question: "1, 4, 7, 10, ...", options: ["11", "12", "13", "14"], answer: "13", hints: ["Dari 1 ke 4 naiknya berapa?", "Ditambah 3."], explanation: "Setiap angka +3." },
-                    { question: "100, 90, 80, 70, ...", options: ["60", "65", "50", "40"], answer: "60", hints: ["Mengecil puluhan.", "Dikurangi 10."], explanation: "Polanya adalah -10." },
-                    { question: "2, 4, 8, 16, ...", options: ["20", "24", "32", "64"], answer: "32", hints: ["Bukan ditambah, tapi dikalikan.", "Dikali 2."], explanation: "Polanya adalah x2. 16 x 2 = 32." },
-                    { question: "3, 6, 9, 12, ...", options: ["13", "15", "18", "21"], answer: "15", hints: ["Kelipatan berapa ini?", "Ditambah 3."], explanation: "Polanya ditambah 3." }
+                    { question: "2, 4, 6, 8, ...", options: ["9", "10", "12", "14"], answer: "10", hints: ["Selisih angka adalah 2.", "Ditambah 2."], explanation: "Polanya +2." },
+                    { question: "15, 13, 11, 9, ...", options: ["7", "8", "6", "5"], answer: "7", hints: ["Angkanya mengecil.", "Dikurangi 2."], explanation: "Polanya -2." },
+                    { question: "5, 10, 15, 20, ...", options: ["22", "25", "30", "35"], answer: "25", hints: ["Kelipatan 5."], explanation: "Polanya +5." },
+                    { question: "1, 3, 5, 7, ...", options: ["8", "9", "10", "11"], answer: "9", hints: ["Angka ganjil berurutan."], explanation: "Polanya +2." },
+                    { question: "50, 40, 30, 20, ...", options: ["5", "10", "15", "0"], answer: "10", hints: ["Mengecil puluhan."], explanation: "Polanya -10." }
                 ],
                 examPool: [
-                    { q: "7, 14, 21, 28, ...", options: ["32", "34", "35", "36"], a: "35" },
-                    { q: "80, 72, 64, 56, ...", options: ["46", "48", "50", "52"], a: "48" },
-                    { q: "Jika 1 buku Rp 2.000, berapa 4 buku?", options: ["Rp 6.000", "Rp 8.000", "Rp 10.000", "Rp 12.000"], a: "Rp 8.000" },
-                    { q: "11, 22, 33, 44, ...", options: ["45", "50", "55", "66"], a: "55" },
-                    { q: "1, 3, 9, 27, ...", options: ["36", "54", "81", "90"], a: "81" },
-                    { q: "1, 4, 9, 16, 25, ...", options: ["30", "35", "36", "40"], a: "36" }
+                    { q: "4, 8, 12, 16, ...", options: ["18", "20", "22", "24"], a: "20" },
+                    { q: "100, 88, 76, 64, ...", options: ["50", "52", "54", "56"], a: "52" },
+                    { q: "2, 6, 18, 54, ...", options: ["108", "162", "216", "120"], a: "162" },
+                    { q: "1, 2, 4, 7, 11, ...", options: ["14", "15", "16", "17"], a: "16" },
+                    { q: "90, 81, 72, 63, ...", options: ["52", "54", "56", "58"], a: "54" }
                 ]
             },
             2: {
-                lesson: { title: "Bilangan Prima & Faktor", concept: "Bilangan Prima HANYA bisa dibagi 1 dan dirinya sendiri. Faktor adalah angka yang bisa membagi habis sebuah bilangan.", trick: "Angka 1 BUKAN bilangan prima. Bilangan prima terkecil adalah 2, yang juga satu-satunya prima genap!", q: "Apakah 7 bilangan prima?", think: "Apakah 7 bisa dibagi angka lain?", step1: "7 dibagi 2 bersisa.", step2: "Tidak ada angka lain yang bisa membagi habis 7.", ans: "Ya! 7 adalah bilangan prima." },
+                lesson: { title: "Hitung Cepat Penjumlahan", concept: "Menjumlahkan angka besar bisa dipermudah dengan teknik mengelompokkan puluhan.", trick: "Jumlahkan satuan terlebih dahulu, lalu simpan puluhannya jika lebih dari 9.", q: "Berapa 47 + 28?", think: "Pisahkan puluhan dan satuan.", step1: "Puluhan: 40 + 20 = 60", step2: "Satuan: 7 + 8 = 15. Total: 60 + 15 = 75", ans: "Hasilnya 75." },
                 practicePool: [
-                    { question: "Manakah bilangan prima?", options: ["9", "10", "11", "15"], answer: "11", hints: ["Cari yang tak ada di perkalian.", "9 bisa dibagi 3."], explanation: "11 hanya bisa dibagi 1 dan 11." },
-                    { question: "Faktor dari 6 adalah...", options: ["1, 6", "2, 3", "1, 2, 3, 6", "1, 2, 4, 6"], answer: "1, 2, 3, 6", hints: ["Angka yang kalau dikalikan hasilnya 6.", "1x6=6 dan 2x3=6."], explanation: "Faktor 6: 1, 2, 3, 6." },
-                    { question: "Bilangan prima terkecil adalah?", options: ["0", "1", "2", "3"], answer: "2", hints: ["Ingat Trik Jago!", "1 bukan prima."], explanation: "2 adalah bilangan prima pertama." },
-                    { question: "Manakah yang BUKAN prima?", options: ["5", "7", "9", "13"], answer: "9", hints: ["Cari yang bisa dibagi 3."], explanation: "9 bukan prima (bisa dibagi 3)." },
-                    { question: "Faktor dari 10: 1, 2, ..., dan 10. Angka hilang?", options: ["3", "4", "5", "6"], answer: "5", hints: ["2 dikali berapa hasilnya 10?"], explanation: "Faktor 10: 1, 2, 5, 10." },
-                    { question: "Berapa banyak faktor dari 8?", options: ["2", "3", "4", "5"], answer: "4", hints: ["Faktor 8: 1, 2, 4, 8."], explanation: "Ada 4 faktor." }
+                    { question: "14 + 19 = ?", options: ["31", "33", "35", "37"], answer: "33", hints: ["14 + 20 = 34, kurangi 1."], explanation: "14 + 19 = 33." },
+                    { question: "50 - 24 = ?", options: ["24", "26", "28", "36"], answer: "26", hints: ["50 - 20 = 30, lalu kurangi 4."], explanation: "50 - 24 = 26." },
+                    { question: "35 + 47 = ?", options: ["72", "81", "82", "83"], answer: "82", hints: ["35 + 40 = 75, tambah 7."], explanation: "35 + 47 = 82." },
+                    { question: "83 - 39 = ?", options: ["42", "44", "46", "54"], answer: "44", hints: ["83 - 40 = 43, tambah 1."], explanation: "83 - 39 = 44." },
+                    { question: "12 + 13 + 14 = ?", options: ["37", "38", "39", "40"], answer: "39", hints: ["Gunakan nilai tengah (13 x 3)."], explanation: "13 x 3 = 39." }
                 ],
                 examPool: [
-                    { q: "Manakah kelompok prima semua?", options: ["2, 3, 4", "2, 3, 5", "1, 3, 5", "3, 5, 9"], a: "2, 3, 5" },
-                    { q: "Faktor terbesar dari 12 adalah...", options: ["6", "12", "24", "4"], a: "12" },
-                    { q: "Manakah BUKAN faktor dari 20?", options: ["2", "4", "5", "6"], a: "6" },
-                    { q: "Prima antara 10 dan 15?", options: ["11 dan 13", "11 dan 15", "13 dan 15", "Hanya 11"], a: "11 dan 13" },
-                    { q: "Faktor persekutuan 4 dan 6?", options: ["1", "2", "1 dan 2", "4"], a: "1 dan 2" },
-                    { q: "Apakah 15 bilangan prima?", options: ["Ya", "Tidak (bisa dibagi 3 & 5)", "Tidak (genap)", "Ya (ganjil)"], a: "Tidak (bisa dibagi 3 & 5)" }
+                    { q: "125 + 175 = ?", options: ["290", "300", "310", "320"], a: "300" },
+                    { q: "450 - 185 = ?", options: ["255", "265", "275", "285"], a: "265" },
+                    { q: "88 + 99 + 11 = ?", options: ["196", "198", "200", "202"], a: "198" },
+                    { q: "1000 - 456 = ?", options: ["534", "544", "554", "564"], a: "544" },
+                    { q: "76 + 54 - 30 = ?", options: ["90", "95", "100", "105"], a: "100" }
                 ]
             },
             3: {
-                lesson: { title: "Pecahan & Persentase", concept: "Pecahan adalah bagian dari keseluruhan. Jika 1 pizza dipotong 4, satu potongnya adalah 1/4.", trick: "Pecahan senilai: Jika atas (pembilang) dan bawah (penyebut) dikali angka yang sama, nilainya TETAP SAMA! (1/2 = 2/4).", q: "Pecahan senilai dengan 1/2?", think: "Kalau atas dikali 2, bawah juga dikali 2.", step1: "1 x 2 = 2 (Atas)", step2: "2 x 2 = 4 (Bawah)", ans: "Pecahan senilainya adalah 2/4." },
+                lesson: { title: "Pecahan Sederhana", concept: "Pecahan menyatakan bagian dari keseluruhan yang dibagi sama besar.", trick: "Angka atas (pembilang) adalah bagian yang diambil, angka bawah (penyebut) adalah total potongan.", q: "Budi punya semangka dipotong 4 bagian. Budi makan 1 bagian. Sisa berapa?", think: "Total bagian 4, dimakan 1.", step1: "4 - 1 = 3 bagian tersisa.", step2: "Dalam pecahan ditulis 3/4.", ans: "Sisa 3/4 bagian." },
                 practicePool: [
-                    { question: "Senilai dengan 1/2?", options: ["1/4", "2/4", "3/4", "1/3"], answer: "2/4", hints: ["Kalikan atas & bawah dengan 2."], explanation: "1/2 x 2/2 = 2/4." },
-                    { question: "Bentuk desimal dari 1/2?", options: ["0.1", "0.2", "0.5", "1.2"], answer: "0.5", hints: ["Setengah dari 1."], explanation: "1 dibagi 2 adalah 0.5." },
-                    { question: "3/4 + 1/4 = ?", options: ["4/8", "4/4 (1)", "3/8", "2/4"], answer: "4/4 (1)", hints: ["Penyebut sama, tambahkan atasnya."], explanation: "3+1=4. Jadi 4/4 atau 1." },
-                    { question: "50% sama dengan?", options: ["1/4", "1/3", "1/2", "3/4"], answer: "1/2", hints: ["50% itu setengah."], explanation: "50/100 = 1/2." },
-                    { question: "Pecahan paling besar?", options: ["1/2", "1/4", "1/8", "1/3"], answer: "1/2", hints: ["Penyebut makin kecil, potongan makin besar."], explanation: "1/2 lebih besar." },
-                    { question: "Ubah 2/5 jadi persen.", options: ["20%", "30%", "40%", "50%"], answer: "40%", hints: ["Kalikan jadi per-100 (x20)."], explanation: "2/5 = 40/100 = 40%." }
+                    { question: "1/2 + 1/2 = ?", options: ["1/4", "2/4", "1 (2/2)", "2/2"], answer: "1 (2/2)", hints: ["Penyebut sudah sama."], explanation: "1/2 + 1/2 = 2/2 atau 1." },
+                    { question: "Mana yang lebih besar: 1/2 atau 1/4?", options: ["1/2", "1/4", "Sama besar", "Tidak tahu"], answer: "1/2", hints: ["Penyebut lebih kecil berarti potongan lebih besar."], explanation: "1/2 lebih besar dari 1/4." },
+                    { question: "3/5 - 1/5 = ?", options: ["2/5", "2/10", "4/5", "1/5"], answer: "2/5", hints: ["Kurangi pembilangnya saja."], explanation: "3-1 = 2 (2/5)." },
+                    { question: "Bentuk pecahan dari setengah adalah...", options: ["1/3", "1/2", "2/3", "3/4"], answer: "1/2", hints: ["Setengah berarti 1 dibagi 2."], explanation: "1/2." },
+                    { question: "2/4 senilai dengan...", options: ["1/3", "1/2", "3/4", "1/4"], answer: "1/2", hints: ["Sederhanakan bagi 2 atas dan bawah."], explanation: "2/4 disederhanakan jadi 1/2." }
                 ],
                 examPool: [
-                    { q: "1/2 + 1/4 = ?", options: ["2/6", "3/4", "1/8", "2/4"], a: "3/4" },
-                    { q: "Senilai dengan 2/3?", options: ["4/6", "3/2", "4/9", "6/8"], a: "4/6" },
-                    { q: "75% sama dengan pecahan...", options: ["1/2", "1/4", "3/4", "1/3"], a: "3/4" },
-                    { q: "Budi makan 2/8 pizza, Ani 3/8. Total dimakan?", options: ["5/16", "5/8", "6/8", "1/8"], a: "5/8" },
-                    { q: "Nilai PALING KECIL?", options: ["1/2", "0.6", "25%", "3/4"], a: "25%" },
-                    { q: "Pecahan dari 0.8 adalah...", options: ["1/8", "4/5", "8/100", "8/9"], a: "4/5" }
+                    { q: "2/3 + 1/6 = ?", options: ["3/9", "5/6", "3/6", "4/6"], a: "5/6" },
+                    { q: "7/8 - 3/4 = ?", options: ["1/8", "2/8", "4/8", "3/8"], a: "1/8" },
+                    { q: "Berapa 1/2 dari 50?", options: ["20", "25", "30", "35"], a: "25" },
+                    { q: "Urutan pecahan terkecil ke terbesar: 1/4, 1/2, 1/3", options: ["1/4, 1/3, 1/2", "1/2, 1/3, 1/4", "1/3, 1/4, 1/2", "1/4, 1/2, 1/3"], a: "1/4, 1/3, 1/2" },
+                    { q: "3/4 + 1/2 = ?", options: ["4/6", "5/4 (1 1/4)", "4/4", "2/3"], a: "5/4 (1 1/4)" }
                 ]
             },
             4: {
-                lesson: { title: "Logika Deduksi", concept: "Soal logika tidak selalu butuh hitungan rumit. Kadang kita hanya perlu membaca petunjuk dengan teliti dan mencoret kemungkinan yang salah.", trick: "Gunakan metode ELIMINASI. Coret jawaban yang sudah pasti salah berdasarkan petunjuk.", q: "Ali lebih tinggi dari Budi. Cici lebih tinggi dari Ali. Siapa tertinggi?", think: "Urutkan dari petunjuk.", step1: "Cici > Ali", step2: "Ali > Budi. Berarti Cici > Ali > Budi.", ans: "Cici paling tinggi." },
+                lesson: { title: "Logika Urutan & Posisi", concept: "Soal cerita logika menguji ketelitian membaca petunjuk posisi.", trick: "Buat garis atau urutan coretan dari kiri ke kanan atau atas ke bawah.", q: "Ani berdiri di urutan ke-4 dari depan dan ke-4 dari belakang. Berapa total anak?", think: "Jangan langsung menjumlahkan 4 + 4.", step1: "Ani dihitung dua kali dari depan dan belakang.", step2: "4 + 4 - 1 (Ani sendiri) = 7.", ans: "Total ada 7 anak." },
                 practicePool: [
-                    { question: "Andi lebih tua dari Budi. Budi lebih tua dari Caca. Siapa termuda?", options: ["Andi", "Budi", "Caca", "Sama umur"], answer: "Caca", hints: ["Andi > Budi > Caca."], explanation: "Caca di urutan terakhir." },
-                    { question: "A = 5, B = A + 3. C = B - 2. Berapa C?", options: ["5", "6", "7", "8"], answer: "6", hints: ["Hitung B dulu. B = 5+3=8."], explanation: "B=8. C=8-2=6." },
-                    { question: "Jika hari ini Senin, 10 hari lagi hari apa?", options: ["Rabu", "Kamis", "Jumat", "Sabtu"], answer: "Kamis", hints: ["1 minggu = 7 hari. Senin + 7 hari = Senin lagi.", "Sisa 3 hari dari Senin."], explanation: "Senin + 3 hari = Kamis." },
-                    { question: "Di kandang ada ayam dan kambing. Total 5 ekor. Total kaki 14. Berapa ayam?", options: ["1", "2", "3", "4"], answer: "3", hints: ["Kambing kaki 4, ayam 2. Coba tebak (Trial Error).", "Jika 2 kambing (8) + 3 ayam (6) = 14."], explanation: "Ada 3 ayam dan 2 kambing." },
-                    { question: "Kotak A lebih berat dari B. Kotak C lebih ringan dari B. Yang terberat?", options: ["A", "B", "C", "A dan B"], answer: "A", hints: ["Susun: A > B > C"], explanation: "A paling berat." },
-                    { question: "2 pensil = 1 pulpen. 2 pulpen = 1 spidol. 1 spidol sama dengan berapa pensil?", options: ["2", "3", "4", "6"], answer: "4", hints: ["Ganti spidol jadi pulpen, lalu pulpen jadi pensil."], explanation: "1 spidol = 2 pulpen = 4 pensil." }
+                    { question: "Kelinci lebih cepat dari kura-kura. Siput lebih lambat dari kura-kura. Siapa paling lambat?", options: ["Kelinci", "Kura-kura", "Siput", "Sama"], answer: "Siput", hints: ["Urutan tercepat ke lambat: Kelinci > Kura > Siput."], explanation: "Siput paling lambat." },
+                    { question: "Hari ini Rabu. 10 hari lagi hari apa?", options: ["Kamis", "Jumat", "Sabtu", "Minggu"], answer: "Sabtu", hints: ["1 minggu = 7 hari. 10 hari = 1 minggu + 3 hari."], explanation: "Rabu + 3 hari = Sabtu." },
+                    { question: "Kotak A lebih berat dari B. C lebih ringan dari B. Yang terberat?", options: ["A", "B", "C", "A dan C"], answer: "A", hints: ["Susun: A > B > C."], explanation: "A paling berat." },
+                    { question: "2 pensil = 1 buku. 2 buku = 1 tas. Berapa pensil dalam 1 tas?", options: ["2", "3", "4", "6"], answer: "4", hints: ["Ganti 1 buku dengan 2 pensil."], explanation: "1 tas = 2 buku = 4 pensil." },
+                    { question: "Budi anak ke-3 dari 5 bersaudara. Berapa saudaranya?", options: ["2", "3", "4", "5"], answer: "4", hints: ["Total anak 5, dikurangi Budi."], explanation: "5 - 1 = 4 saudara." }
                 ],
                 examPool: [
-                    { q: "Rina di depan Sita. Doni di depan Rina. Siapa di belakang?", options: ["Rina", "Sita", "Doni", "Sama sejajar"], a: "Sita" },
-                    { q: "X + Y = 10. X - Y = 2. Berapa X?", options: ["4", "5", "6", "8"], a: "6" },
-                    { q: "Jika kemarin Rabu, 3 hari lagi hari apa?", options: ["Minggu", "Senin", "Selasa", "Sabtu"], a: "Minggu" },
-                    { q: "Kucing makan 2 tikus/hari. Ular makan 1 tikus/hari. Total dimakan 2 kucing & 1 ular dalam 2 hari?", options: ["8", "10", "12", "14"], a: "10" },
-                    { q: "Buku merah di atas biru. Buku hijau di bawah biru. Yang paling bawah?", options: ["Merah", "Biru", "Hijau", "Tidak tahu"], a: "Hijau" },
-                    { q: "Anak tangga: Budi lompat 2. Iwan lompat 3. Mereka bertemu di anak tangga ke berapa?", options: ["5", "6", "8", "9"], a: "6" }
+                    { q: "Dalam lomba lari, kamu menyusul orang di posisi ke-2. Sekarang posisimu ke berapa?", options: ["1", "2", "3", "4"], a: "2" },
+                    { q: "Umur Ibu 3 kali umur Andi. Total umur mereka 48 tahun. Berapa umur Andi?", options: ["10", "12", "14", "16"], a: "12" },
+                    { q: "Jika kemarin lusa hari Selasa, besok hari apa?", options: ["Kamis", "Jumat", "Sabtu", "Minggu"], a: "Jumat" },
+                    { q: "Ada 5 anak bersalaman satu sama lain tepat 1 kali. Total seluruh salaman?", options: ["10", "15", "20", "25"], a: "10" },
+                    { q: "Tono di depan Rina. Doni di depan Tono. Siapa di urutan paling belakang?", options: ["Tono", "Rina", "Doni", "Tidak tentu"], a: "Rina" }
                 ]
             },
             5: {
-                lesson: { title: "Geometri Keliling & Luas", concept: "Geometri adalah belajar tentang bentuk. KELILING adalah panjang pinggiran (seperti pagar). LUAS adalah isi di dalamnya (seperti karpet).", trick: "Keliling = Tambahkan SEMUA sisi luarnya. Luas Persegi Panjang = Panjang x Lebar.", q: "Kebun panjang 5m, lebar 3m. Berapa luasnya?", think: "Luas = Panjang x Lebar", step1: "5 x 3", step2: "Hitung perkaliannya.", ans: "15 meter persegi." },
+                lesson: { title: "Geometri Keliling Dasar", concept: "Keliling adalah jumlah panjang seluruh sisi tepi suatu bangun datar.", trick: "Jumlahkan semua panjang sisi luarnya tanpa terlewat.", q: "Berapa keliling persegi dengan sisi 5 cm?", think: "Persegi punya 4 sisi yang sama panjang.", step1: "5 + 5 + 5 + 5 atau 4 x 5", step2: "4 x 5 = 20 cm", ans: "Kelilingnya 20 cm." },
                 practicePool: [
-                    { question: "Persegi sisinya 4 cm. Luasnya?", options: ["8", "12", "16", "20"], answer: "16", hints: ["Luas persegi = sisi x sisi", "4 x 4 = ?"], explanation: "Luas = 4 x 4 = 16." },
-                    { question: "Persegi panjang p=6, l=2. Kelilingnya?", options: ["12", "16", "20", "24"], answer: "16", hints: ["Keliling tambahkan semua sisinya: p+l+p+l", "6+2+6+2 = ?"], explanation: "Keliling = 16." },
-                    { question: "Luas persegi panjang 20. Panjangnya 5. Berapa lebarnya?", options: ["3", "4", "5", "6"], answer: "4", hints: ["5 dikali berapa hasilnya 20?"], explanation: "20 / 5 = 4." },
-                    { question: "Segitiga sama sisi, sisinya 5cm. Kelilingnya?", options: ["10", "15", "20", "25"], answer: "15", hints: ["Segitiga punya 3 sisi.", "5+5+5 = ?"], explanation: "Keliling = 15." },
-                    { question: "Keliling persegi 20 cm. Berapa sisinya?", options: ["4", "5", "10", "15"], answer: "5", hints: ["Persegi punya 4 sisi sama panjang.", "20 dibagi 4."], explanation: "Sisi = 5." },
-                    { question: "Ada 2 persegi (sisi 3cm) digabung. Luas totalnya?", options: ["9", "12", "18", "24"], answer: "18", hints: ["Hitung luas 1 persegi lalu kali 2.", "Luas 1 = 3x3=9."], explanation: "9 x 2 = 18." }
+                    { question: "Persegi panjang panjang 8cm, lebar 3cm. Kelilingnya?", options: ["20 cm", "22 cm", "24 cm", "26 cm"], answer: "22 cm", hints: ["Rumus keliling: 2 x (panjang + lebar)."], explanation: "2 x (8 + 3) = 22 cm." },
+                    { question: "Luas persegi dengan sisi 6 cm adalah...", options: ["24 cm²", "30 cm²", "36 cm²", "42 cm²"], answer: "36 cm²", hints: ["Luas persegi = sisi x sisi."], explanation: "6 x 6 = 36 cm²." },
+                    { question: "Segitiga sama sisi sisinya 7cm. Kelilingnya?", options: ["14 cm", "21 cm", "28 cm", "35 cm"], answer: "21 cm", hints: ["Segitiga punya 3 sisi sama panjang."], explanation: "3 x 7 = 21 cm." },
+                    { question: "Luas persegi panjang p=10, l=4 adalah...", options: ["28", "30", "40", "50"], answer: "40", hints: ["Panjang x Lebar."], explanation: "10 x 4 = 40." },
+                    { question: "Keliling persegi 36 cm. Berapa panjang sisinya?", options: ["6 cm", "8 cm", "9 cm", "12 cm"], answer: "9 cm", hints: ["Keliling dibagi 4."], explanation: "36 / 4 = 9 cm." }
                 ],
                 examPool: [
-                    { q: "Luas persegi dengan sisi 6 cm?", options: ["12", "24", "36", "42"], a: "36" },
-                    { q: "Keliling persegi panjang p=8, l=3?", options: ["22", "24", "11", "30"], a: "22" },
-                    { q: "Luas kolam 50m. Lebar 5m. Panjangnya?", options: ["8", "10", "15", "45"], a: "10" },
-                    { q: "Keliling segitiga dengan sisi 3, 4, dan 5?", options: ["10", "12", "15", "20"], a: "12" },
-                    { q: "Persegi panjang p=10, l=4 digabung persegi sisi 2. Total Luas?", options: ["44", "48", "40", "50"], a: "44" },
-                    { q: "Pagar taman persegi kelilingnya 40m. Berapa luas taman itu?", options: ["40", "80", "100", "400"], a: "100" }
+                    { q: "Sebuah kebun berbentuk persegi panjang p=15m, l=10m. Berapa kelilingnya?", options: ["40m", "50m", "60m", "150m"], a: "50m" },
+                    { q: "Luas kebun persegi adalah 81 m². Berapa panjang sisinya?", options: ["7m", "8m", "9m", "10m"], a: "9m" },
+                    { q: "Keliling segitiga sembarang dengan sisi 8cm, 12cm, dan 15cm?", options: ["33 cm", "35 cm", "37 cm", "40 cm"], a: "35 cm" },
+                    { q: "Taman berbentuk persegi panjang luasnya 120m². Jika panjangnya 12m, berapa lebarnya?", options: ["8m", "10m", "12m", "15m"], a: "10m" },
+                    { q: "Dua buah persegi identik sisi 4cm digabung berdampingan. Berapa keliling gabungannya?", options: ["24 cm", "32 cm", "40 cm", "48 cm"], a: "24 cm" }
                 ]
             },
             6: {
-                lesson: { title: "Kecepatan, Jarak, Waktu", concept: "Hubungan ketiga hal ini sangat penting. JARAK = KECEPATAN x WAKTU. Jika kamu naik sepeda 10 km/jam selama 2 jam, jarakmu adalah 20 km.", trick: "Gunakan segitiga Ajaib J-K-W. Kalau cari J (Jarak), berarti K dikali W. Kalau cari W (Waktu), berarti J dibagi K.", q: "Jarak 30 km. Kecepatan 10 km/jam. Berapa lama waktunya?", think: "Mencari Waktu = Jarak dibagi Kecepatan.", step1: "30 dibagi 10", step2: "30 / 10 = 3", ans: "Butuh waktu 3 jam." },
+                lesson: { title: "Bilangan Prima & Faktor (SD 4-6)", concept: "Bilangan prima hanya punya 2 faktor: 1 dan dirinya sendiri. KPK dan FPB adalah kunci olimpiade.", trick: "Gunakan pohon faktor untuk mencari FPB (faktor terkecil dari yang sama) dan KPK (semua faktor pangkat terbesar).", q: "Berapa FPB dari 12 dan 18?", think: "Cari faktor pembagi bersama terbesar.", step1: "Faktor 12: 1, 2, 3, 4, 6, 12", step2: "Faktor 18: 1, 2, 3, 6, 9, 18. Persekutuan terbesar adalah 6.", ans: "FPB-nya adalah 6." },
                 practicePool: [
-                    { question: "Kecepatan 20 km/jam. Waktu 2 jam. Jarak?", options: ["10 km", "22 km", "40 km", "60 km"], answer: "40 km", hints: ["Jarak = Kecepatan x Waktu", "20 x 2 = ?"], explanation: "Jarak = 40 km." },
-                    { question: "Jarak 50 km. Waktu 5 jam. Kecepatan?", options: ["5 km/jam", "10 km/jam", "15 km/jam", "20 km/jam"], answer: "10 km/jam", hints: ["Kecepatan = Jarak dibagi Waktu", "50 / 5 = ?"], explanation: "Kecepatan = 10 km/jam." },
-                    { question: "Budi lari 5 m/detik. Berapa meter dalam 10 detik?", options: ["15 m", "25 m", "50 m", "100 m"], answer: "50 m", hints: ["5 dikali 10"], explanation: "Jarak = 5 x 10 = 50 m." },
-                    { question: "Rata-rata dari nilai 7, 8, dan 9?", options: ["7", "8", "9", "24"], answer: "8", hints: ["Tambahkan semua, lalu bagi 3.", "(7+8+9) / 3"], explanation: "24 / 3 = 8." },
-                    { question: "Berangkat jam 07:00, lama jalan 2 jam. Tiba jam?", options: ["08:00", "09:00", "10:00", "11:00"], answer: "09:00", hints: ["07:00 ditambah 2 jam."], explanation: "Tiba jam 09:00." },
-                    { question: "Rata-rata 2 angka adalah 10. Jika angka pertama 6, angka kedua?", options: ["12", "14", "16", "20"], answer: "14", hints: ["Total 2 angka = 10 x 2 = 20.", "20 dikurangi 6."], explanation: "20 - 6 = 14." }
+                    { question: "Manakah yang merupakan bilangan prima?", options: ["9", "15", "17", "21"], answer: "17", hints: ["17 tidak bisa dibagi angka lain selain 1 dan 17."], explanation: "17 adalah bilangan prima." },
+                    { question: "Berapa KPK dari 4 dan 6?", options: ["10", "12", "24", "36"], answer: "12", hints: ["Kelipatan 4: 4, 8, 12... Kelipatan 6: 6, 12..."], explanation: "KPK = 12." },
+                    { question: "Faktor prima dari 20 adalah...", options: ["2 dan 5", "2 dan 10", "4 dan 5", "1, 2, 4, 5"], answer: "2 dan 5", hints: ["Faktor prima yang berupa bilangan prima."], explanation: "2² x 5, jadi faktor primanya 2 dan 5." },
+                    { question: "Jumlah semua bilangan prima antara 1 sampai 10?", options: ["15", "17", "18", "26"], answer: "17", hints: ["Bilangan prima 1-10: 2, 3, 5, 7."], explanation: "2 + 3 + 5 + 7 = 17." },
+                    { question: "FPB dari 24 dan 36 adalah...", options: ["6", "8", "12", "18"], answer: "12", hints: ["Faktor persekutuan terbesar."], explanation: "FPB = 12." }
                 ],
                 examPool: [
-                    { q: "Jarak 100 km, kecepatan 50 km/jam. Waktu?", options: ["1 jam", "2 jam", "3 jam", "4 jam"], a: "2 jam" },
-                    { q: "Berangkat 08:30, perjalanan 1,5 jam. Tiba jam?", options: ["09:30", "10:00", "10:30", "11:00"], a: "10:00" },
-                    { q: "Rata-rata 5, 10, 15?", options: ["8", "10", "12", "30"], a: "10" },
-                    { q: "Kecepatan mobil 60 km/jam. Jarak dalam 30 menit?", options: ["20 km", "30 km", "40 km", "60 km"], a: "30 km" },
-                    { q: "Total 3 bilangan adalah 30. Rata-ratanya?", options: ["3", "10", "15", "30"], a: "10" },
-                    { q: "Susi lari keliling lapangan 400m dalam 2 menit. Kecepatan per menit?", options: ["100 m/mnt", "200 m/mnt", "400 m/mnt", "800 m/mnt"], a: "200 m/mnt" }
+                    { q: "Lampu A menyala tiap 4 detik, lampu B tiap 6 detik. Keduanya menyala bersamaan tiap... detik", options: ["10", "12", "18", "24"], a: "12" },
+                    { q: "Berapa banyak bilangan prima antara 10 dan 30?", options: ["5", "6", "7", "8"], a: "6" },
+                    { q: "KPK dari 12, 15, dan 20 adalah...", options: ["60", "120", "180", "240"], a: "60" },
+                    { q: "FPB dari 72 dan 96 adalah...", options: ["12", "16", "24", "36"], a: "24" },
+                    { q: "Jika A = 2³ x 3² dan B = 2² x 3³, berapa FPB dari A dan B?", options: ["36", "72", "108", "216"], a: "36" }
                 ]
             },
             7: {
-                lesson: { title: "Kombinasi & Peluang", concept: "Peluang adalah kemungkinan terjadinya sesuatu. Kombinasi adalah cara memasangkan barang.", trick: "Jika ada 2 baju dan 3 celana, total cara memakainya tinggal Dikalikan saja! (2 x 3 = 6 cara).", q: "Ada Baju Merah, Biru. Celana Hitam, Putih. Berapa pasang baju-celana berbeda?", think: "Gunakan perkalian karena dipasangkan.", step1: "Baju ada 2.", step2: "Celana ada 2.", ans: "2 x 2 = 4 pasang." },
+                lesson: { title: "Pecahan, Desimal & Persen Lanjutan", concept: "Operasi hitung campuran pecahan, desimal, dan persen memerlukan penyamaan bentuk.", trick: "Ubahlah semua bilangan menjadi pecahan biasa atau desimal terlebih dahulu untuk mempermudah perhitungan.", q: "Berapa 3/4 + 0.5 - 25%?", think: "Ubah ke bentuk desimal: 3/4 = 0.75, 25% = 0.25", step1: "0.75 + 0.5 = 1.25", step2: "1.25 - 0.25 = 1.00", ans: "Hasilnya adalah 1." },
                 practicePool: [
-                    { question: "3 rasa es krim, 2 jenis topping. Berapa variasi es krim?", options: ["5", "6", "8", "9"], answer: "6", hints: ["Kalikan jumlah rasa dengan topping.", "3 x 2 = ?"], explanation: "Kombinasi = 3 x 2 = 6." },
-                    { question: "Peluang muncul angka dadu genap (1-6)?", options: ["1/6", "2/6", "3/6 (Setengah)", "4/6"], answer: "3/6 (Setengah)", hints: ["Angka genap dadu: 2, 4, 6 (ada 3 angka).", "Total angka 6."], explanation: "Ada 3 genap dari 6 angka (3/6 = 1/2)." },
-                    { question: "Di kantong ada 3 bola merah, 2 biru. Diambil acak, peluang terambil biru?", options: ["2/5", "3/5", "2/3", "1/2"], answer: "2/5", hints: ["Total bola = 5.", "Biru ada 2."], explanation: "Peluang biru = 2 dari 5 (2/5)." },
-                    { question: "Ada rute A ke B (2 jalan), B ke C (3 jalan). Total rute A ke C?", options: ["5", "6", "8", "12"], answer: "6", hints: ["Kalikan jalannya.", "2 x 3"], explanation: "Ada 6 rute berbeda." },
-                    { question: "Menyusun huruf A, B, C tanpa berulang. Berapa cara?", options: ["3", "4", "6", "9"], answer: "6", hints: ["Posisi 1 ada 3 huruf, Posisi 2 ada 2 huruf, Posisi 3 ada 1.", "3 x 2 x 1"], explanation: "Ada 6 susunan (ABC, ACB, BAC, BCA, CAB, CBA)." },
-                    { question: "Peluang koin dilempar muncul 'Angka'?", options: ["1/4", "1/3", "1/2", "1"], answer: "1/2", hints: ["Koin hanya punya 2 sisi: Angka dan Gambar."], explanation: "1 dari 2 kemungkinan (1/2)." }
+                    { question: "Bentuk desimal dari 3/5 adalah...", options: ["0.3", "0.5", "0.6", "0.75"], answer: "0.6", hints: ["Kalikan pembilang dan penyebut dengan 2 (6/10)."], explanation: "3/5 = 6/10 = 0.6." },
+                    { question: "20% dari Rp 50.000 adalah...", options: ["Rp 5.000", "Rp 10.000", "Rp 15.000", "Rp 20.000"], answer: "Rp 10.000", hints: ["20/100 x 50.000"], explanation: "10.000." },
+                    { question: "1.5 + 3/4 = ?", options: ["2.0", "2.25", "2.5", "1.875"], answer: "2.25", hints: ["3/4 = 0.75. Jadi 1.5 + 0.75"], explanation: "2.25." },
+                    { question: "75% diubah ke pecahan biasa paling sederhana adalah...", options: ["3/4", "2/3", "4/5", "7/10"], answer: "3/4", hints: ["75/100 disederhanakan bagi 25."], explanation: "3/4." },
+                    { question: "0.4 x 0.5 = ?", options: ["0.02", "0.2", "2.0", "0.09"], answer: "0.2", hints: ["4/10 x 5/10 = 20/100"], explanation: "0.20 atau 0.2." }
                 ],
                 examPool: [
-                    { q: "4 Baju, 3 Celana. Berapa pasang kombinasi?", options: ["7", "10", "12", "14"], a: "12" },
-                    { q: "Peluang dadu muncul angka 5?", options: ["1/6", "1/5", "5/6", "1/2"], a: "1/6" },
-                    { q: "Dalam kotak ada 4 permen coklat, 6 stroberi. Peluang ambil coklat?", options: ["4/6", "4/10", "6/10", "2/10"], a: "4/10" },
-                    { q: "Rute X ke Y (4 jalan), Y ke Z (2 jalan). X ke Z?", options: ["6", "8", "10", "12"], a: "8" },
-                    { q: "Menyusun huruf X dan Y. Berapa cara?", options: ["1", "2", "3", "4"], a: "2" },
-                    { q: "Dadu dilempar, peluang muncul angka lebih dari 4?", options: ["1/6", "2/6", "3/6", "4/6"], a: "2/6" }
+                    { q: "1 1/2 + 2.75 - 50% = ?", options: ["3.25", "3.5", "3.75", "4.0"], a: "3.75" },
+                    { q: "Harga baju Rp 150.000 diskon 20%. Berapa harga yang harus dibayar?", options: ["Rp 110.000", "Rp 120.000", "Rp 130.000", "Rp 140.000"], a: "Rp 120.000" },
+                    { q: "Hasil dari 3/8 : 3/4 x 2 = ?", options: ["1", "1/2", "2", "3/4"], a: "1" },
+                    { q: "Urutan dari terbesar: 0.75, 4/5, 70%, 2/3", options: ["4/5, 0.75, 70%, 2/3", "0.75, 4/5, 2/3, 70%", "4/5, 2/3, 0.75, 70%", "70%, 2/3, 0.75, 4/5"], a: "4/5, 0.75, 70%, 2/3" },
+                    { q: "Jika 3/5 bagian tangki berisi 150 liter air, berapa kapasitas total tangki?", options: ["200 liter", "250 liter", "300 liter", "350 liter"], a: "250 liter" }
                 ]
             },
             8: {
-                lesson: { title: "Berpikir Mundur (Working Backwards)", concept: "Kadang soal olimpiade memberi tahu hasil akhirnya, dan bertanya dari mana asalnya. Caranya: Balik semua operasinya!", trick: "Lawan dari Tambah adalah Kurang. Lawan Kali adalah Bagi. Kerjakan dari akhir ke awal.", q: "Aku memikirkan angka. Kutambah 5, hasilnya 12. Angka berapa?", think: "Balikkan: Hasilnya 12, asalnya ditambah 5. Berarti dikurang 5.", step1: "12 - 5", step2: "12 - 5 = 7", ans: "Angkanya 7." },
+                lesson: { title: "Kecepatan, Jarak & Waktu", concept: "Rumus utama: Jarak = Kecepatan x Waktu (J-K-W).", trick: "Gunakan segitiga ajaib J di atas, K dan W di bawah. Perhatikan satuan waktu (jam, menit, detik).", q: "Jarak kota A ke B 120 km. Kecepatan mobil 60 km/jam. Berapa jam waktu tempuhnya?", think: "Waktu = Jarak / Kecepatan", step1: "120 / 60", step2: "Hasilnya 2 jam", ans: "Waktu tempuh 2 jam." },
                 practicePool: [
-                    { question: "Suatu angka dikali 3 hasilnya 15. Angka itu?", options: ["3", "4", "5", "6"], answer: "5", hints: ["Lawan dari dikali adalah dibagi.", "15 / 3 = ?"], explanation: "15 dibagi 3 = 5." },
-                    { question: "Angka ditambah 10 lalu dibagi 2 hasilnya 8. Angkanya?", options: ["4", "6", "8", "16"], answer: "6", hints: ["Mundur: 8 dikali 2 = 16.", "16 dikurangi 10 = ?"], explanation: "(8x2) - 10 = 6." },
-                    { question: "Aku punya kelereng. Diberi kakak 5. Diminta adik 2. Sisa 10. Awalnya berapa?", options: ["5", "7", "12", "15"], answer: "7", hints: ["Sisa 10. Sebelum diminta adik (10+2=12).", "Sebelum diberi kakak (12-5)."], explanation: "10 + 2 - 5 = 7." },
-                    { question: "Buku dibaca setengah, sisa 20 halaman. Total halaman?", options: ["20", "30", "40", "50"], answer: "40", hints: ["Setengah = 20.", "20 x 2 = ?"], explanation: "Total = 40 halaman." },
-                    { question: "Uang Budi dikali 2, dikurangi 5.000, hasilnya 15.000. Uang awal?", options: ["5.000", "10.000", "15.000", "20.000"], answer: "10.000", hints: ["15.000 + 5.000 = 20.000", "20.000 / 2 = ?"], explanation: "(15rb+5rb)/2 = 10rb." },
-                    { question: "Umur ayah 5 tahun lagi adalah 40. Umur ayah sekarang?", options: ["30", "35", "40", "45"], answer: "35", hints: ["Kurangi 5 dari umur masa depan."], explanation: "40 - 5 = 35." }
+                    { question: "Kecepatan 50 km/jam, waktu 3 jam. Berapa jaraknya?", options: ["120 km", "150 km", "180 km", "200 km"], answer: "150 km", hints: ["Jarak = Kecepatan x Waktu."], explanation: "50 x 3 = 150 km." },
+                    { question: "Jarak 90 km ditempuh dalam 1.5 jam. Berapa kecepatannya?", options: ["45 km/jam", "50 km/jam", "60 km/jam", "75 km/jam"], answer: "60 km/jam", hints: ["Kecepatan = Jarak / Waktu."], explanation: "90 / 1.5 = 60 km/jam." },
+                    { question: "Berangkat pukul 07.30, jarak 120 km, kecepatan 40 km/jam. Pukul berapa tiba?", options: ["10.00", "10.30", "11.00", "11.30"], answer: "10.30", hints: ["Waktu = 120/40 = 3 jam. 07.30 + 3 jam."], explanation: "Pukul 10.30." },
+                    { question: "Kecepatan 72 km/jam. Berapa meter per detik (m/detik)?", options: ["15 m/s", "20 m/s", "25 m/s", "30 m/s"], answer: "20 m/s", hints: ["72 km/jam dibagi 3.6."], explanation: "72 / 3.6 = 20 m/s." },
+                    { question: "Rata-rata nilai ulangan 4 anak adalah 75. Masuk 1 anak nilai 90. Rata-rata baru?", options: ["78", "80", "82", "85"], answer: "78", hints: ["Total 4 anak = 300. Tambah 90 = 390 / 5."], explanation: "390 / 5 = 78." }
                 ],
                 examPool: [
-                    { q: "Angka dikurangi 4 lalu dikali 2 hasilnya 12. Angkanya?", options: ["8", "10", "12", "16"], a: "10" },
-                    { q: "Uang Ani dibagi 3 hasilnya Rp 4.000. Uang Ani?", options: ["Rp 7.000", "Rp 8.000", "Rp 12.000", "Rp 15.000"], a: "Rp 12.000" },
-                    { q: "Kue dimakan adik 2, dimakan ayah 3, sisa 5. Kue awal?", options: ["8", "10", "12", "15"], a: "10" },
-                    { q: "Angka ditambah dirinya sendiri, ditambah 2 hasilnya 12. Angkanya?", options: ["4", "5", "6", "7"], a: "5" },
-                    { q: "Gelas isi air setengahnya, lalu diminum 100ml sisa 100ml. Kapasitas penuh gelas?", options: ["200ml", "300ml", "400ml", "500ml"], a: "400ml" },
-                    { q: "Umur ibu 10 tahun lalu adalah 25. Umur ibu 5 tahun ke depan?", options: ["35", "40", "45", "50"], a: "40" }
+                    { q: "Mobil A dari kota P ke Q (60 km/jam). Mobil B dari Q ke P (40 km/jam). Jarak 200 km. Berpapasan jam berapa jika berangkat jam 08.00?", options: ["09.00", "09.30", "10.00", "10.30"], a: "10.00" },
+                    { q: "Jarak 300 km ditempuh 75 km/jam. Istirahat 45 menit di jalan, total perjalanan?", options: ["4 jam 45 menit", "5 jam", "5 jam 15 menit", "5 jam 30 menit"], a: "4 jam 45 menit" },
+                    { q: "Kecepatan rata-rata pergi 40 km/jam dan pulang 60 km/jam rute sama?", options: ["48 km/jam", "50 km/jam", "52 km/jam", "55 km/jam"], a: "48 km/jam" },
+                    { q: "Debit air keran 15 liter/menit. Berapa waktu untuk mengisi bak 450 liter?", options: ["20 menit", "25 menit", "30 menit", "45 menit"], a: "30 menit" },
+                    { q: "Bus melaju 80 km/jam selama 2 jam pertama, lalu 60 km/jam selama 3 jam berikutnya. Kecepatan rata-rata?", options: ["65 km/jam", "68 km/jam", "70 km/jam", "72 km/jam"], a: "68 km/jam" }
                 ]
             },
             9: {
-                lesson: { title: "Olympiad Prep (Multi-Langkah)", concept: "Di kompetisi, soal sering kali menggabungkan beberapa materi. Jangan panik, pecah masalahnya menjadi bagian-bagian kecil.", trick: "Tuliskan poin-poin yang kamu ketahui dari soal. Selesaikan satu per satu.", q: "Total kaki ayam dan kambing adalah 10. Jika ada 3 hewan, berapa ayam?", think: "Gunakan tebak-uji.", step1: "Kaki Ayam=2, Kambing=4.", step2: "Coba 2 ayam (4) + 1 kbg (4) = 8 (salah). Coba 1 ayam (2) + 2 kbg (8) = 10! Total hewan = 3.", ans: "Ada 1 ayam." },
+                lesson: { title: "Working Backwards (Berpikir Mundur)", concept: "Metode menyelesaikan soal cerita rumit dengan membalik urutan operasi dari hasil akhir.", trick: "Lawan operasi hitung: + jadi -, - jadi +, x jadi /, / jadi x.", q: "Suatu angka dikali 3, lalu ditambah 5, hasilnya 26. Berapa angka itu?", think: "Kerjakan mundur dari 26.", step1: "26 - 5 = 21", step2: "21 / 3 = 7", ans: "Angka tersebut adalah 7." },
                 practicePool: [
-                    { question: "Total 4 hewan (Ayam & Kambing), total kaki 10. Berapa ayam?", options: ["1", "2", "3", "4"], answer: "3", hints: ["Ayam kaki 2, kambing 4.", "Tebak: 3 ayam (6) + 1 kambing (4) = ?"], explanation: "3 ayam + 1 kambing = 10 kaki." },
-                    { question: "Buku Rp 10.000, diskon 20%. Lalu potong harga lagi Rp 1.000. Harga akhir?", options: ["Rp 6.000", "Rp 7.000", "Rp 8.000", "Rp 9.000"], answer: "Rp 7.000", hints: ["Hitung diskon: 20% dari 10.000 = 2.000.", "10.000 - 2.000 = 8.000. Lalu potong lagi."], explanation: "8.000 - 1.000 = 7.000." },
-                    { question: "Persegi panjang Keliling 20, Panjang 6. Luasnya?", options: ["12", "18", "24", "30"], answer: "24", hints: ["Cari lebar dulu. p+l+p+l = 20 -> 6+l+6+l=20. Lebar = 4", "Luas = p x l"], explanation: "Luas = 6 x 4 = 24." },
-                    { question: "Umur A 2 kali umur B. Total umur 30. Umur B?", options: ["10", "15", "20", "30"], answer: "10", hints: ["A = 2B. Jadi 2B + B = 30.", "3B = 30."], explanation: "B = 30/3 = 10." },
-                    { question: "Rata-rata 2 tes 80. Tes ke-3 dapat 95. Rata-rata baru?", options: ["80", "85", "90", "95"], answer: "85", hints: ["Total 2 tes = 160.", "(160 + 95) / 3 = ?"], explanation: "255 / 3 = 85." },
-                    { question: "Jam sekarang 10:15. Waktu 90 menit lalu jam berapa?", options: ["08:30", "08:45", "09:00", "09:15"], answer: "08:45", hints: ["90 menit = 1 jam 30 menit.", "10:15 mundur 1 jam (09:15), mundur 30 mnt."], explanation: "09:15 - 30 mnt = 08:45." }
+                    { question: "Uang Andi dibagi 2 lalu ditambah 10.000 hasilnya 25.000. Uang awal?", options: ["20.000", "25.000", "30.000", "40.000"], answer: "30.000", hints: ["Mundur: (25.000 - 10.000) x 2."], explanation: "15.000 x 2 = 30.000." },
+                    { question: "Umur ayah 5 tahun lalu adalah 35. Berapa umur ayah 7 tahun yang akan datang?", options: ["42", "45", "47", "50"], answer: "47", hints: ["Umur sekarang = 35 + 5 = 40."], explanation: "47 tahun." },
+                    { question: "Buku dibaca separuh, lalu dibaca lagi 10 halaman, sisa 20 halaman. Total halaman?", options: ["40", "50", "60", "80"], answer: "60", hints: ["Mundur: (20 + 10) x 2."], explanation: "30 x 2 = 60." },
+                    { question: "Kelereng Budi setelah diberi Andi 12 butir menjadi 45 butir. Berapa kelereng awal Budi?", options: ["25", "33", "35", "57"], answer: "33", hints: ["45 dikurangi 12."], explanation: "33 butir." },
+                    { question: "Suatu bilangan jika dikuadratkan lalu dikurangi 4 hasilnya 21. Bilangan itu adalah...", options: ["3", "4", "5", "6"], answer: "5", hints: ["21 + 4 = 25. Akar dari 25."], explanation: "5 (karena 5² - 4 = 21)." }
                 ],
                 examPool: [
-                    { q: "Budi beli 3 apel, sisa uang Rp 2.000. Jika beli 4, kurang Rp 3.000. Harga 1 apel?", options: ["Rp 3.000", "Rp 4.000", "Rp 5.000", "Rp 6.000"], a: "Rp 5.000" },
-                    { q: "Ada 10 soal. Benar nilai +5, salah -2. Jawab semua, 7 benar. Skor?", options: ["21", "25", "29", "35"], a: "29" },
-                    { q: "Keliling persegi 24. Berapa Luasnya?", options: ["16", "24", "36", "48"], a: "36" },
-                    { q: "1/4 uang Andi Rp 5.000. Berapa 1/2 uang Andi?", options: ["Rp 10.000", "Rp 15.000", "Rp 20.000", "Rp 25.000"], a: "Rp 10.000" },
-                    { q: "Kecepatan 40 km/jam. Istirahat 30 mnt di jalan. Waktu total 2,5 jam. Jarak?", options: ["80 km", "100 km", "120 km", "160 km"], a: "80 km" },
-                    { q: "3 pensil = Rp 6.000. 2 buku = Rp 8.000. Harga 1 pensil & 1 buku?", options: ["Rp 5.000", "Rp 6.000", "Rp 7.000", "Rp 14.000"], a: "Rp 6.000" }
+                    { q: "Kereta api membawa penumpang. Di stasiun A turun 1/3, di B naik 20 orang. Penumpang sekarang 60 orang. Mula-mula?", options: ["60", "75", "90", "120"], a: "60" },
+                    { q: "Seember air berkurang 1/4 bagian setiap jam karena bocor. Setelah 2 jam sisa 18 liter. Kapasitas penuh?", options: ["24", "32", "36", "48"], a: "32" },
+                    { q: "Jumlah tiga bilangan berurutan adalah 72. Berapa bilangan terkecilnya?", options: ["22", "23", "24", "25"], a: "23" },
+                    { q: "Ibu membagikan kue ke 4 anak: 1/2, 1/4, 1/8, dan sisa 5 kue. Total kue ibu?", options: ["20", "30", "40", "50"], a: "40" },
+                    { q: "Uang Kakak berbanding Adik 5:3. Selisih Rp 60.000. Jumlah uang mereka?", options: ["Rp 160.000", "Rp 200.000", "Rp 240.000", "Rp 300.000"], a: "Rp 240.000" }
                 ]
             },
             10: {
-                lesson: { title: "Olympiad Master Test", concept: "Ini adalah ujian akhir. Semua materi dari Level 1 sampai 9 dicampur. Tarik napas dalam-dalam, baca soal dengan teliti, dan gunakan coretan!", trick: "Jika macet di satu soal, jangan panik. Lewati dulu dalam pikiran, dan kembali lagi. Fokus dan teliti adalah kuncinya.", q: "Berapa banyak bilangan prima antara 1-10?", think: "Hitung satu-satu dengan teliti.", step1: "2, 3, 5, 7.", step2: "Ada 4.", ans: "Ada 4 bilangan prima." },
+                lesson: { title: "Olympiad Master Test (OSN SD)", concept: "Ujian akhir tingkat mahir yang menggabungkan seluruh logika tingkat tinggi olimpiade matematika SD.", trick: "Tetap tenang, baca soal cerita minimal dua kali, dan pastikan satuan sudah setara.", q: "Berapa banyak angka 0 pada hasil perkalian 1 x 2 x 3 x ... x 25 (Faktorial 25)?", think: "Jumlah angka 0 ditentukan oleh pasangan faktor 2 dan 5.", step1: "Kelipatan 5: 5, 10, 15, 20, 25 (ada 6 faktor 5).", step2: "25 = 5x5. Total 6 buah angka nol.", ans: "Ada 6 buah angka nol di akhir." },
                 practicePool: [
-                    { question: "Terdapat pola: 1, 1, 2, 3, 5, 8, ... (Fibonacci). Angka berikutnya?", options: ["10", "11", "12", "13"], answer: "13", hints: ["Tambahkan dua angka sebelumnya.", "5 + 8 = ?"], explanation: "13 (Pola penjumlahan 2 angka sebelum)." },
-                    { question: "Jika A = 2, B = 3, C = 4. Maka (A x B) + C = ?", options: ["9", "10", "12", "14"], answer: "10", hints: ["Kerjakan kali dulu.", "(2 x 3) + 4"], explanation: "6 + 4 = 10." },
-                    { question: "Total umur 3 anak kembar dan 1 anak bungsu adalah 20. Bungsu umur 2th. Umur kembar?", options: ["4", "5", "6", "8"], answer: "6", hints: ["Kurangi umur total dengan bungsu. 20 - 2 = 18.", "Bagi 3 anak kembar."], explanation: "18 / 3 = 6 tahun." },
-                    { question: "KPK dari 4 dan 6 adalah?", options: ["10", "12", "24", "36"], answer: "12", hints: ["Kelipatan 4: 4, 8, 12... Kelipatan 6: 6, 12...", "Cari yang sama dan terkecil."], explanation: "Kelipatan persekutuan terkecil = 12." },
-                    { question: "Lantai 4x5 dipasang ubin 1x1. Butuh berapa ubin?", options: ["9", "18", "20", "40"], answer: "20", hints: ["Hitung luas lantai.", "Luas = 4 x 5."], explanation: "Butuh 20 ubin." },
-                    { question: "Peluang koin dilempar 2 kali, keduanya 'Angka'?", options: ["1/2", "1/3", "1/4", "1/8"], answer: "1/4", hints: ["Peluang pertama 1/2. Peluang kedua 1/2.", "Dikali: 1/2 x 1/2"], explanation: "Peluang = 1/4." }
+                    { question: "Sisa pembagian 2²⁰²⁶ dibagi 5 adalah...", options: ["1", "2", "3", "4"], answer: "4", hints: ["Pola satuan 2: 2, 4, 8, 6 (berulang tiap 4)."], explanation: "Sisa siklus ke-2 adalah 4." },
+                    { question: "Berapa luas daerah yang diarsir jika diameter lingkaran 14 cm di dalam persegi?", options: ["42 cm²", "56 cm²", "63 cm²", "154 cm²"], answer: "42 cm²", hints: ["Luas Persegi (196) - Luas Lingkaran (154)."], explanation: "196 - 154 = 42 cm²." },
+                    { question: "Jika A * B = (A + B) x (B - A), berapa nilai 7 * 4?", options: ["33", "36", "44", "48"], answer: "33", hints: ["(7 + 4) x (7 - 4) = 11 x 3."], explanation: "11 x 3 = 33." },
+                    { question: "Jumlah sudut dalam suatu segi-n adalah 1080°. Berapa banyak sisi (n)?", options: ["6", "8", "10", "12"], answer: "8", hints: ["Rumus: (n - 2) x 180° = 1080°."], explanation: "n - 2 = 6, jadi n = 8." },
+                    { question: "Berapa banyak bilangan antara 1 sampai 100 yang habis dibagi 3 atau 5?", options: ["47", "50", "52", "55"], answer: "47", hints: ["(Kelipatan 3) + (Kelipatan 5) - (Kelipatan 15)."], explanation: "33 + 20 - 6 = 47." }
                 ],
                 examPool: [
-                    { q: "Angka satuan dari 2 pangkat 4 adalah?", options: ["2", "4", "6", "8"], a: "6" },
-                    { q: "KPK dari 3 dan 5?", options: ["8", "15", "30", "45"], a: "15" },
-                    { q: "Sebuah dadu dilempar. Peluang bukan angka 1?", options: ["1/6", "4/6", "5/6", "6/6"], a: "5/6" },
-                    { q: "Sudut tegak lurus (Siku-siku) besarnya?", options: ["45", "60", "90", "180"], a: "90" },
-                    { q: "Jika harga naik 10% dari 10.000, lalu turun 10%. Harga jadi?", options: ["9.900", "10.000", "10.100", "11.000"], a: "9.900" },
-                    { q: "3 kucing tangkap 3 tikus dlm 3 menit. 100 kucing tangkap 100 tikus dlm?", options: ["3 menit", "33 menit", "100 menit", "300 menit"], a: "3 menit" }
+                    { q: "Tangki air berbentuk kubus rusuk 1 meter berisi penuh. Jika air dialirkan dengan debit 20 liter/menit, berapa lama tangki kosong?", options: ["45 menit", "50 menit", "55 menit", "60 menit"], a: "50 menit" },
+                    { q: "Umur Ayah sekarang 4 kali umur Anak. 6 tahun lalu perbandingan 10 : 1. Umur Anak sekarang?", options: ["10 tahun", "12 tahun", "14 tahun", "15 tahun"], a: "12 tahun" },
+                    { q: "Nilai dari 1/(1x2) + 1/(2x3) + 1/(3x4) + ... + 1/(99x100) adalah...", options: ["97/100", "98/100", "99/100", "1"], a: "99/100" },
+                    { q: "Dalam kelas 30 anak suka Matematika, 25 suka IPA, 10 suka keduanya, 5 tidak suka keduanya. Total siswa?", options: ["45", "50", "55", "60"], a: "50" },
+                    { q: "Tiga lampu menyala bersamaan pukul 08.00. Lampu A tiap 12 menit, B tiap 15 menit, C tiap 20 menit. Bersamaan lagi pukul?", options: ["09.00", "10.00", "11.00", "12.00"], a: "10.00" }
                 ]
             }
         };
 
-        // State Aplikasi (Storage Final)
-        let state = JSON.parse(localStorage.getItem('sbb_vanilla_final')) || {
+        // State Aplikasi (Tersimpan di LocalStorage)
+        let state = JSON.parse(localStorage.getItem('sbb_olimpiade_final')) || {
             stars: 0,
             completedLevels: [],
             unlockedLevels: [1],
@@ -272,7 +250,7 @@
         };
 
         function saveState() {
-            localStorage.setItem('sbb_vanilla_final', JSON.stringify(state));
+            localStorage.setItem('sbb_olimpiade_final', JSON.stringify(state));
         }
 
         let currentView = 'home';
@@ -287,7 +265,7 @@
             mistakeCount: 0
         };
 
-        // Fungsi Helper Acak Array
+        // Fisher-Yates Array Shuffler (Untuk mengacak soal secara instan)
         function shuffleArray(array) {
             let arr = [...array];
             for (let i = arr.length - 1; i > 0; i--) {
@@ -297,7 +275,7 @@
             return arr;
         }
 
-        // Router Utama
+        // Router Utama Aplikasi
         function router(viewName, levelId = null) {
             currentView = viewName;
             if (levelId !== null) activeLevelId = levelId;
@@ -308,7 +286,7 @@
             const starCountEl = document.getElementById('star-count');
             starCountEl.innerText = state.stars;
 
-            // Atur Visibilitas Navigasi & Header
+            // Kontrol Navigasi Bar & Header
             if (['home', 'map', 'dashboard'].includes(viewName)) {
                 nav.classList.remove('hidden');
                 header.classList.add('hidden');
@@ -323,19 +301,19 @@
                 };
             }
 
-            // Highlight Active Nav
+            // Styling Tombol Navigasi Aktif
             ['home', 'map', 'dashboard'].forEach(id => {
                 const btn = document.getElementById(`nav-${id}`);
                 if (btn) {
                     if (id === viewName) {
                         btn.className = "flex flex-col items-center p-2 rounded-xl text-blue-600 transform scale-105 transition-all duration-300 font-bold";
                     } else {
-                        btn.className = "flex flex-col items-center p-2 rounded-xl text-gray-400 transition-all duration-300";
+                        btn.className = "flex flex-col items-center p-2 rounded-xl text-slate-400 transition-all duration-300";
                     }
                 }
             });
 
-            // Render Views
+            // Render Halaman
             main.innerHTML = '';
             if (viewName === 'home') renderHome(main);
             else if (viewName === 'map') renderMap(main);
@@ -347,21 +325,21 @@
             else if (viewName === 'examResult') renderExamResult(main);
         }
 
-        // 1. HOME VIEW
+        // 1. TAMPILAN HOME
         function renderHome(container) {
             container.innerHTML = `
-                <div class="flex flex-col items-center justify-center min-h-[80vh] p-6 text-center animate-fade-in bg-gradient-to-b from-blue-50 to-white">
+                <div class="flex flex-col items-center justify-center min-h-[85vh] p-6 text-center animate-fade-in bg-gradient-to-b from-blue-50 to-white">
                     <div class="bg-white p-6 rounded-3xl shadow-xl max-w-md w-full border-4 border-blue-100">
                         <div class="flex justify-center mb-6">
-                            <div class="bg-blue-600 p-5 rounded-full text-white shadow-xl">
+                            <div class="bg-blue-600 p-5 rounded-full text-white shadow-xl animate-pulse">
                                 <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                             </div>
                         </div>
-                        <h1 class="text-3xl font-black text-blue-900 mb-2">SEMUA BISA BELAJAR</h1>
-                        <h2 class="text-lg font-bold text-orange-500 mb-4 uppercase tracking-widest">Matematika Itu Seru!</h2>
-                        <p class="text-gray-600 mb-8 font-bold bg-blue-50 p-4 rounded-2xl border border-blue-100">Tantang dirimu dari Pemula hingga menjadi Master Olimpiade!</p>
+                        <h1 class="text-2xl font-black text-blue-900 mb-1">SEMUA BISA BELAJAR</h1>
+                        <h2 class="text-sm font-bold text-orange-500 mb-4 uppercase tracking-widest">Olimpiade Matematika SD 1 - 6</h2>
+                        <p class="text-slate-600 mb-8 font-bold text-sm bg-blue-50 p-4 rounded-2xl border border-blue-100 leading-relaxed">Kuasai konsep dasar hingga soal cerita tingkat tinggi OSN dengan kurikulum terstruktur!</p>
                         <div class="space-y-4">
-                            <button onclick="router('map')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-4 px-6 rounded-2xl shadow-[0_6px_0_rgb(37,99,235)] active:translate-y-1 transition text-lg flex items-center justify-center gap-2">
+                            <button onclick="router('map')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-4 px-6 rounded-2xl shadow-[0_6px_0_rgb(37,99,235)] active:translate-y-1 transition text-base flex items-center justify-center gap-2">
                                 ⚡ MULAI PETUALANGAN
                             </button>
                             <button onclick="router('dashboard')" class="w-full bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold py-4 px-6 rounded-2xl transition flex items-center justify-center gap-2">
@@ -373,39 +351,39 @@
             `;
         }
 
-        // 2. MAP VIEW (PETA BELAJAR)
+        // 2. TAMPILAN PETA LEVEL (DENGAN LOCK SYSTEM)
         function renderMap(container) {
             let html = `
                 <div class="p-5 animate-fade-in">
-                    <div class="text-center mb-8 bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="text-center mb-6 bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                         <h2 class="text-2xl font-black text-blue-900">Peta Belajar</h2>
-                        <p class="text-gray-600 font-bold text-sm">10 Level Menuju Master Olimpiade!</p>
+                        <p class="text-slate-600 font-bold text-xs">SD Kelas 1-3 (Level 1-5) & SD Kelas 4-6 (Level 6-10)</p>
                     </div>
                     <div class="space-y-6 relative before:absolute before:inset-0 before:ml-10 before:w-1 before:bg-blue-200">
             `;
 
-            LEVELS.forEach((lvl, index) => {
+            LEVELS.forEach((lvl) => {
                 const isUnlocked = state.unlockedLevels.includes(lvl.id);
                 const isCompleted = state.completedLevels.includes(lvl.id);
                 
                 html += `
                     <div class="relative flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white z-10 shrink-0 shadow-md ${isCompleted ? 'bg-green-500' : isUnlocked ? lvl.color : 'bg-gray-300'}">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white z-10 shrink-0 shadow-md ${isCompleted ? 'bg-emerald-500' : isUnlocked ? lvl.color : 'bg-slate-300'}">
                             ${isCompleted ? '✓' : isUnlocked ? lvl.id : '🔒'}
                         </div>
-                        <div class="flex-grow bg-white p-4 rounded-2xl border-2 ${isUnlocked ? 'border-blue-100 shadow-sm' : 'border-gray-100 opacity-60 bg-gray-50'}">
+                        <div class="flex-grow bg-white p-4 rounded-2xl border-2 ${isUnlocked ? 'border-blue-100 shadow-sm' : 'border-slate-100 opacity-60 bg-slate-50'}">
                             <div class="flex justify-between items-center mb-1">
-                                <span class="text-[10px] font-black px-2.5 py-1 rounded uppercase tracking-wider ${isCompleted ? 'bg-green-100 text-green-700' : isUnlocked ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-500'}">${lvl.title}</span>
+                                <span class="text-[9px] font-black px-2.5 py-1 rounded uppercase tracking-wider ${isCompleted ? 'bg-emerald-100 text-emerald-700' : isUnlocked ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-500'}">${lvl.title}</span>
                                 ${isCompleted ? '<span class="text-xs font-bold text-yellow-500">⭐ Lulus</span>' : ''}
                             </div>
-                            <h3 class="font-black text-base text-gray-900">${lvl.name}</h3>
-                            <p class="text-xs text-gray-500 mb-3">${lvl.desc}</p>
+                            <h3 class="font-black text-sm text-slate-900">${lvl.name}</h3>
+                            <p class="text-xs text-slate-500 mb-3">${lvl.desc}</p>
                             ${isUnlocked ? `
-                                <button onclick="router('levelIntro', ${lvl.id})" class="w-full py-2.5 rounded-xl font-bold text-sm text-white shadow ${lvl.color} active:scale-95 transition">
+                                <button onclick="router('levelIntro', ${lvl.id})" class="w-full py-2.5 rounded-xl font-bold text-xs text-white shadow ${lvl.color} active:scale-95 transition">
                                     ${isCompleted ? 'MAIN LAGI' : 'MULAI MISI'}
                                 </button>
                             ` : `
-                                <div class="w-full py-2.5 rounded-xl font-bold text-sm bg-gray-200 text-gray-400 text-center">TERKUNCI</div>
+                                <div class="w-full py-2.5 rounded-xl font-bold text-xs bg-slate-200 text-slate-400 text-center">TERKUNCI (SELESAIKAN LEVEL SEBELUMNYA)</div>
                             `}
                         </div>
                     </div>
@@ -416,7 +394,7 @@
             container.innerHTML = html;
         }
 
-        // 3. DASHBOARD VIEW
+        // 3. TAMPILAN PROFIL & STATISTIK
         function renderDashboard(container) {
             container.innerHTML = `
                 <div class="p-5 animate-fade-in">
@@ -425,28 +403,28 @@
                         <div class="bg-yellow-50 rounded-3xl p-5 border-2 border-yellow-200 flex flex-col items-center text-center shadow-sm">
                             <span class="text-3xl mb-1">⭐</span>
                             <span class="text-3xl font-extrabold text-yellow-700">${state.stars}</span>
-                            <span class="text-xs font-black text-yellow-600 uppercase mt-1">Bintang</span>
+                            <span class="text-[10px] font-black text-yellow-600 uppercase mt-1">Bintang</span>
                         </div>
                         <div class="bg-orange-50 rounded-3xl p-5 border-2 border-orange-200 flex flex-col items-center text-center shadow-sm">
                             <span class="text-3xl mb-1">🔥</span>
                             <span class="text-3xl font-extrabold text-orange-700">${state.streak}</span>
-                            <span class="text-xs font-black text-orange-600 uppercase mt-1">Hari Main</span>
+                            <span class="text-[10px] font-black text-orange-600 uppercase mt-1">Hari Main</span>
                         </div>
                     </div>
-                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mb-6">
-                        <h3 class="font-bold text-gray-800 mb-3">Kemajuan (Total 10 Level)</h3>
-                        <div class="flex justify-between text-sm font-medium text-gray-600 mb-2">
+                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6">
+                        <h3 class="font-bold text-slate-800 text-sm mb-3">Kemajuan Total (10 Level)</h3>
+                        <div class="flex justify-between text-xs font-medium text-slate-600 mb-2">
                             <span>Selesai</span>
-                            <span class="font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">${state.completedLevels.length} Level</span>
+                            <span class="font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${state.completedLevels.length} Level</span>
                         </div>
-                        <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden shadow-inner">
+                        <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden shadow-inner">
                             <div class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${(state.completedLevels.length / 10) * 100}%"></div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="font-bold text-gray-800 mb-3">🏆 Koleksi Badge</h3>
+                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-800 text-sm mb-3">🏆 Koleksi Badge Olimpiade</h3>
                         <div class="flex flex-wrap gap-2">
-                            ${state.badges.length > 0 ? state.badges.map(b => `<span class="bg-indigo-50 text-indigo-900 px-3 py-1.5 rounded-xl text-xs font-black border border-indigo-200">${b}</span>`).join('') : '<p class="text-sm text-gray-400 italic">Belum ada badge. Selesaikan level untuk mendapatkannya!</p>'}
+                            ${state.badges.length > 0 ? state.badges.map(b => `<span class="bg-indigo-50 text-indigo-900 px-3 py-1.5 rounded-xl text-xs font-black border border-indigo-200">${b}</span>`).join('') : '<p class="text-xs text-slate-400 italic">Belum ada badge. Selesaikan level untuk meraih prestasi!</p>'}
                         </div>
                     </div>
                 </div>
@@ -461,22 +439,22 @@
             container.innerHTML = `
                 <div class="p-6 animate-fade-in flex flex-col justify-center">
                     <div class="bg-white p-8 rounded-[2rem] shadow-xl border-4 border-blue-100 text-center">
-                        <div class="w-20 h-20 mx-auto rounded-full ${lvl.color} text-white flex items-center justify-center text-3xl font-black mb-4 shadow">
+                        <div class="w-20 h-20 mx-auto rounded-full ${lvl.color} text-white flex items-center justify-center text-2xl font-black mb-4 shadow">
                             ${lvl.id}
                         </div>
                         <h2 class="text-blue-500 font-extrabold text-xs tracking-widest uppercase mb-1">${lvl.title}</h2>
-                        <h1 class="text-2xl font-black text-gray-800 mb-3">${lvl.name}</h1>
-                        <p class="text-gray-600 font-bold bg-gray-50 p-3 rounded-xl mb-6 text-sm">${lvl.desc}</p>
+                        <h1 class="text-xl font-black text-slate-800 mb-3">${lvl.name}</h1>
+                        <p class="text-slate-600 font-bold bg-slate-50 p-3 rounded-xl mb-6 text-xs">${lvl.desc}</p>
                         
                         <div class="bg-blue-50 p-4 rounded-2xl mb-6 text-left border border-blue-100">
-                            <h4 class="font-black text-blue-900 text-sm mb-2">Target Misi:</h4>
-                            <ul class="text-xs text-gray-700 space-y-2 font-bold">
-                                <li>✓ Pahami Materi & Trik Jago</li>
-                                <li>✓ Latihan 5 Soal Acak</li>
-                                <li>✓ Lulus Ujian (Min. Skor 80)</li>
+                            <h4 class="font-black text-blue-900 text-xs mb-2">Target Misi Level Ini:</h4>
+                            <ul class="text-xs text-slate-700 space-y-2 font-bold">
+                                <li>✓ Memahami Konsep & Trik Cepat</li>
+                                <li>✓ Menyelesaikan 5 Latihan Soal Acak</li>
+                                <li>✓ Lulus Ujian Evaluasi (Skor Min. 80)</li>
                             </ul>
                         </div>
-                        <button onclick="router('lesson', ${lvl.id})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-4 rounded-2xl shadow-[0_6px_0_rgb(37,99,235)] transition text-base">
+                        <button onclick="router('lesson', ${lvl.id})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-4 rounded-2xl shadow-[0_6px_0_rgb(37,99,235)] transition text-sm">
                             ▶ MULAI MATERI
                         </button>
                     </div>
@@ -484,7 +462,7 @@
             `;
         }
 
-        // 5. LESSON VIEW (MATERI & TRIK)
+        // 5. TAMPILAN MATERI & PEMBAHASAN
         function renderLesson(container) {
             const lvl = LEVELS.find(l => l.id === activeLevelId);
             const data = CONTENT[activeLevelId].lesson;
@@ -492,34 +470,34 @@
 
             container.innerHTML = `
                 <div class="p-5 pb-28 animate-fade-in space-y-5">
-                    <div class="bg-white rounded-3xl p-6 border-2 border-gray-100 shadow-sm">
+                    <div class="bg-white rounded-3xl p-6 border-2 border-slate-100 shadow-sm">
                         <span class="text-blue-600 font-extrabold text-[10px] tracking-widest uppercase bg-blue-50 px-3 py-1 rounded-lg">Konsep</span>
-                        <h3 class="text-xl font-black text-gray-900 mt-2 mb-3">${data.title}</h3>
-                        <p class="text-gray-700 font-bold text-sm leading-relaxed">${data.concept}</p>
+                        <h3 class="text-lg font-black text-slate-900 mt-2 mb-3">${data.title}</h3>
+                        <p class="text-slate-700 font-bold text-xs leading-relaxed">${data.concept}</p>
                     </div>
 
                     <div class="bg-gradient-to-br from-orange-400 to-yellow-400 rounded-3xl p-1.5 shadow-md">
                         <div class="bg-white rounded-[1.3rem] p-5">
-                            <h3 class="text-orange-600 font-black mb-2 text-sm uppercase">💡 TRIK JAGO</h3>
-                            <p class="text-gray-800 font-bold text-sm">${data.trick}</p>
+                            <h3 class="text-orange-600 font-black mb-2 text-xs uppercase">💡 TRIK JAGO OLIMPIADE</h3>
+                            <p class="text-slate-800 font-bold text-xs">${data.trick}</p>
                         </div>
                     </div>
 
-                    <div class="bg-white border-2 border-gray-100 rounded-3xl p-5 shadow-sm">
-                        <h3 class="text-gray-400 font-extrabold text-xs uppercase mb-3 border-b pb-2">Contoh Soal</h3>
-                        <div class="bg-blue-50 p-4 rounded-xl mb-4 font-bold text-blue-900 text-sm">${data.q}</div>
-                        <div class="space-y-2 text-xs font-bold text-gray-700">
+                    <div class="bg-white border-2 border-slate-100 rounded-3xl p-5 shadow-sm">
+                        <h3 class="text-slate-400 font-extrabold text-[10px] uppercase mb-3 border-b pb-2">Contoh Pembahasan</h3>
+                        <div class="bg-blue-50 p-4 rounded-xl mb-4 font-bold text-blue-900 text-xs">${data.q}</div>
+                        <div class="space-y-2 text-xs font-bold text-slate-700">
                             <p>💭 <em>"${data.think}"</em></p>
                             <p>1️⃣ ${data.step1}</p>
                             <p>2️⃣ ${data.step2}</p>
-                            <div class="mt-3 bg-green-50 text-green-800 p-3 rounded-xl border border-green-200 font-black">
+                            <div class="mt-3 bg-emerald-50 text-emerald-800 p-3 rounded-xl border border-emerald-200 font-black">
                                 ✓ ${data.ans}
                             </div>
                         </div>
                     </div>
 
                     <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur border-t flex justify-center max-w-md mx-auto z-40">
-                        <button onclick="startPractice(${activeLevelId})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 rounded-2xl shadow-[0_4px_0_rgb(37,99,235)] transition text-base">
+                        <button onclick="startPractice(${activeLevelId})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 rounded-2xl shadow-[0_4px_0_rgb(37,99,235)] transition text-sm">
                             COBA LATIHAN ACAK ➔
                         </button>
                     </div>
@@ -527,7 +505,7 @@
             `;
         }
 
-        // 6. QUIZ / EXAM ENGINE (RANDOMIZER PENUH TANPA BUG)
+        // 6. ENGINE Kuis & Evaluasi (Soal Diacak Otomatis)
         function startPractice(levelId) {
             quizState = {
                 isExam: false,
@@ -541,10 +519,6 @@
             router('practice');
         }
 
-        function startExamIntro(levelId) {
-            router('examIntro');
-        }
-
         function renderExamIntro(container) {
             const lvl = LEVELS.find(l => l.id === activeLevelId);
             document.getElementById('header-title').innerText = "Ujian Level";
@@ -552,16 +526,16 @@
             container.innerHTML = `
                 <div class="p-6 animate-fade-in flex flex-col justify-center">
                     <div class="bg-white p-8 rounded-[2rem] shadow-xl border-4 border-orange-200 text-center">
-                        <div class="w-20 h-20 mx-auto rounded-full bg-orange-100 flex items-center justify-center text-3xl mb-4 text-orange-500 shadow">🎯</div>
-                        <h2 class="text-2xl font-black text-gray-800 mb-2">Ujian ${lvl.title}</h2>
-                        <p class="text-gray-600 font-bold mb-6 text-sm">Buktikan kemampuanmu dengan 5 soal acak tanpa bantuan Hint.</p>
+                        <div class="w-20 h-20 mx-auto rounded-full bg-orange-100 flex items-center justify-center text-2xl mb-4 text-orange-500 shadow">🎯</div>
+                        <h2 class="text-xl font-black text-slate-800 mb-2">Ujian Evaluasi ${lvl.title}</h2>
+                        <p class="text-slate-600 font-bold mb-6 text-xs">Jawab 5 soal acak dengan benar untuk membuka level berikutnya!</p>
                         
                         <div class="bg-orange-50 p-4 rounded-2xl mb-6 text-left border border-orange-100 text-xs font-bold text-orange-900 space-y-2">
-                            <p>• Tidak ada tombol petunjuk.</p>
-                            <p>• Skor minimal untuk lulus adalah 80.</p>
+                            <p>• Tanpa tombol bantuan (Hint).</p>
+                            <p>• Nilai minimal kelulusan adalah 80.</p>
                         </div>
 
-                        <button onclick="launchExam()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-4 rounded-2xl shadow-[0_6px_0_rgb(249,115,22)] transition text-base">
+                        <button onclick="launchExam()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-4 rounded-2xl shadow-[0_6px_0_rgb(249,115,22)] transition text-sm">
                             ⚡ MULAI UJIAN SEKARANG
                         </button>
                     </div>
@@ -585,12 +559,12 @@
         function renderQuiz(container) {
             const isExam = quizState.isExam;
             const q = quizState.questions[quizState.currentIndex];
-            document.getElementById('header-title').innerText = isExam ? "Ujian" : "Latihan";
+            document.getElementById('header-title').innerText = isExam ? "Ujian Evaluasi" : "Latihan Soal";
 
             let optionsHtml = '';
             q.options.forEach((opt, idx) => {
                 optionsHtml += `
-                    <button onclick="handleOptionSelect('${opt.replace(/'/g, "\\'")}')" id="opt-btn-${idx}" class="w-full p-4 rounded-2xl font-bold text-left text-base border-2 border-gray-200 bg-white hover:border-blue-400 transition shadow-sm">
+                    <button onclick="handleOptionSelect('${opt.replace(/'/g, "\\'")}')" id="opt-btn-${idx}" class="w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border-2 border-slate-200 bg-white hover:border-blue-400 transition shadow-sm">
                         <span class="opacity-60 mr-2">${String.fromCharCode(65 + idx)}.</span> ${opt}
                     </button>
                 `;
@@ -598,13 +572,13 @@
 
             container.innerHTML = `
                 <div class="p-5 pb-32 animate-fade-in flex flex-col">
-                    <div class="w-full bg-gray-200 h-2 rounded-full mb-6 overflow-hidden shadow-inner">
+                    <div class="w-full bg-slate-200 h-2 rounded-full mb-6 overflow-hidden shadow-inner">
                         <div class="bg-blue-600 h-2 transition-all duration-300" style="width: ${((quizState.currentIndex) / quizState.questions.length) * 100}%"></div>
                     </div>
 
-                    <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm mb-6">
-                        <span class="text-xs font-black text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg uppercase">Soal ${quizState.currentIndex + 1} dari 5</span>
-                        <h3 class="text-lg font-black text-gray-900 mt-4 mb-6 leading-relaxed">${isExam ? q.q : q.question}</h3>
+                    <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm mb-6">
+                        <span class="text-[10px] font-black text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg uppercase">Soal ${quizState.currentIndex + 1} dari 5</span>
+                        <h3 class="text-sm sm:text-base font-black text-slate-900 mt-4 mb-6 leading-relaxed">${isExam ? q.q : q.question}</h3>
                         <div class="space-y-3" id="options-container">
                             ${optionsHtml}
                         </div>
@@ -614,7 +588,7 @@
                 </div>
 
                 <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur border-t flex justify-center max-w-md mx-auto z-40">
-                    <button id="btn-next-quiz" onclick="handleNextQuestion()" disabled class="w-full bg-gray-200 text-gray-400 font-extrabold py-3.5 rounded-2xl transition text-base cursor-not-allowed">
+                    <button id="btn-next-quiz" onclick="handleNextQuestion()" disabled class="w-full bg-slate-200 text-slate-400 font-extrabold py-3.5 rounded-2xl transition text-sm cursor-not-allowed">
                         ${quizState.currentIndex === quizState.questions.length - 1 ? 'SELESAI' : 'LANJUT SOAL ➔'}
                     </button>
                 </div>
@@ -627,22 +601,21 @@
             const isExam = quizState.isExam;
             const correctAnswer = isExam ? q.a : q.answer;
 
-            // Update UI Tombol Pilihan
             q.options.forEach((opt, idx) => {
                 const btn = document.getElementById(`opt-btn-${idx}`);
                 btn.disabled = true;
                 if (opt === correctAnswer) {
-                    btn.className = "w-full p-4 rounded-2xl font-bold text-left text-base border-2 border-green-500 bg-green-500 text-white shadow";
+                    btn.className = "w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border-2 border-emerald-500 bg-emerald-500 text-white shadow";
                 } else if (opt === selected) {
-                    btn.className = "w-full p-4 rounded-2xl font-bold text-left text-base border-2 border-red-400 bg-red-50 text-red-700";
+                    btn.className = "w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border-2 border-rose-400 bg-rose-50 text-rose-700";
                 } else {
-                    btn.className = "w-full p-4 rounded-2xl font-bold text-left text-base border-2 border-gray-200 opacity-50 bg-white";
+                    btn.className = "w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border-2 border-slate-200 opacity-50 bg-white";
                 }
             });
 
             const nextBtn = document.getElementById('btn-next-quiz');
             nextBtn.disabled = false;
-            nextBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 rounded-2xl shadow-[0_4px_0_rgb(37,99,235)] transition text-base cursor-pointer";
+            nextBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 rounded-2xl shadow-[0_4px_0_rgb(37,99,235)] transition text-sm cursor-pointer";
 
             if (!isExam) {
                 const feedbackArea = document.getElementById('feedback-area');
@@ -652,7 +625,7 @@
                     saveState();
                     document.getElementById('star-count').innerText = state.stars;
                     feedbackArea.innerHTML = `
-                        <div class="bg-green-50 p-4 rounded-2xl border border-green-200 text-green-900 font-bold text-xs animate-fade-in">
+                        <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-emerald-900 font-bold text-xs animate-fade-in">
                             <p class="font-black text-sm mb-1">✓ Jawaban Tepat!</p>
                             <p>${q.explanation}</p>
                         </div>
@@ -662,7 +635,7 @@
                     feedbackArea.innerHTML = `
                         <div class="bg-orange-50 p-4 rounded-2xl border border-orange-200 text-orange-900 font-bold text-xs animate-fade-in">
                             <p class="font-black text-sm mb-1">💡 Belum Tepat</p>
-                            <p>${q.hints ? q.hints[0] : 'Coba perhatikan kembali rumusnya ya.'}</p>
+                            <p>${q.hints ? q.hints[0] : 'Perhatikan kembali langkah penyelesaiannya.'}</p>
                         </div>
                     `;
                 }
@@ -690,7 +663,7 @@
             }
         }
 
-        // 7. EXAM RESULT & UNLOCK SYSTEM
+        // 7. HASIL UJIAN & BUKA LEVEL BERIKUTNYA
         function renderExamResult(container) {
             const percentage = Math.round((quizState.score / quizState.questions.length) * 100);
             const passed = percentage >= 80;
@@ -705,8 +678,10 @@
                 }
                 state.stars += 50;
                 
-                // Tambah Badge
-                const badgesMap = { 1: "🌟 Pemula Hebat", 2: "🔢 Penakluk Angka", 3: "🍕 Master Pecahan", 4: "🧠 Detektif Logika", 5: "📐 Raja Bangun", 6: "⚡ Master Cepat", 7: "🎲 Ahli Kombinasi", 8: "💡 Pemikir Jenius", 9: "🔥 Penantang Elite", 10: "🏆 OLYMPIAD MASTER" };
+                const badgesMap = { 
+                    1: "🏅 Master Pola SD 1-3", 2: "⚡ Kilat Hitung", 3: "🍕 Master Piza", 4: "🧠 Detektif Cilik", 5: "📐 Geometri Junior",
+                    6: "👑 Juara Prima", 7: "📊 Ahli Persen", 8: "🏎️ King of Speed", 9: "🔄 Master Mundur", 10: "🏆 OSN MASTER SD" 
+                };
                 if (badgesMap[activeLevelId] && !state.badges.includes(badgesMap[activeLevelId])) {
                     state.badges.push(badgesMap[activeLevelId]);
                 }
@@ -716,23 +691,23 @@
             container.innerHTML = `
                 <div class="p-6 animate-fade-in flex flex-col justify-center text-center">
                     <div class="bg-white p-8 rounded-[2rem] shadow-2xl border-4 border-blue-100">
-                        <div class="text-6xl mb-4">${passed ? '🏆' : '💪'}</div>
-                        <h2 class="text-2xl font-black text-gray-800 mb-2">${passed ? 'LULUS LEVEL!' : 'JANGAN MENYERAH!'}</h2>
-                        <p class="text-gray-600 font-bold mb-6 text-xs">${passed ? 'Luar biasa! Level selanjutnya telah terbuka.' : 'Skor minimal lulus adalah 80. Ayo pelajari kembali materinya.'}</p>
+                        <div class="text-5xl mb-3">${passed ? '🏆' : '💪'}</div>
+                        <h2 class="text-xl font-black text-slate-800 mb-1">${passed ? 'LULUS UJIAN!' : 'COBA LAGI!'}</h2>
+                        <p class="text-slate-600 font-bold mb-6 text-xs">${passed ? 'Hebat! Level berikutnya telah terbuka di peta.' : 'Syarat lulus minimal skor 80. Pelajari materinya kembali ya.'}</p>
                         
-                        <div class="bg-gray-50 p-5 rounded-2xl mb-6 border">
-                            <span class="text-xs font-black text-gray-400 uppercase">Skor Akhir</span>
-                            <div class="text-5xl font-black my-1 ${passed ? 'text-green-500' : 'text-orange-500'}">${percentage}</div>
-                            <span class="text-xs font-bold text-gray-600">Benar ${quizState.score} dari 5 soal</span>
+                        <div class="bg-slate-50 p-5 rounded-2xl mb-6 border">
+                            <span class="text-[10px] font-black text-slate-400 uppercase">Skor Akhir</span>
+                            <div class="text-4xl font-black my-1 ${passed ? 'text-emerald-500' : 'text-orange-500'}">${percentage}</div>
+                            <span class="text-xs font-bold text-slate-600">Benar ${quizState.score} dari 5 soal</span>
                         </div>
 
                         ${passed ? `
-                            <button onclick="router('map')" class="w-full bg-green-500 hover:bg-green-600 text-white font-extrabold py-4 rounded-2xl shadow-[0_6px_0_rgb(34,197,94)] transition text-base">
+                            <button onclick="router('map')" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3.5 rounded-2xl shadow-[0_4px_0_rgb(16,185,129)] transition text-sm">
                                 KLAIM & LANJUT KE PETA ➔
                             </button>
                         ` : `
-                            <button onclick="router('lesson', ${activeLevelId})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-4 rounded-2xl shadow-[0_6px_0_rgb(37,99,235)] transition text-base">
-                                PELAJARI MATERI LAGI
+                            <button onclick="router('lesson', ${activeLevelId})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 rounded-2xl shadow-[0_4px_0_rgb(37,99,235)] transition text-sm">
+                                ULANGI MATERI & LATIHAN
                             </button>
                         `}
                     </div>
@@ -740,7 +715,7 @@
             `;
         }
 
-        // Inisialisasi awal saat halaman dimuat
+        // Inisialisasi Aplikasi Saat Window Load
         window.onload = () => {
             router('home');
         };
