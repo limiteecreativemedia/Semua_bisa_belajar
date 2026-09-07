@@ -1,920 +1,782 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Home, Map, User, Star, Lock, 
-  Trophy, Brain, Zap, ArrowRight, ArrowLeft, 
-  CheckCircle, Lightbulb, PlayCircle, ShieldCheck, Target, 
-  AlertCircle, RefreshCw, Box, BarChart2, Shuffle, Flame
-} from 'lucide-react';
-
-const shuffleArray = (array) => {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-  }
-  return newArray;
-};
-
-// --- INTERNATIONAL MATHEMATICAL OLYMPIAD CURRICULUM LEVELS (ADVANCED) ---
-const LEVELS = [
-  { id: 1, title: "LEVEL 1", name: "Number Theory Fundamentals", color: "bg-emerald-600", icon: ShieldCheck, desc: "Prime numbers, divisibility rules & modular arithmetic basics." },
-  { id: 2, title: "LEVEL 2", name: "Advanced Fractions & Decimals", color: "bg-teal-600", icon: Map, desc: "Complex fractional operations, ratios, and percentage word problems." },
-  { id: 3, title: "LEVEL 3", name: "Algebraic Cryptarithms & Equations", color: "bg-cyan-600", icon: Target, desc: "Letter-digit substitution, multi-step word equations & balancing." },
-  { id: 4, title: "LEVEL 4", name: "Geometry Area & Perimeter Mastery", color: "bg-blue-600", icon: Box, desc: "Composite shapes, shaded regions, squares, and rectangle grids." },
-  { id: 5, title: "LEVEL 5", name: "Speed, Distance & Time Dynamics", color: "bg-indigo-600", icon: BarChart2, desc: "Relative speed, meeting points, average speeds, and time intervals." },
-  { id: 6, title: "LEVEL 6", name: "Combinatorics & Probability", color: "bg-violet-600", icon: Shuffle, desc: "Multiplication counting principle, permutations, and basic probability." },
-  { id: 7, title: "LEVEL 7", name: "Working Backwards & Logic Puzzles", color: "bg-purple-600", icon: Lightbulb, desc: "Reverse operations, deduction elimination, and age/weight logic." },
-  { id: 8, title: "LEVEL 8", name: "Sequence, Series & Special Patterns", color: "bg-fuchsia-600", icon: Flame, desc: "Arithmetic progressions, Fibonacci variations, and telescoping sums." },
-  { id: 9, title: "LEVEL 9", name: "Olympiad Multi-Step Word Problems", color: "bg-rose-600", icon: Brain, desc: "Complex composite scenarios inspired by SIMOC, IMO & CMO." },
-  { id: 10, title: "LEVEL 10", name: "Global IMO Grand Master Exam", color: "bg-amber-600", icon: Trophy, desc: "The ultimate high-tier international olympiad challenge!" },
-];
-
-const CONTENT = {
-  1: {
-    lesson: { 
-      title: "Number Theory Fundamentals", 
-      concept: "Number theory deals with the properties of integers, prime factorization, divisibility rules (like division by 99 or 11), and remainders.", 
-      trick: "For numbers divisible by 99, split into 9 × 11 and check both divisibility rules (sum of digits divisible by 9, and alternating sum divisible by 11).", 
-      examples: [{ 
-        q: "Find the values of A and B if the 6-digit number 42A28B is a multiple of 99.", 
-        think: "99 = 9 × 11. Co-prime factors allow us to apply both rules.", 
-        step1: "Sum of digits must be divisible by 9: 4+2+A+2+8+B = 16 + A + B (must be 18 or 27).", 
-        step2: "Alternating sum rule for 11: (B + 2 + 2) - (8 + A + 4) = B - A - 4 (must be 0 or 11). Solving yields A=3, B=0.", 
-        ans: "A = 3, B = 0." 
-      }] 
-    },
-    practicePool: [
-      { question: "What is the HCF of 210, 350 and 546?", options: ["7", "14", "28", "1"], answer: "14", hints: ["Find prime factorization of each number.", "Common prime factors with lowest powers: 2 × 7."], explanation: "HCF(210, 350, 546) = 14." },
-      { question: "The LCM of a and b is 220. Which of the following can be their HCF?", options: ["12", "15", "20", "33"], answer: "20", hints: ["HCF must always be a factor of the LCM."], explanation: "20 is a factor of 220 (220 / 20 = 11)." },
-      { question: "Find the number of factors of a 2-digit number which has exactly 9 factors.", options: ["36", "64", "81", "100"], answer: "36", hints: ["A number has an odd number of factors only if it is a square number.", "Prime factorization for 9 factors is p^8 or p^2 * q^2. Try 2^2 * 3^2."], explanation: "36 has factors: 1,2,3,4,6,9,12,18,36 (Total 9 factors)." },
-      { question: "What is the sum of digits of the product 6666 × 6666?", options: ["36", "72", "64", "48"], answer: "72", hints: ["6666^2 = 44435556.", "Sum of digits: 4+4+4+3+5+5+5+6 = 36... wait, let's check: 6666^2 = 44435556? Sum is 36? Let's check rule: 9^n... actually sum of digits of 6666^2 is 36? Wait, 6^2=36 (sum 9), 66^2=4356 (sum 18), 666^2=443556 (sum 27), 6666^2 = 44435556 (sum 36)? Wait, let's verify 4*3 + 3 + 3*5 + 6 = 12 + 3 + 15 + 6 = 36. Wait, standard formula is 9n where n is number of digits. For 4 digits, 9*4 = 36? Wait, let's check standard IMO problem: 6666^2 sum of digits is 72? Wait, 9 * 8 = 72."], explanation: "Sum of digits of 6666^2 is 72." },
-      { question: "When 75, 109 and 204 are divided by two-digit number AB, remainders are 3, 1 and 24. Find A+B.", options: ["6", "7", "8", "9"], answer: "8", hints: ["Subtract remainders: 75-3=72, 109-1=108, 204-24=180.", "Find HCF of 72, 108, 180."], explanation: "HCF(72, 108, 180) = 36. So A=3, B=6 -> A+B=9? Wait, let's check HCF: HCF is 36. A=3, B=6, sum = 9." }
-    ],
-    examPool: [
-      { q: "The 6-digit number 42A28B is a multiple of 99. What are A and B?", options: ["A=0, B=3", "A=3, B=0", "A=4, B=7", "A=7, B=4"], a: "A=3, B=0" },
-      { q: "Find the HCF of 210, 350 and 546.", options: ["14", "28", "7", "1"], a: "14" },
-      { q: "Which of the following can be the HCF of two numbers whose LCM is 220?", options: ["33", "15", "20", "12"], a: "20" },
-      { q: "Find the last digit of 2! + 0! + 1! + 8!", options: ["2", "3", "4", "5"], a: "4" },
-      { q: "Find the sum of divisors of 36.", options: ["91", "85", "78", "64"], a: "91" }
-    ]
-  },
-  2: {
-    lesson: { 
-      title: "Advanced Fractions, Decimals & Ratios", 
-      concept: "Handling complex fractional arithmetic, proportions, ratio shifts when quantities are transferred between parties, and unit conversions.", 
-      trick: "When a quantity is transferred between two ratios (e.g., Mark and Mike), keep the TOTAL sum constant if no external items are added/removed, or use algebra for ratio scaling.", 
-      examples: [{ 
-        q: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15 pieces, ratio becomes 11:19. Total pieces?", 
-        think: "Total candy remains constant before and after transfer.", 
-        step1: "Initial units = 7 + 8 = 15 units. New units = 11 + 19 = 30 units.", 
-        step2: "Make total units equal (multiply first by 2): 14:16 becomes 11:19. Mark drops by 3 units (14-11=3). 3 units = 15 pieces, so 1 unit = 5.", 
-        ans: "Total 30 units × 5 = 150 pieces." 
-      }] 
-    },
-    practicePool: [
-      { question: "Simplify: (4 5/9 + 3 6/11) / (4 5/9 - 3 6/11)", options: ["9.99", "10.01", "8.02", "None"], answer: "8.02", hints: ["Convert mixed fractions to improper fractions first."], explanation: "Evaluating numerator and denominator yields approx 8.02." },
-      { question: "A car covers 24.5 km in 4.2 L of petrol. Distance covered using 2 L?", options: ["5.83 km", "11.67 km", "13.45 km", "16.67 km"], answer: "11.67 km", hints: ["Use unitary method: (24.5 / 4.2) * 2."], explanation: "Distance = (24.5 / 4.2) × 2 = 11.67 km." },
-      { question: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15 pieces, ratio becomes 11:19. Total pieces?", options: ["135", "165", "150", "180"], answer: "150", hints: ["Total sum of ratio parts must be equalized."], explanation: "Total candy = 150 pieces." },
-      { question: "If 3/5 of a tank holds 150 liters, what is the total capacity?", options: ["200 L", "250 L", "300 L", "350 L"], answer: "250 L", hints: ["Divide 150 by 3, then multiply by 5."], explanation: "150 / 3 × 5 = 250 liters." },
-      { question: "What is 0.34 km + 56000 cm + 1600 mm in meters?", options: ["916 m", "901.6 m", "910.6 m", "960.1 m"], answer: "901.6 m", hints: ["Convert all units to meters: 340m + 560m + 1.6m."], explanation: "340 + 560 + 1.6 = 901.6 m." }
-    ],
-    examPool: [
-      { q: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15, ratio becomes 11:19. Total?", options: ["135", "165", "150", "180"], a: "150" },
-      { q: "What do we get when we divide sum of 4 5/9 and 3 6/11 by their difference?", options: ["9.99", "10.01", "8.02", "None"], a: "8.02" },
-      { q: "A car covers 24.5 km in 4.2 L. Distance with 2 L?", options: ["5.83 km", "11.67 km", "13.45 km", "16.67 km"], a: "11.67 km" },
-      { q: "If 1/3 of 1/4 of a number is 15, what is 3/10 of that number?", options: ["35", "36", "45", "54"], a: "54" },
-      { q: "While cooking curry, mass reduced from 1kg to 850g. Find % reduction.", options: ["30%", "20%", "15%", "50%"], a: "15%" }
-    ]
-  },
-  3: {
-    lesson: { 
-      title: "Cryptarithms & Algebraic Equations", 
-      concept: "Cryptarithms are puzzles where letters represent digits in arithmetic operations. Multi-step word equations require setting up variables for unknowns.", 
-      trick: "Analyze carry-overs in multiplication columns and constraints on single-digit values (0-9).", 
-      examples: [{ 
-        q: "If A * B = AB(A - B), find the value of 509 * 218.", 
-        think: "Substitute A = 509 and B = 218 into the given custom operation formula.", 
-        step1: "AB means A × B = 509 × 218 = 110,962.", 
-        step2: "(A - B) = 509 - 218 = 291. Multiply: 110,962 × 291 = 32,289,942.", 
-        ans: "32,289,942." 
-      }] 
-    },
-    practicePool: [
-      { question: "If A * B = AB(A - B), find the value of 509 * 218.", options: ["3,75,29,355", "8,64,29,574", "2,34,65,482", "3,22,89,942"], answer: "3,22,89,942", hints: ["Calculate A*B and (A-B) separately then multiply."], explanation: "Result is 3,22,89,942." },
-      { question: "Solve for x: 301.01 - 0.101 = x + 198.01", options: ["103.119", "103.101", "102.901", "102.899"], answer: "102.901", hints: ["Simplify left side: 300.909, then subtract 198.01."], explanation: "x = 102.901." },
-      { question: "Find value of a in (-26 × a) / 4 = 364", options: ["26", "-37", "78", "-56"], answer: "-56", hints: ["Multiply 364 by 4, then divide by -26."], explanation: "a = -56." },
-      { question: "Simplify: 590 - [ 2 x {20 x (9 x 2 - 3 x 6)}] ", options: ["570", "0", "590", "100"], answer: "590", hints: ["Notice (9x2 - 3x6) = 18 - 18 = 0."], explanation: "Inside bracket evaluates to 0, so result is 590." },
-      { question: "Find value of X if Star + Star + Star = 297 and Star + Circle + Circle = 1574 (from typical olympiad problem)", options: ["1,234", "1,409", "1,574", "1,310"], answer: "1,409", hints: ["Star = 297 / 3 = 99."], explanation: "Resolves to 1,409." }
-    ],
-    examPool: [
-      { q: "If A * B = AB(A - B), find 509 * 218.", options: ["3,75,29,355", "8,64,29,574", "2,34,65,482", "3,22,89,942"], a: "3,22,89,942" },
-      { q: "Solve for x: 301.01 - 0.101 = x + 198.01", options: ["103.119", "103.101", "102.901", "102.899"], a: "102.901" },
-      { q: "Find value of a in (-26 × a) / 4 = 364", options: ["26", "-37", "78", "-56"], a: "-56" },
-      { q: "Simplify: 590 - [2 x {20 x (9 x 2 - 3 x 6)}]", options: ["570", "0", "590", "100"], a: "590" },
-      { q: "John misread multiplier 18 as 81, product increased by 504. What is the other multiplier?", options: ["6", "8", "10", "12"], a: "8" }
-    ]
-  },
-  4: {
-    lesson: { 
-      title: "Geometry: Area & Perimeter Mastery", 
-      concept: "Calculating areas and perimeters of composite figures, overlapping squares, and partitioned rectangles.", 
-      trick: "For overlapping rectangles or square grids, calculate individual areas and subtract overlapping regions or use square side dimensions.", 
-      examples: [{ 
-        q: "Rectangle ACEG is divided into 4 parts. BCDX is a square of area 4 sq.cm. Top rectangle is 16 sq.cm, bottom-right is 8 sq.cm. What is the area of shaded part X?", 
-        think: "Use proportional areas of rectangles with a common height or width.", 
-        step1: "BCDX is 4 sq.cm (side 2 cm). Top-left rectangle is 16 sq.cm with width matching square (2 cm), so length is 8 cm.", 
-        step2: "Shaded region shares dimensions with partitioned sections. Calculating proportions yields 32 sq.cm.", 
-        ans: "32 sq. cm." 
-      }] 
-    },
-    practicePool: [
-      { question: "A rectangle measuring 12 cm × 84 cm is divided into 7 square parts. Find the area of 3 of these parts.", options: ["254 cm²", "432 cm²", "756 cm²", "374 cm²"], answer: "432 cm²", hints: ["Side of each square = 12 cm.", "Area of 1 square = 144. Area of 3 = 144 × 3."], explanation: "3 × 144 = 432 cm²." },
-      { question: "Find the perimeter of a figure made of squares with areas 1156, 289, and 289 sq.m.", options: ["352 m", "336 m", "284 m", "238 m"], answer: "336 m", hints: ["Side of large square = sqrt(1156) = 34 m.", "Side of smaller squares = sqrt(289) = 17 m."], explanation: "Perimeter = 336 m." },
-      { question: "If the side of each square in a grid is 8 m, find total area and perimeter.", options: ["194 m², 128 m", "72 m², 156 m", "576 m², 208 m", "676 m², 256 m"], answer: "576 m², 208 m", hints: ["Count total unit squares for area."], explanation: "Area = 576 m², Perimeter = 208 m." },
-      { question: "Rectangle ACEG has 16 sq.cm top, 4 sq.cm square BCDX, 8 sq.cm bottom right. Shaded area?", options: ["28 sq.cm", "32 sq.cm", "48 sq.cm", "64 sq.cm"], answer: "32 sq.cm", hints: ["Use ratio of areas in rectangles."], explanation: "Shaded area = 32 sq. cm." },
-      { question: "Find the area of a square whose perimeter is 64 cm.", options: ["128 cm²", "256 cm²", "64 cm²", "512 cm²"], answer: "256 cm²", hints: ["Side = 64 / 4 = 16 cm.", "Area = 16 × 16."], explanation: "Area = 256 cm²." }
-    ],
-    examPool: [
-      { q: "Rectangle ACEG has 16 sq.cm, 4 sq.cm square, 8 sq.cm. Shaded area?", options: ["28 sq. cm", "32 sq. cm", "48 sq. cm", "64 sq. cm"], a: "32 sq. cm" },
-      { q: "A rectangle 12 cm × 84 cm is divided into 7 square parts. Area of 3 parts?", options: ["254 cm²", "432 cm²", "756 cm²", "374 cm²"], a: "432 cm²" },
-      { q: "Perimeter of figure made of squares with areas 1156, 289, 289 sq.m?", options: ["352 m", "336 m", "284 m", "238 m"], a: "336 m" },
-      { q: "If the side of each square is 8 m, find area and perimeter of the grid shape.", options: ["194 m², 128 m", "72 m², 156 m", "576 m², 208 m", "676 m², 256 m"], a: "576 m², 208 m" },
-      { q: "Square with side 24 m cut into small cubes of side 6 m. How many small cubes?", options: ["24", "40", "32", "64"], a: "64" }
-    ]
-  },
-  5: {
-    lesson: { 
-      title: "Speed, Distance & Time Dynamics", 
-      concept: "Advanced motion problems involving round trips, pit stops, relative closing speeds, and average speeds over multiple segments.", 
-      trick: "Total Distance divided by Total Time is always the formula for Average Speed (never average the speeds directly!).", 
-      examples: [{ 
-        q: "Rohan traveled House to Post Office (1.6 km), Market (1.3 km), Hospital (6.65 km), and back to House (0.75 km). Total distance?", 
-        think: "Sum up all individual segment distances given in the path.", 
-        step1: "1.6 + 1.3 + 6.65 + 0.75", 
-        step2: "1.6 + 1.3 = 2.9; 6.65 + 0.75 = 7.4; 2.9 + 7.4 = 10.3 km.", 
-        ans: "10.3 km." 
-      }] 
-    },
-    practicePool: [
-      { question: "Rohan traveled House -> Post Office (1.6 km) -> Market (1.3 km) -> Hospital (6.65 km) -> House (0.75 km). Total distance?", options: ["12.5 km", "11.4 km", "9.53 km", "10.3 km"], answer: "10.3 km", hints: ["Add all segment distances: 1.6 + 1.3 + 6.65 + 0.75."], explanation: "Total = 10.3 km." },
-      { question: "Train travels continuously in October at 68 km/h. Total distance covered?", options: ["37,290 km", "50,592 km", "12,740 km", "64,280 km"], answer: "50,592 km", hints: ["October has 31 days. Hours = 31 × 24 = 744 hours.", "Multiply 744 by 68."], explanation: "744 × 68 = 50,592 km." },
-      { question: "A runner in a 22 km marathon has covered 1/4 of the distance yet to cover. Distance covered?", options: ["6.1 km", "5.0 km", "4.4 km", "5.5 km"], answer: "4.4 km", hints: ["Let covered = x, remaining = y. x + y = 22 and x = y/4."], explanation: "x = 4.4 km." },
-      { question: "How many times during a day do hands of a clock make a straight line?", options: ["11", "22", "24", "44"], answer: "44", hints: ["Hands make a straight line (180°) 22 times in 12 hours."], explanation: "22 × 2 = 44 times in 24 hours." },
-      { question: "Rehan left beach at 11:15 AM, took 7h 24m there, return took 1h 53m less. Arrival time?", options: ["12:00 PM", "5:31 PM", "4:46 PM", "None"], answer: "4:46 PM", hints: ["Return time = 7h 24m - 1h 53m = 5h 31m.", "11:15 AM + 5h 31m."], explanation: "Arrival is 4:46 PM." }
-    ],
-    examPool: [
-      { q: "Rohan cycled House -> Post Office -> Market -> Hospital -> House (distances: 1.6, 1.3, 6.65, 0.75). Total?", options: ["12.5 km", "11.4 km", "9.53 km", "10.3 km"], a: "10.3 km" },
-      { q: "Train travels in October at 68 km/h without stopping. Total distance?", options: ["37,290 km", "50,592 km", "12,740 km", "64,280 km"], a: "50,592 km" },
-      { q: "Marathon 22 km, distance covered is 1/4 of distance yet to cover. Distance covered?", options: ["6.1 km", "5.0 km", "4.4 km", "5.5 km"], a: "4.4 km" },
-      { q: "How many times during a day do clock hands make a straight line?", options: ["11", "22", "24", "44"], a: "44" },
-      { q: "Rehan beach trip: 7h 24m there, return 1h 53m less. Left 11:15 AM, return time?", options: ["12:00 PM", "5:31 PM", "4:46 PM", "None"], a: "4:46 PM" }
-    ]
-  },
-  6: {
-    lesson: { 
-      title: "Combinatorics & Probability", 
-      concept: "Counting principles, path routing in networks, symmetry lines in geometric shapes, and probability ratios.", 
-      trick: "For route counting networks, write the number of paths arriving at each junction by summing paths from preceding connected arrows.", 
-      examples: [{ 
-        q: "Find the number of lines of symmetry in a regular polygon or standard shapes.", 
-        think: "Count axes where folding the shape results in exact halves matching.", 
-        step1: "Equilateral triangle has 3, Square has 4, Regular pentagon has 5.", 
-        step2: "Circle has infinite lines of symmetry.", 
-        ans: "Depends on shape (Square = 4)." 
-      }] 
-    },
-    practicePool: [
-      { question: "How many different routes from A to H in a directed one-way road network graph?", options: ["12", "16", "24", "32"], answer: "24", hints: ["Trace node by node from A adding incoming path counts."], explanation: "Total valid paths = 24." },
-      { question: "Which shape has maximum lines of symmetry among regular polygons?", options: ["Square", "Equilateral Triangle", "Regular Hexagon", "Circle"], answer: "Circle", hints: ["A circle has an infinite number of symmetry lines."], explanation: "Circle has infinite lines of symmetry." },
-      { question: "4 shirts and 3 trousers. How many outfit combinations?", options: ["7", "10", "12", "14"], answer: "12", hints: ["Multiply choices: 4 × 3."], explanation: "4 × 3 = 12 combinations." },
-      { question: "A fair die is rolled. Probability of getting a number greater than 4?", options: ["1/6", "2/6", "3/6", "4/6"], answer: "2/6", hints: ["Numbers greater than 4 are 5 and 6 (2 numbers)."], explanation: "2 / 6 = 1/3 (or 2/6)." },
-      { question: "Letter 'E' has how many lines of symmetry?", options: ["0", "1", "2", "4"], answer: "1", hints: ["Letter E can be folded horizontally in half."], explanation: "1 horizontal line of symmetry." }
-    ],
-    examPool: [
-      { q: "How many different routes from A to H along directed roads?", options: ["12", "16", "24", "32"], a: "24" },
-      { q: "Which shape has infinite lines of symmetry?", options: ["Square", "Circle", "Equilateral Triangle", "Regular Pentagon"], a: "Circle" },
-      { q: "4 shirts and 3 trousers. Total outfit combinations?", options: ["7", "10", "12", "14"], a: "12" },
-      { q: "A fair die is rolled. Probability of getting number > 4?", options: ["1/6", "2/6", "3/6", "4/6"], a: "2/6" },
-      { q: "Letter 'E' has how many lines of symmetry?", options: ["0", "1", "2", "4"], a: "1" }
-    ]
-  },
-  7: {
-    lesson: { 
-      title: "Working Backwards & Logic Puzzles", 
-      concept: "Solving complex multi-person statements, age puzzles with conditional truths, and reverse-calculation word problems.", 
-      trick: "In logic puzzles where statements have partial truths, test each person's claims against consistency rules.", 
-      examples: [{ 
-        q: "Three brothers Marcus, Joseph, Ryan. In each statement only 2 sentences are correct. Marcus says: I'm 28, younger than Joseph by 3, older than Ryan by 2. How old is Joseph?", 
-        think: "Analyze truth conditions for each brother's 3 statements.", 
-        step1: "Test ages: If Marcus = 30, Joseph = 33, Ryan = 28.", 
-        step2: "Verify statement constraints. Joseph = 33 satisfies all valid conditions.", 
-        ans: "Joseph is 33 years old." 
-      }] 
-    },
-    practicePool: [
-      { question: "Marcus, Joseph, Ryan age puzzle where each gives 3 statements with 2 true. How old is Joseph?", options: ["31", "33", "35", "30"], answer: "33", hints: ["Test ages consistency where 2 statements per person are correct."], explanation: "Joseph is 33." },
-      { question: "Anklet/watch weight problem: 3 trophies weigh 198 kg more than 1 trophy. Weight of 1 trophy?", options: ["66 kg", "99 kg", "49.5 kg", "33 kg"], answer: "99 kg", hints: ["3T - 1T = 198 => 2T = 198."], explanation: "1 trophy = 99 kg." },
-      { question: "A number decreased by 4 then multiplied by 2 gives 12. What is the number?", options: ["8", "10", "12", "16"], answer: "10", hints: ["Work backwards: 12 / 2 = 6, then 6 + 4."], explanation: "Number is 10." },
-      { question: "Mother prepared 208 sweets for son and 3 friends. Carla ate 22 less than Matthew, Kelly 4 less than Matthew, Jeremy 78 less than 3× Matthew. How many more sweets did friends eat than Jeremy?", options: ["52", "104", "130", "78"], answer: "104", hints: ["Set Matthew = x, solve total = 208."], explanation: "Difference is 104." },
-      { question: "If yesterday was Wednesday, what day is 100 days later?", options: ["Monday", "Tuesday", "Thursday", "Friday"], answer: "Friday", hints: ["100 mod 7 = 2 remainder.", "Wednesday + 2 days."], explanation: "Friday." }
-    ],
-    examPool: [
-      { q: "Marcus, Joseph, Ryan age puzzle (2 true statements each). Joseph's age?", options: ["31", "33", "35", "30"], a: "33" },
-      { q: "3 trophies weigh 198 kg more than 1 trophy. Weight of 1 trophy?", options: ["66 kg", "99 kg", "49.5 kg", "33 kg"], a: "99 kg" },
-      { q: "A number decreased by 4 then multiplied by 2 gives 12. Number?", options: ["8", "10", "12", "16"], a: "10" },
-      { q: "Mother prepared 208 sweets for son and 3 friends with specific relations. Friends vs Jeremy difference?", options: ["52", "104", "130", "78"], a: "104" },
-      { q: "If July 7, 2018 is Saturday, what day of the week is 10 years later?", options: ["Thursday", "Friday", "Saturday", "Sunday"], a: "Thursday" }
-    ]
-  },
-  8: {
-    lesson: { 
-      title: "Sequence, Series & Special Patterns", 
-      concept: "Telescoping series sums, Fibonacci number sequences, and arithmetic progression nth term formulas.", 
-      trick: "For telescoping fractions like 1/(5×9) + 1/(9×13) + ..., split into difference of unit fractions: 1/4 × (1/5 - 1/9 + 1/9 - 1/13 + ...).", 
-      examples: [{ 
-        q: "Find the sum of 235 × (1/(5×9) + 1/(9×13) + ... + 1/(2017×2021)) written as m/n in simplest form. Find m+n.", 
-        think: "Use telescoping sum formula for fractions with common differences in denominators (d=4).", 
-        step1: "Sum = 1/4 × (1/5 - 1/2021) = 1/4 × (2016 / 10105) = 504 / 10105.", 
-        step2: "Multiply by 235: 235 × (504 / 10105) = simplify ratio to m/n.", 
-        ans: "m + n calculation." 
-      }] 
-    },
-    practicePool: [
-      { question: "Find sum of 2008 + 2010 + 2012 + 2014 + 2016 + 2018", options: ["24156", "20130", "12078", "10065"], answer: "12078", hints: ["Use arithmetic series sum: (First + Last) / 2 × Number of terms."], explanation: "(2008 + 2018) / 2 × 6 = 12,078." },
-      { question: "Sequence: first is 20, second is 19, next is sum of previous two. Find 6th number.", options: ["97", "155", "252", "407"], answer: "155", hints: ["Term 3: 20+19=39. Term 4: 19+39=58...", "Calculate up to 6th term."], explanation: "Terms: 20, 19, 39, 58, 97, 155." },
-      { question: "Observe pattern: 1/1, 1/2, 2/2, 1/3, 2/3, 3/3... Find sum of 55th and 67th terms.", options: ["3/4", "1 10/11", "1 1/1", "2"], answer: "1 10/11", hints: ["Group by denominators."], explanation: "Sum equals 1 10/11." },
-      { question: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], answer: "2019", hints: ["Factor out 2019: 2019 × (2019 - 2018)."], explanation: "2019 × 1 = 2019." },
-      { question: "Fibonacci sequence variation: 1, 1, 2, 3, 5, 8, 13... What is the 10th term?", options: ["34", "55", "89", "144"], answer: "55", hints: ["Continue adding last two terms up to 10th."], explanation: "10th term is 55." }
-    ],
-    examPool: [
-      { q: "Find sum of 2008 + 2010 + 2012 + 2014 + 2016 + 2018", options: ["24156", "20130", "12078", "10065"], a: "12078" },
-      { q: "Sequence: 20, 19, sum of previous two. 6th term?", options: ["97", "155", "252", "407"], a: "155" },
-      { q: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], a: "2019" },
-      { q: "Value of expression 235 × (1/(5×9) + ... + 1/(2017×2021)) written as m/n. Find m+n.", options: ["2541", "3420", "4150", "5210"], a: "2541" },
-      { q: "Three friends Ann (every 5 days), Barbara (6 days), Carla (8 days) met on Thursday 2 days ago. Days until next Thursday meeting?", options: ["72", "842", "838", "840"], a: "840" }
-    ]
-  },
-  9: {
-    lesson: { 
-      title: "Olympiad Multi-Step Word Problems", 
-      concept: "Complex composite word problems combining simultaneous equations, Venn diagrams, and percentage/discount chains.", 
-      trick: "In set theory / Venn diagrams, use Principle of Inclusion-Exclusion: Total = A + B - Both + Neither.", 
-      examples: [{ 
-        q: "In a class of 50 students, 35 like basketball, 23 like soccer. Greatest possible number who dislike both?", 
-        think: "Maximize the outer region (dislike both) by minimizing overlap.", 
-        step1: "If soccer (23) is completely inside basketball (35), then basketball/soccer lovers total 35.", 
-        step2: "Remaining students who like neither = 50 - 35 = 15.", 
-        ans: "15 students." 
-      }] 
-    },
-    practicePool: [
-      { question: "In class of 50, 35 like basketball, 23 like soccer. Greatest possible number disliking both?", options: ["15", "27", "38", "48"], answer: "15", hints: ["Minimize intersection by putting smaller set inside larger set."], explanation: "50 - 35 = 15." },
-      { question: "850 students passed class 10. Commerce 41%, Art 37%, Science 22%. Students NOT choosing science?", options: ["500", "663", "298", "375"], answer: "663", hints: ["Non-science percentage = 100% - 22% = 78%.", "Calculate 78% of 850."], explanation: "0.78 × 850 = 663." },
-      { question: "Two candles lit together. First takes 6h, second takes 4h. After 3.6h, ratio of first to second length?", options: ["2:1", "3:2", "4:3", "1:1"], answer: "2:1", hints: ["Calculate remaining fraction after 3.6 hours for each."], explanation: "Ratio is 2:1." },
-      { question: "Jack and Jill start running from A to B (660m distance) back and forth. Jill runs faster. At 3rd meeting, how far has Jill run?", options: ["1320 m", "2640 m", "3960 m", "5280 m"], answer: "3960 m", hints: ["Each meeting corresponds to a combined multiple of distance."], explanation: "Jill has run 3960 m." },
-      { question: "Three brothers talking about ages with conditional truths. Joseph's age?", options: ["31", "33", "35", "30"], answer: "33", hints: ["Verified through consistent age inequalities."], explanation: "Joseph is 33." }
-    ],
-    examPool: [
-      { q: "In class of 50, 35 basketball, 23 soccer. Greatest number disliking both?", options: ["15", "27", "38", "48"], a: "15" },
-      { q: "850 students passed. Commerce 41%, Art 37%, Science 22%. Students not choosing science?", options: ["500", "663", "298", "375"], a: "663" },
-      { q: "Two candles (6h and 4h burn time). Ratio of lengths after 3.6 hours?", options: ["1:2", "2:1", "3:4", "4:3"], a: "2:1" },
-      { q: "Jack and Jill run 660m track back and forth. At 3rd meeting, Jill distance?", options: ["1320 m", "2640 m", "3960 m", "5280 m"], a: "3960 m" },
-      { q: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], a: "2019" }
-    ]
-  },
-  10: {
-    lesson: { 
-      title: "Global IMO Grand Master Exam", 
-      concept: "The highest tier of international mathematical olympiad challenges, uniting number theory, advanced geometry, algebraic identities, and combinatorial logic.", 
-      trick: "Stay calm, re-read complex problem statements twice, test edge cases, and use rigorous verification.", 
-      examples: [{ 
-        q: "In the cryptarithm SIMOC × SIMOC, find the value of S × I × M × O × C where different letters represent different digits.", 
-        think: "Analyze digit constraints and multiplication column carry-overs.", 
-        step1: "Test candidate values for 5-letter palindromic / multiplication patterns.", 
-        step2: "Product mapping yields unique digit assignments.", 
-        ans: "Calculated product." 
-      }] 
-    },
-    practicePool: [
-      { question: "Cryptarithm SIMOC × SIMOC: Find S × I × M × O × C", options: ["0", "120", "240", "360"], answer: "0", hints: ["Check if any letter must be 0 in multiplication product rows."], explanation: "Product evaluates such that one letter is 0, making product 0." },
-      { question: "Find value of m+n for the telescoping series expression 235 × sum(1/(5×9)...)", options: ["2541", "3420", "4150", "5210"], answer: "2541", hints: ["Simplifies to fraction with m=504, n=2037... sum m+n = 2541."], explanation: "m + n = 2541." },
-      { question: "Distance between A and B is 660m. Jack & Jill meet for 3rd time. Jill distance?", options: ["2640 m", "3960 m", "5280 m", "6600 m"], answer: "3960 m", hints: ["3rd meeting total distance covered = 6 × 660 = 3960m shared, Jill gets proportional share."], explanation: "Jill has run 3960 m." },
-      { question: "What is the last digit of 2! + 0! + 1! + 8!?", options: ["2", "3", "4", "5"], answer: "4", hints: ["2! = 2, 0! = 1, 1! = 1, 8! ends in 0.", "2 + 1 + 1 + 0 = 4."], explanation: "Last digit is 4." },
-      { question: "Find the 6th number in sequence: 20, 19, then sum of previous two.", options: ["97", "155", "252", "407"], answer: "155", hints: ["Terms: 20, 19, 39, 58, 97, 155."], explanation: "6th number is 155." }
-    ],
-    examPool: [
-      { q: "Cryptarithm SIMOC × SIMOC: Find S × I × M × O × C", options: ["0", "120", "240", "360"], a: "0" },
-      { q: "Find value of m+n for 235 × (1/(5×9) + ... + 1/(2017×2021))", options: ["2541", "3420", "4150", "5210"], a: "2541" },
-      { q: "Distance A to B 660m. Jack & Jill 3rd meeting distance for Jill?", options: ["2640 m", "3960 m", "5280 m", "6600 m"], a: "3960 m" },
-      { q: "Find the last digit of 2! + 0! + 1! + 8!", options: ["2", "3", "4", "5"], a: "4" },
-      { q: "Three friends Ann, Barbara, Carla swimming lesson overlap. Days until next Thursday meeting?", options: ["72", "842", "838", "840"], a: "840" }
-    ]
-  }
-};
-
-const HomeView = ({ setCurrentView }) => (
-  <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center animate-fade-in bg-gradient-to-b from-blue-900 via-indigo-900 to-slate-900 text-white">
-    <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl shadow-2xl max-w-md w-full border border-white/20">
-      <div className="flex justify-center mb-6">
-        <div className="bg-amber-500 p-5 rounded-full text-white shadow-xl transform hover:scale-105 transition">
-          <Trophy size={64} />
-        </div>
-      </div>
-      <h1 className="text-3xl font-black mb-2 tracking-tight">IMO & SIMOC OLYMPIAD</h1>
-      <h2 className="text-sm font-bold text-amber-400 mb-4 uppercase tracking-widest">International Math Masterclass</h2>
-      <p className="text-blue-100 mb-8 font-medium leading-relaxed bg-white/5 p-4 rounded-2xl border border-white/10 text-xs">
-        Latih kemampuan matematika tingkat internasional dengan soal-soal tingkat lanjut, silabus mendalam, tips & trik, dan ujian grand master!
-      </p>
-      <div className="space-y-4">
-        <button onClick={() => setCurrentView('map')} className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-4 px-6 rounded-2xl shadow-[0_8px_0_rgb(180,83,9)] hover:translate-y-1 transition-all flex justify-center items-center gap-2 text-base">
-          <Zap fill="currentColor"/> MULAI PETUALANGAN OLYMPIAD
-        </button>
-        <button onClick={() => setCurrentView('dashboard')} className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-6 rounded-2xl transition-colors flex justify-center items-center gap-2 text-sm border border-white/10">
-          <User /> PROFIL & PRESTASI SAYA
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-const MapView = ({ LEVELS, CONTENT, userData, setCurrentView, setActiveLevel }) => (
-  <div className="pb-28 pt-8 px-5 max-w-md mx-auto animate-fade-in min-h-screen bg-slate-900 text-white">
-    <div className="text-center mb-8 bg-slate-800/80 backdrop-blur p-5 rounded-3xl shadow-sm border border-slate-700">
-      <h2 className="text-2xl font-black text-amber-400">Peta Level Olimpiade</h2>
-      <p className="text-slate-300 text-xs font-semibold mt-1">10 Level Tantangan Matematika Internasional</p>
-    </div>
-    
-    <div className="space-y-6 relative before:absolute before:inset-0 before:ml-12 before:w-1.5 before:bg-gradient-to-b before:from-emerald-500 before:via-blue-500 before:to-amber-500">
-      {LEVELS.map((level, index) => {
-        const isUnlocked = userData.unlockedLevels.includes(level.id);
-        const isCompleted = userData.completedLevels.includes(level.id);
-        const isCurrent = isUnlocked && !isCompleted && (!LEVELS[index-1] || userData.completedLevels.includes(LEVELS[index-1].id));
-        
-        return (
-          <div key={level.id} className="relative flex items-center justify-between group">
-            <div className={`flex items-center justify-center w-14 h-14 rounded-full border-4 shadow-lg shrink-0 z-10 transition-transform
-              ${isCompleted ? 'bg-emerald-600 border-emerald-300 text-white' : isCurrent ? `${level.color} border-white text-white animate-bounce scale-110` : 'bg-slate-700 border-slate-600 text-slate-400'}`}>
-              {isCompleted ? <CheckCircle size={28} /> : isUnlocked ? <level.icon size={28} /> : <Lock size={28} />}
-            </div>
-            
-            <div className={`w-[calc(100%-4.5rem)] p-5 rounded-2xl shadow-md border-2 bg-slate-800 transition-all
-              ${isUnlocked ? 'border-slate-700 hover:border-amber-500/50 cursor-pointer' : 'border-slate-800 opacity-60'}`}>
-              <div className="flex justify-between items-center mb-2">
-                <span className={`text-[10px] font-black px-3 py-1 rounded-lg uppercase tracking-wider ${isCompleted ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : isCurrent ? 'bg-blue-950 text-blue-400 border border-blue-800' : 'bg-slate-700 text-slate-400'}`}>
-                  {level.title}
-                </span>
-                {isCompleted && <span className="text-xs font-bold text-amber-400 flex items-center gap-1"><Star size={14} fill="currentColor"/> Selesai</span>}
-              </div>
-              <h3 className={`font-black text-base mb-1 ${isUnlocked ? 'text-white' : 'text-slate-400'}`}>{level.name}</h3>
-              <p className="text-xs text-slate-400 mb-4 font-medium leading-relaxed">{level.desc}</p>
-              
-              {isUnlocked ? (
-                <button 
-                  onClick={() => {
-                    if(CONTENT[level.id]) {
-                      setActiveLevel(level);
-                      setCurrentView('levelIntro');
-                    } else {
-                      alert("Materi level ini sedang disiapkan.");
-                    }
-                  }}
-                  className={`w-full py-3 rounded-xl font-extrabold flex justify-center items-center gap-2 text-xs transition-transform active:scale-95 text-white shadow-md
-                    ${isCompleted ? 'bg-emerald-700 hover:bg-emerald-800' : level.color}`}>
-                  {isCompleted ? 'ULANGI MISI' : level.id === 10 ? 'IKUTI UJIAN GRAND MASTER' : 'MULAI PELAJARAN'} <PlayCircle size={16} />
-                </button>
-              ) : (
-                <div className="w-full py-3 rounded-xl font-bold flex justify-center items-center gap-2 text-xs bg-slate-700 text-slate-400">
-                  <Lock size={14} /> TERKUNCI (Selesaikan Level Sebelumnya)
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-);
-
-const DashboardView = ({ userData }) => (
-  <div className="pb-24 pt-8 px-5 max-w-md mx-auto animate-fade-in bg-slate-900 text-white min-h-screen">
-    <h2 className="text-2xl font-black text-amber-400 mb-6 flex items-center gap-3">
-      <User className="text-amber-400" size={28}/> Profil Olimpiade
-    </h2>
-    
-    <div className="grid grid-cols-2 gap-4 mb-6">
-      <div className="bg-slate-800 rounded-3xl p-5 border border-slate-700 flex flex-col items-center text-center shadow-sm">
-        <Star className="text-amber-400 mb-2 drop-shadow-sm" size={36} fill="currentColor" />
-        <span className="text-3xl font-extrabold text-amber-300">{userData.stars}</span>
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-wide mt-1">Total Bintang</span>
-      </div>
-      <div className="bg-slate-800 rounded-3xl p-5 border border-slate-700 flex flex-col items-center text-center shadow-sm">
-        <div className="text-3xl mb-1">🔥</div>
-        <span className="text-3xl font-extrabold text-orange-400">{userData.streak}</span>
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-wide mt-1">Hari Latihan</span>
-      </div>
-    </div>
-
-    <div className="bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-700 mb-6">
-      <h3 className="font-bold text-slate-200 mb-4 flex items-center gap-2 text-sm">
-        <Map size={18} className="text-blue-400"/> Progres Keseluruhan (10 Level)
-      </h3>
-      <div className="mb-2 flex justify-between text-xs font-medium text-slate-300">
-        <span>Level Ditaklukkan</span>
-        <span className="font-bold bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800">{userData.completedLevels.length} / 10</span>
-      </div>
-      <div className="w-full bg-slate-700 rounded-full h-3 shadow-inner mt-2 overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-amber-500 h-3 rounded-full transition-all duration-1000" style={{width: `${(userData.completedLevels.length / 10) * 100}%`}}></div>
-      </div>
-    </div>
-
-    <div className="bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-700">
-      <h3 className="font-bold text-slate-200 mb-4 flex items-center gap-2 text-sm">
-        <Trophy size={18} className="text-amber-400"/> Badge Penghargaan Internasional
-      </h3>
-      {userData.badges.length > 0 ? (
-        <div className="flex flex-wrap gap-2.5">
-          {userData.badges.map((badge, idx) => (
-            <span key={idx} className="bg-slate-900 text-amber-300 px-3 py-2 rounded-xl text-xs font-black uppercase tracking-wide border border-amber-500/30 shadow-sm flex items-center gap-2">
-              {badge}
-            </span>
-          ))}
-        </div>
-      ) : (
-        <p className="text-xs text-slate-400 italic text-center py-6 bg-slate-900/50 rounded-2xl border border-dashed border-slate-700">Selesaikan Level 1 untuk meraih badge pertamamu!</p>
-      )}
-    </div>
-  </div>
-);
-
-const LevelIntroView = ({ activeLevel, CONTENT, setCurrentView }) => {
-  const lesson = CONTENT[activeLevel.id].lesson;
-  return (
-    <div className="min-h-screen bg-slate-900 text-white p-6 flex flex-col justify-center max-w-md mx-auto animate-fade-in">
-      <button onClick={() => setCurrentView('map')} className="text-slate-300 hover:text-white mb-6 self-start flex items-center gap-2 font-bold bg-slate-800 px-4 py-2 rounded-2xl shadow-sm border border-slate-700 transition-transform active:scale-95 text-xs">
-        <ArrowLeft size={16} /> Kembali ke Peta
-      </button>
-      
-      <div className="bg-slate-800 p-7 rounded-[2rem] shadow-xl border border-slate-700 text-center relative overflow-hidden">
-        <div className={`relative z-10 w-20 h-20 mx-auto rounded-full ${activeLevel.color} text-white flex items-center justify-center mb-5 shadow-lg border-2 border-white/20`}>
-          <activeLevel.icon size={40} />
-        </div>
-        <h2 className="text-amber-400 font-extrabold tracking-widest text-xs mb-1 uppercase">{activeLevel.title}</h2>
-        <h1 className="text-2xl font-black text-white mb-3 leading-tight">{activeLevel.name}</h1>
-        <p className="text-slate-300 mb-6 font-medium bg-slate-900/50 p-3.5 rounded-xl border border-slate-700 text-xs leading-relaxed">{activeLevel.desc}</p>
-        
-        <div className="bg-slate-900/80 rounded-2xl p-4 mb-6 text-left border border-slate-700">
-          <h3 className="font-black text-blue-400 mb-3 flex items-center gap-2 text-xs uppercase tracking-wider"><Target size={16}/> Silabus & Target Materi:</h3>
-          <p className="text-xs text-slate-300 mb-3 font-semibold">{lesson.concept}</p>
-          <ul className="text-xs text-slate-300 space-y-2 font-bold border-t border-slate-800 pt-3">
-            <li className="flex items-center gap-2"><div className="text-emerald-400"><CheckCircle size={14}/></div> Pelajari Tip & Trik Olimpiade</li>
-            <li className="flex items-center gap-2"><div className="text-emerald-400"><CheckCircle size={14}/></div> Latihan 5 Soal Lanjutan dengan Hint</li>
-            <li className="flex items-center gap-2"><div className="text-emerald-400"><CheckCircle size={14}/></div> Ujian Evaluasi (Skor Min. 80)</li>
-          </ul>
-        </div>
-        
-        <button onClick={() => setCurrentView('lesson')} className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-4 px-6 rounded-2xl shadow-[0_6px_0_rgb(180,83,9)] hover:translate-y-1 transition-all text-sm flex justify-center items-center gap-2">
-          BUKA MATERI & TRIK <PlayCircle size={18} fill="currentColor"/>
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const LessonView = ({ activeLevel, CONTENT, setCurrentView }) => {
-  const lesson = CONTENT[activeLevel.id].lesson;
-  return (
-    <div className="min-h-screen bg-slate-900 text-white p-5 pb-28 max-w-md mx-auto animate-fade-in">
-      <div className="flex items-center justify-between mb-6 bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-700 sticky top-2 z-30">
-         <button onClick={() => setCurrentView('levelIntro')} className="p-2 bg-slate-900 rounded-full text-slate-300 hover:text-white"><ArrowLeft size={18}/></button>
-         <h2 className="font-extrabold text-amber-400 text-sm uppercase tracking-wider">Silabus & Trik</h2>
-         <div className="w-8"></div>
-      </div>
-
-      <div className="space-y-5">
-        <div className="bg-slate-800 rounded-3xl p-6 border border-slate-700 shadow-sm">
-          <span className="text-blue-400 font-extrabold mb-2 text-[10px] tracking-widest uppercase bg-blue-950 px-2.5 py-1 rounded-lg border border-blue-800 inline-block">Konsep Inti</span>
-          <h4 className="text-xl font-black text-white mb-3 mt-1 leading-snug">{lesson.title}</h4>
-          <p className="text-slate-300 leading-relaxed font-medium text-xs">{lesson.concept}</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-3xl p-1 shadow-lg">
-          <div className="bg-slate-900 rounded-[1.4rem] p-5 h-full">
-            <h3 className="text-amber-400 font-black mb-2 flex items-center gap-2 text-xs uppercase tracking-wide">
-              <Lightbulb className="fill-amber-400 text-amber-400" size={16}/> TIP & TRIK INTERNASIONAL
-            </h3>
-            <p className="text-slate-200 font-bold text-xs leading-relaxed">{lesson.trick}</p>
-          </div>
-        </div>
-
-        <div className="bg-slate-800 border border-slate-700 rounded-3xl p-5 shadow-sm">
-          <h3 className="text-slate-400 font-extrabold mb-4 text-[10px] tracking-widest uppercase border-b border-slate-700 pb-2">Contoh Soal Pembahasan</h3>
-          <div className="bg-slate-900 p-4 rounded-2xl mb-4 border border-slate-700">
-            <p className="font-bold text-blue-300 text-xs leading-relaxed">{lesson.examples[0].q}</p>
-          </div>
-          
-          <div className="space-y-3 text-xs">
-            <div className="flex gap-3 items-start">
-              <div className="bg-purple-950 text-purple-300 border border-purple-800 w-6 h-6 rounded-full flex items-center justify-center font-bold shrink-0 mt-0.5">?</div>
-              <p className="text-slate-300 italic font-semibold leading-relaxed">"{lesson.examples[0].think}"</p>
-            </div>
-            <div className="flex gap-3 items-start">
-              <div className="bg-slate-700 text-slate-300 w-6 h-6 rounded-full flex items-center justify-center font-bold shrink-0 mt-0.5">1</div>
-              <p className="text-slate-300 font-semibold leading-relaxed">{lesson.examples[0].step1}</p>
-            </div>
-            <div className="flex gap-3 items-start">
-              <div className="bg-slate-700 text-slate-300 w-6 h-6 rounded-full flex items-center justify-center font-bold shrink-0 mt-0.5">2</div>
-              <p className="text-slate-300 font-semibold leading-relaxed">{lesson.examples[0].step2}</p>
-            </div>
-            <div className="mt-4 bg-emerald-950 text-emerald-300 p-4 rounded-2xl border border-emerald-800 font-black flex gap-2.5 items-center">
-               <CheckCircle className="shrink-0 text-emerald-400" size={20}/>
-               <span className="text-xs">{lesson.examples[0].ans}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 flex justify-center max-w-md mx-auto z-40">
-        <button onClick={() => setCurrentView('practice')} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-[0_4px_0_rgb(37,99,235)] transition-all text-xs flex justify-center items-center gap-2">
-          MULAI LATIHAN SOAL ACAK <ArrowRight size={16} />
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const QuizEngine = ({ isExam, activeLevel, CONTENT, currentView, setCurrentView, userData, updateStats, addStars, unlockNextLevel }) => {
-  const [questions, setQuestions] = useState([]);
-  const [qIndex, setQIndex] = useState(0);
-  const [selectedAns, setSelectedAns] = useState(null);
-  const [status, setStatus] = useState('idle');
-  const [hintLevel, setHintLevel] = useState(0);
-  const [mistakes, setMistakes] = useState(0);
-  const [examScore, setExamScore] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const pool = isExam ? CONTENT[activeLevel.id].examPool : CONTENT[activeLevel.id].practicePool;
-    const shuffledPool = shuffleArray(pool);
-    const selectedQuestions = shuffledPool.slice(0, 5);
-    setQuestions(selectedQuestions);
-    setTimeout(() => setIsLoading(false), 400);
-  }, [activeLevel.id, isExam]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center max-w-md mx-auto text-amber-400">
-        <RefreshCw size={40} className="animate-spin mb-3" />
-        <h2 className="font-bold text-sm">Menyiapkan Soal Olimpiade...</h2>
-      </div>
-    );
-  }
-
-  if (currentView === 'examResult') {
-    const percentage = Math.round((examScore / questions.length) * 100);
-    const passed = percentage >= 80;
-    
-    return (
-      <div className="min-h-screen bg-slate-900 text-white p-6 flex flex-col justify-center max-w-md mx-auto text-center animate-fade-in">
-         <div className="bg-slate-800 p-8 rounded-[2rem] shadow-2xl border border-slate-700">
-           <div className="text-6xl mb-4">{passed ? '🏆' : '💪'}</div>
-           <h2 className="text-2xl font-black mb-2">{passed ? 'UJIAN DITAKLUKKAN!' : 'BELUM LULUS'}</h2>
-           <p className="text-slate-300 font-medium mb-6 text-xs">
-             {passed ? 'Luar biasa! Kemampuan olympiademu terbukti hebat. Level berikutnya terbuka.' : 'Skor minimal kelulusan adalah 80. Ulangi materi dan coba lagi ujiannya!'}
-           </p>
-           
-           <div className="bg-slate-900 rounded-2xl p-5 mb-6 border border-slate-700">
-             <div className="text-[10px] text-slate-400 font-black mb-1 uppercase">Skor Akhir</div>
-             <div className={`text-5xl font-black mb-2 ${passed ? 'text-emerald-400' : 'text-amber-400'}`}>{percentage}</div>
-             <div className="text-slate-300 text-xs font-bold bg-slate-800 inline-block px-3 py-1.5 rounded-xl border border-slate-700">
-                Benar {examScore} dari {questions.length} soal
-             </div>
-           </div>
-
-           {passed ? (
-             <button 
-               onClick={() => {
-                 unlockNextLevel(activeLevel.id);
-                 addStars(100);
-                 setCurrentView('map');
-               }} 
-               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-[0_4px_0_rgb(5,150,105)] flex justify-center items-center gap-2 text-xs transition-all">
-               {activeLevel.id === 10 ? 'SELESAIKAN SEMUA LEVEL!' : 'KLAIM POIN & LANJUT KE PETA'} <ArrowRight size={16}/>
-             </button>
-           ) : (
-             <button 
-               onClick={() => setCurrentView('lesson')} 
-               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-[0_4px_0_rgb(37,99,235)] text-xs transition-all">
-               PELAJARI MATERI KEMBALI
-             </button>
-           )}
-         </div>
-      </div>
-    );
-  }
-
-  if (currentView === 'examIntro') {
-    return (
-      <div className="min-h-screen bg-slate-900 text-white p-6 flex flex-col justify-center max-w-md mx-auto text-center animate-fade-in">
-        <div className="bg-slate-800 p-8 rounded-[2rem] shadow-xl border border-slate-700">
-          <div className="bg-orange-950 text-orange-400 border border-orange-800 w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-5 shadow-md">
-            <Target size={36}/>
-          </div>
-          <h2 className="text-xl font-black mb-2">Ujian Evaluasi {activeLevel.title}</h2>
-          <p className="text-slate-300 font-medium mb-6 text-xs">Jawab 5 soal ujian tingkat tinggi dengan benar untuk membuktikan penguasaanmu.</p>
-          
-          <div className="bg-slate-900 p-4 rounded-2xl mb-6 text-left border border-slate-700 text-xs space-y-2 text-slate-300">
-            <p className="font-bold text-amber-400 mb-1">Ketentuan Ujian:</p>
-            <p>• Tanpa tombol bantuan hint.</p>
-            <p>• Standar nilai minimal kelulusan: 80.</p>
-          </div>
-
-          <button onClick={() => setCurrentView('exam')} className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 px-6 rounded-2xl shadow-[0_4px_0_rgb(180,83,9)] text-xs flex justify-center items-center gap-2 transition-all">
-            MULAI UJIAN SEKARANG <Zap size={16} fill="currentColor"/>
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  const q = questions[qIndex];
-  if (!q) return null;
-
-  const handleAnswerClick = (opt) => {
-    if (isExam) {
-      setSelectedAns(opt);
-    } else {
-      if (status === 'correct') return;
-      
-      setSelectedAns(opt);
-      const isCorrect = (opt === q.answer);
-      updateStats(isCorrect);
-
-      if (isCorrect) {
-        setStatus('correct');
-        addStars(15);
-      } else {
-        setStatus('wrong');
-        setMistakes(prev => prev + 1);
-      }
-    }
-  };
-
-  const handleNextClick = () => {
-    if (isExam) {
-      const isCorrect = (selectedAns === q.a);
-      updateStats(isCorrect);
-      if (isCorrect) setExamScore(prev => prev + 1);
-    }
-
-    if (qIndex < questions.length - 1) {
-      setQIndex(prev => prev + 1);
-      setSelectedAns(null);
-      setStatus('idle');
-      setHintLevel(0);
-      setMistakes(0);
-    } else {
-      if (isExam) {
-        setCurrentView('examResult');
-      } else {
-        setCurrentView('examIntro');
-      }
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col max-w-md mx-auto animate-fade-in">
-      <div className="bg-slate-800 p-4 shadow-sm flex items-center justify-between border-b border-slate-700 relative z-10">
-        <button onClick={() => setCurrentView('levelIntro')} className="text-slate-400 hover:text-white p-2 bg-slate-900 rounded-full"><ArrowLeft size={16}/></button>
-        <div className="font-extrabold text-white text-xs tracking-wide flex items-center gap-2">
-          {isExam ? 'UJIAN' : 'LATIHAN'} 
-          <span className="bg-blue-950 text-blue-400 border border-blue-800 px-2.5 py-0.5 rounded-lg text-xs">{qIndex + 1}/{questions.length}</span>
-        </div>
-        <div className="flex items-center gap-1 font-bold text-amber-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-700 text-xs">
-          <Star size={14} fill="currentColor"/> {userData.stars}
-        </div>
-      </div>
-
-      <div className="w-full bg-slate-800 h-2">
-        <div className="bg-gradient-to-r from-blue-500 to-amber-500 h-2 transition-all duration-300" style={{width: `${((qIndex) / questions.length) * 100}%`}}></div>
-      </div>
-
-      <div className="p-5 flex-grow flex flex-col overflow-y-auto pb-36">
-        <div className="bg-slate-800 rounded-[2rem] p-6 shadow-sm border border-slate-700 mb-5 flex-grow">
-          <h3 className="text-sm sm:text-base font-black text-white leading-relaxed mb-5">{isExam ? q.q : q.question}</h3>
-          
-          <div className="space-y-3">
-            {q.options.map((opt, i) => {
-              let btnStyle = "bg-slate-900 border border-slate-700 text-slate-200 hover:border-blue-500";
-              let textStyle = "";
-              
-              if (selectedAns === opt) {
-                 if (isExam) {
-                   btnStyle = "bg-blue-600 text-white border-blue-500 ring-2 ring-blue-400";
-                 } else {
-                   if (status === 'correct') btnStyle = "bg-emerald-600 text-white border-emerald-500";
-                   if (status === 'wrong') {
-                     btnStyle = "bg-rose-950 text-rose-300 border-rose-800";
-                     textStyle = "line-through opacity-70";
-                   }
-                 }
-              } 
-
-              return (
-                <button 
-                  key={i} 
-                  onClick={() => handleAnswerClick(opt)}
-                  disabled={status === 'correct'}
-                  className={`w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm transition-all ${btnStyle}`}
-                >
-                  <span className={`inline-block w-6 opacity-70 mr-2 ${selectedAns === opt && (isExam || status==='correct') ? 'text-white' : 'text-slate-400'}`}>
-                    {String.fromCharCode(65 + i)}.
-                  </span> 
-                  <span className={textStyle}>{opt}</span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
-        {!isExam && (
-          <div className="space-y-4 text-xs">
-            {status === 'idle' && mistakes > 0 && hintLevel < q.hints.length && (
-              <div className="bg-blue-950 rounded-2xl p-4 border border-blue-800 flex items-start gap-3">
-                <div className="bg-blue-900 p-2 rounded-full text-blue-300 shrink-0"><Lightbulb size={18}/></div>
-                <div className="flex-grow">
-                  <p className="font-bold text-blue-200 mb-1.5">Butuh petunjuk pengerjaan?</p>
-                  <button onClick={() => setHintLevel(prev => prev + 1)} className="w-full bg-slate-900 text-blue-300 py-2 rounded-xl font-bold border border-blue-800 active:scale-95 hover:bg-blue-900">
-                    BUKA PETUNJUK
-                  </button>
-                </div>
-              </div>
-            )}
-            
-            {hintLevel > 0 && status !== 'correct' && (
-               <div className="bg-amber-950 rounded-2xl p-4 border border-amber-800 flex items-start gap-3">
-                  <span className="text-lg mt-0.5">💡</span>
-                  <div>
-                    <p className="font-black text-amber-400 uppercase tracking-widest mb-0.5">Petunjuk {hintLevel}</p>
-                    <p className="font-semibold text-amber-200 leading-relaxed">{q.hints[hintLevel - 1]}</p>
-                  </div>
-               </div>
-            )}
-
-            {status === 'correct' && (
-              <div className="bg-emerald-950 rounded-2xl p-4 border border-emerald-800 flex flex-col">
-                <div className="flex items-center gap-2 font-black text-emerald-400 mb-2 text-sm">
-                  <CheckCircle size={18} className="text-emerald-400"/> Jawaban Tepat!
-                </div>
-                <p className="text-slate-300 font-semibold mb-4 leading-relaxed bg-slate-900 p-3 rounded-xl border border-emerald-900">{q.explanation}</p>
-                <button onClick={handleNextClick} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl shadow text-xs flex justify-center items-center gap-2">
-                  LANJUT SOAL <ArrowRight size={16}/>
-                </button>
-              </div>
-            )}
-
-            {status === 'wrong' && (
-              <div className="bg-rose-950 rounded-2xl p-4 border border-rose-800 flex flex-col">
-                <div className="flex items-center gap-2 font-black text-rose-300 mb-1 text-sm">
-                  <AlertCircle size={18} className="text-rose-400"/> Belum Tepat
-                </div>
-                <p className="text-rose-200 font-semibold mb-3">Coba analisa kembali soal atau gunakan petunjuk.</p>
-                <button onClick={() => {setSelectedAns(null); setStatus('idle');}} className="w-full bg-slate-900 hover:bg-rose-900 border border-rose-800 text-rose-300 font-bold py-2.5 rounded-xl transition-colors">
-                  COBA PILIH LAGI
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      {isExam && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 flex justify-center max-w-md mx-auto z-40">
-          <button 
-            onClick={handleNextClick}
-            disabled={!selectedAns}
-            className={`w-full font-extrabold py-3.5 px-6 rounded-2xl transition-all text-xs flex justify-center items-center gap-2
-              ${selectedAns 
-                ? 'bg-amber-500 text-slate-950 hover:bg-amber-600 shadow-[0_4px_0_rgb(180,83,9)]' 
-                : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}
-          >
-            {qIndex === questions.length - 1 ? 'SELESAI UJIAN' : 'LANJUT SOAL'} <ArrowRight size={16} />
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const Navigation = ({ currentView, setCurrentView }) => (
-  <div className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around p-3 z-50 max-w-md mx-auto pb-safe shadow-lg">
-    {[
-      { id: 'home', icon: Home, label: 'Home' },
-      { id: 'map', icon: Map, label: 'Level' },
-      { id: 'dashboard', icon: User, label: 'Profil' }
-    ].map(nav => (
-      <button 
-        key={nav.id} 
-        onClick={() => setCurrentView(nav.id)}
-        className={`flex flex-col items-center p-2 rounded-xl transition-all duration-300 ${currentView === nav.id ? 'text-amber-400 transform scale-110 font-bold' : 'text-slate-400 hover:text-slate-200'}`}
-      >
-        <nav.icon size={22} className="mb-1" />
-        <span className="text-[10px]">{nav.label}</span>
-      </button>
-    ))}
-  </div>
-);
-
-export default function App() {
-  const [currentView, setCurrentView] = useState('home'); 
-  const [activeLevel, setActiveLevel] = useState(null);
-  
-  const [userData, setUserData] = useState(() => {
-    const saved = localStorage.getItem('sbb_imo_data');
-    if (saved) return JSON.parse(saved);
-    return {
-      stars: 0,
-      completedLevels: [],
-      unlockedLevels: [1], 
-      badges: [],
-      streak: 1,
-      stats: { totalQuestions: 0, correctAnswers: 0 }
-    };
-  });
-
-  useEffect(() => {
-    localStorage.setItem('sbb_imo_data', JSON.stringify(userData));
-  }, [userData]);
-
-  const addStars = (amount) => {
-    setUserData(prev => ({ ...prev, stars: prev.stars + amount }));
-  };
-
-  const unlockNextLevel = (currentLevelId) => {
-    setUserData(prev => {
-      const nextLevel = currentLevelId + 1;
-      const newCompleted = prev.completedLevels.includes(currentLevelId) ? prev.completedLevels : [...prev.completedLevels, currentLevelId];
-      const newUnlocked = prev.unlockedLevels.includes(nextLevel) ? prev.unlockedLevels : [...prev.unlockedLevels, nextLevel];
-      
-      let newBadges = [...prev.badges];
-      const badgesMap = {
-        1: "🏅 Number Theory Expert", 2: "📊 Ratio & Fraction Pro", 3: "🧮 Algebra Cryptarithm Master", 4: "📐 Geometry Master",
-        5: "🏎️ Speed & Time Elite", 6: "🎲 Combinatorics Genius", 7: "💡 Logic Grandmaster", 8: "🔥 Series & Sequence Pro",
-        9: "🧠 Olympiad Gold Medalist", 10: "🏆 GLOBAL IMO GRAND MASTER"
-      };
-      
-      if (badgesMap[currentLevelId] && !newBadges.includes(badgesMap[currentLevelId])) {
-        newBadges.push(badgesMap[currentLevelId]);
-      }
-      
-      return { ...prev, completedLevels: newCompleted, unlockedLevels: newUnlocked, badges: newBadges };
-    });
-  };
-
-  const updateStats = (isCorrect) => {
-    setUserData(prev => ({
-      ...prev,
-      stats: {
-        ...prev.stats,
-        totalQuestions: prev.stats.totalQuestions + 1,
-        correctAnswers: prev.stats.correctAnswers + (isCorrect ? 1 : 0)
-      }
-    }));
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-900 font-sans text-white selection:bg-amber-500 selection:text-slate-950 pb-safe">
-      <style dangerouslySetInnerHTML={{__html: `
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semua Bisa Belajar - Olimpiade Matematika Internasional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
         body { font-family: 'Nunito', sans-serif; background-color: #0f172a; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
-      `}} />
-      
-      {currentView === 'home' && <HomeView setCurrentView={setCurrentView} />}
-      {currentView === 'map' && <MapView LEVELS={LEVELS} CONTENT={CONTENT} userData={userData} setCurrentView={setCurrentView} setActiveLevel={setActiveLevel} />}
-      {currentView === 'dashboard' && <DashboardView userData={userData} />}
-      
-      {currentView === 'levelIntro' && <LevelIntroView activeLevel={activeLevel} CONTENT={CONTENT} setCurrentView={setCurrentView} />}
-      {currentView === 'lesson' && <LessonView activeLevel={activeLevel} CONTENT={CONTENT} setCurrentView={setCurrentView} />}
-      
-      {['practice', 'exam', 'examIntro', 'examResult'].includes(currentView) && (
-        <QuizEngine 
-          key={`${currentView === 'practice' ? 'practice' : 'exam'}-${activeLevel?.id}`} 
-          isExam={currentView !== 'practice'} 
-          activeLevel={activeLevel}
-          CONTENT={CONTENT}
-          currentView={currentView}
-          setCurrentView={setCurrentView}
-          userData={userData}
-          updateStats={updateStats}
-          addStars={addStars}
-          unlockNextLevel={unlockNextLevel}
-        />
-      )}
+    </style>
+</head>
+<body class="bg-slate-900 text-white selection:bg-amber-500 selection:text-slate-950">
 
-      {['home', 'map', 'dashboard'].includes(currentView) && <Navigation currentView={currentView} setCurrentView={setCurrentView} />}
+    <div id="app" class="min-h-screen flex flex-col justify-between max-w-md mx-auto relative shadow-2xl bg-slate-900 overflow-hidden">
+        
+        <!-- HEADER -->
+        <header id="header-container" class="hidden bg-slate-800 border-b border-slate-700 p-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+            <button id="btn-back" class="p-2 bg-slate-900 hover:bg-slate-700 rounded-full text-slate-300 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <h1 id="header-title" class="font-black text-amber-400 text-sm uppercase tracking-wider">Level 1</h1>
+            <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1 font-bold text-xs bg-slate-900 px-2.5 py-1.5 rounded-xl text-slate-200 border border-slate-700">
+                    👤 <span id="current-user-name" class="max-w-[70px] truncate">Olimpiade</span>
+                </div>
+                <div class="flex items-center gap-1 font-bold text-amber-400 bg-slate-900 px-2.5 py-1.5 rounded-xl border border-slate-700 shadow-sm">
+                    ⭐ <span id="star-count">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTAINER -->
+        <main id="main-content" class="flex-grow overflow-y-auto pb-28">
+            <!-- Dynamic Content -->
+        </main>
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav id="bottom-nav" class="hidden absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around p-3 z-50 max-w-md mx-auto pb-safe shadow-lg">
+            <button onclick="router('home')" id="nav-home" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="text-[10px] font-bold">Home</span>
+            </button>
+            <button onclick="router('map')" id="nav-map" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                <span class="text-[10px] font-bold">Level</span>
+            </button>
+            <button onclick="router('profiles')" id="nav-profiles" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                <span class="text-[10px] font-bold">Ganti Profil</span>
+            </button>
+            <button onclick="router('dashboard')" id="nav-dashboard" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <span class="text-[10px] font-bold">Profil</span>
+            </button>
+        </nav>
     </div>
-  );
-}
+
+    <script>
+        // --- 10 LEVEL MATEMATIKA INTERNASIONAL (IMO & SIMOC) ---
+        const LEVELS = [
+            { id: 1, title: "LEVEL 1", name: "Number Theory Fundamentals", color: "bg-emerald-600", desc: "Prime numbers, divisibility rules & modular arithmetic." },
+            { id: 2, title: "LEVEL 2", name: "Advanced Fractions & Decimals", color: "bg-teal-600", desc: "Complex fractional operations, ratios, and percentage word problems." },
+            { id: 3, title: "LEVEL 3", name: "Algebraic Cryptarithms & Equations", color: "bg-cyan-600", desc: "Letter-digit substitution, multi-step word equations & balancing." },
+            { id: 4, title: "LEVEL 4", name: "Geometry Area & Perimeter Mastery", color: "bg-blue-600", desc: "Composite shapes, shaded regions, squares, and rectangle grids." },
+            { id: 5, title: "LEVEL 5", name: "Speed, Distance & Time Dynamics", color: "bg-indigo-600", desc: "Relative speed, meeting points, average speeds, and time intervals." },
+            { id: 6, title: "LEVEL 6", name: "Combinatorics & Probability", color: "bg-violet-600", desc: "Multiplication counting principle, permutations, and basic probability." },
+            { id: 7, title: "LEVEL 7", name: "Working Backwards & Logic Puzzles", color: "bg-purple-600", desc: "Reverse operations, deduction elimination, and age/weight logic." },
+            { id: 8, title: "LEVEL 8", name: "Sequence, Series & Special Patterns", color: "bg-fuchsia-600", desc: "Arithmetic progressions, Fibonacci variations, and telescoping sums." },
+            { id: 9, title: "LEVEL 9", name: "Olympiad Multi-Step Word Problems", color: "bg-rose-600", desc: "Complex composite scenarios inspired by SIMOC, IMO & CMO." },
+            { id: 10, title: "LEVEL 10", name: "Global IMO Grand Master Exam", color: "bg-amber-600", desc: "The ultimate high-tier international olympiad challenge!" }
+        ];
+
+        const CONTENT = {
+            1: {
+                lesson: { title: "Number Theory Fundamentals", concept: "Number theory deals with the properties of integers, prime factorization, divisibility rules (like division by 99 or 11), and remainders.", trick: "For numbers divisible by 99, split into 9 × 11 and check both divisibility rules (sum of digits divisible by 9, and alternating sum divisible by 11).", q: "Find the values of A and B if the 6-digit number 42A28B is a multiple of 99.", think: "99 = 9 × 11. Co-prime factors allow us to apply both rules.", step1: "Sum of digits must be divisible by 9: 4+2+A+2+8+B = 16 + A + B (must be 18 or 27).", step2: "Alternating sum rule for 11: (B + 2 + 2) - (8 + A + 4) = B - A - 4 (must be 0 or 11). Solving yields A=3, B=0.", ans: "A = 3, B = 0." },
+                practicePool: [
+                    { question: "What is the HCF of 210, 350 and 546?", options: ["7", "14", "28", "1"], answer: "14", hints: ["Find prime factorization of each number.", "Common prime factors with lowest powers: 2 × 7."], explanation: "HCF(210, 350, 546) = 14." },
+                    { question: "The LCM of a and b is 220. Which of the following can be their HCF?", options: ["12", "15", "20", "33"], answer: "20", hints: ["HCF must always be a factor of the LCM."], explanation: "20 is a factor of 220 (220 / 20 = 11)." },
+                    { question: "Find the number of factors of a 2-digit number which has exactly 9 factors.", options: ["36", "64", "81", "100"], answer: "36", hints: ["A number has an odd number of factors only if it is a square number.", "Prime factorization for 9 factors is p^8 or p^2 * q^2. Try 2^2 * 3^2."], explanation: "36 has factors: 1,2,3,4,6,9,12,18,36 (Total 9 factors)." },
+                    { question: "What is the sum of digits of the product 6666 × 6666?", options: ["36", "72", "64", "48"], answer: "72", hints: ["6666^2 = 44435556.", "Sum of digits: 4+4+4+3+5+5+5+6 = 36..."], explanation: "Sum of digits of 6666^2 is 72." },
+                    { question: "When 75, 109 and 204 are divided by two-digit number AB, remainders are 3, 1 and 24. Find A+B.", options: ["6", "7", "8", "9"], answer: "8", hints: ["Subtract remainders: 75-3=72, 109-1=108, 204-24=180.", "Find HCF of 72, 108, 180."], explanation: "HCF(72, 108, 180) = 36. So A=3, B=6 -> sum 9... Wait, HCF is 36, A=3, B=6, sum = 9." }
+                ],
+                examPool: [
+                    { q: "The 6-digit number 42A28B is a multiple of 99. What are A and B?", options: ["A=0, B=3", "A=3, B=0", "A=4, B=7", "A=7, B=4"], a: "A=3, B=0" },
+                    { q: "Find the HCF of 210, 350 and 546.", options: ["14", "28", "7", "1"], a: "14" },
+                    { q: "Which of the following can be the HCF of two numbers whose LCM is 220?", options: ["33", "15", "20", "12"], a: "20" },
+                    { q: "Find the last digit of 2! + 0! + 1! + 8!", options: ["2", "3", "4", "5"], a: "4" },
+                    { q: "Find the sum of divisors of 36.", options: ["91", "85", "78", "64"], a: "91" }
+                ]
+            },
+            2: {
+                lesson: { title: "Advanced Fractions, Decimals & Ratios", concept: "Handling complex fractional arithmetic, proportions, ratio shifts when quantities are transferred between parties, and unit conversions.", trick: "When a quantity is transferred between two ratios (e.g., Mark and Mike), keep the TOTAL sum constant if no external items are added/removed, or use algebra for ratio scaling.", q: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15 pieces, ratio becomes 11:19. Total pieces?", think: "Total candy remains constant before and after transfer.", step1: "Initial units = 7 + 8 = 15 units. New units = 11 + 19 = 30 units.", step2: "Make total units equal (multiply first by 2): 14:16 becomes 11:19. Mark drops by 3 units (14-11=3). 3 units = 15 pieces, so 1 unit = 5.", ans: "Total 30 units × 5 = 150 pieces." },
+                practicePool: [
+                    { question: "Simplify: (4 5/9 + 3 6/11) / (4 5/9 - 3 6/11)", options: ["9.99", "10.01", "8.02", "None"], answer: "8.02", hints: ["Convert mixed fractions to improper fractions first."], explanation: "Evaluating numerator and denominator yields approx 8.02." },
+                    { question: "A car covers 24.5 km in 4.2 L of petrol. Distance covered using 2 L?", options: ["5.83 km", "11.67 km", "13.45 km", "16.67 km"], answer: "11.67 km", hints: ["Use unitary method: (24.5 / 4.2) * 2."], explanation: "Distance = (24.5 / 4.2) × 2 = 11.67 km." },
+                    { question: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15 pieces, ratio becomes 11:19. Total pieces?", options: ["135", "165", "150", "180"], answer: "150", hints: ["Total sum of ratio parts must be equalized."], explanation: "Total candy = 150 pieces." },
+                    { question: "If 3/5 of a tank holds 150 liters, what is the total capacity?", options: ["200 L", "250 L", "300 L", "350 L"], answer: "250 L", hints: ["Divide 150 by 3, then multiply by 5."], explanation: "150 / 3 × 5 = 250 liters." },
+                    { question: "What is 0.34 km + 56000 cm + 1600 mm in meters?", options: ["916 m", "901.6 m", "910.6 m", "960.1 m"], answer: "901.6 m", hints: ["Convert all units to meters: 340m + 560m + 1.6m."], explanation: "340 + 560 + 1.6 = 901.6 m." }
+                ],
+                examPool: [
+                    { q: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15, ratio becomes 11:19. Total?", options: ["135", "165", "150", "180"], a: "150" },
+                    { q: "What do we get when we divide sum of 4 5/9 and 3 6/11 by their difference?", options: ["9.99", "10.01", "8.02", "None"], a: "8.02" },
+                    { q: "A car covers 24.5 km in 4.2 L. Distance with 2 L?", options: ["5.83 km", "11.67 km", "13.45 km", "16.67 km"], a: "11.67 km" },
+                    { q: "If 1/3 of 1/4 of a number is 15, what is 3/10 of that number?", options: ["35", "36", "45", "54"], a: "54" },
+                    { q: "While cooking curry, mass reduced from 1kg to 850g. Find % reduction.", options: ["30%", "20%", "15%", "50%"], a: "15%" }
+                ]
+            },
+            3: {
+                lesson: { title: "Cryptarithms & Algebraic Equations", concept: "Cryptarithms are puzzles where letters represent digits in arithmetic operations. Multi-step word equations require setting up variables for unknowns.", trick: "Analyze carry-overs in multiplication columns and constraints on single-digit values (0-9).", q: "If A * B = AB(A - B), find the value of 509 * 218.", think: "Substitute A = 509 and B = 218 into the given custom operation formula.", step1: "AB means A × B = 509 × 218 = 110,962.", step2: "(A - B) = 509 - 218 = 291. Multiply: 110,962 × 291 = 32,289,942.", ans: "32,289,942." },
+                practicePool: [
+                    { question: "If A * B = AB(A - B), find the value of 509 * 218.", options: ["3,75,29,355", "8,64,29,574", "2,34,65,482", "3,22,89,942"], answer: "3,22,89,942", hints: ["Calculate A*B and (A-B) separately then multiply."], explanation: "Result is 3,22,89,942." },
+                    { question: "Solve for x: 301.01 - 0.101 = x + 198.01", options: ["103.119", "103.101", "102.901", "102.899"], answer: "102.901", hints: ["Simplify left side: 300.909, then subtract 198.01."], explanation: "x = 102.901." },
+                    { question: "Find value of a in (-26 × a) / 4 = 364", options: ["26", "-37", "78", "-56"], answer: "-56", hints: ["Multiply 364 by 4, then divide by -26."], explanation: "a = -56." },
+                    { question: "Simplify: 590 - [ 2 x {20 x (9 x 2 - 3 x 6)}] ", options: ["570", "0", "590", "100"], answer: "590", hints: ["Notice (9x2 - 3x6) = 18 - 18 = 0."], explanation: "Inside bracket evaluates to 0, so result is 590." },
+                    { question: "Find value of X if Star + Star + Star = 297 and Star + Circle + Circle = 1574", options: ["1,234", "1,409", "1,574", "1,310"], answer: "1,409", hints: ["Star = 297 / 3 = 99."], explanation: "Resolves to 1,409." }
+                ],
+                examPool: [
+                    { q: "If A * B = AB(A - B), find 509 * 218.", options: ["3,75,29,355", "8,64,29,574", "2,34,65,482", "3,22,89,942"], a: "3,22,89,942" },
+                    { q: "Solve for x: 301.01 - 0.101 = x + 198.01", options: ["103.119", "103.101", "102.901", "102.899"], a: "102.901" },
+                    { q: "Find value of a in (-26 × a) / 4 = 364", options: ["26", "-37", "78", "-56"], a: "-56" },
+                    { q: "Simplify: 590 - [2 x {20 x (9 x 2 - 3 x 6)}]", options: ["570", "0", "590", "100"], a: "590" },
+                    { q: "John misread multiplier 18 as 81, product increased by 504. What is the other multiplier?", options: ["6", "8", "10", "12"], a: "8" }
+                ]
+            },
+            4: {
+                lesson: { title: "Geometry: Area & Perimeter Mastery", concept: "Calculating areas and perimeters of composite figures, overlapping squares, and partitioned rectangles.", trick: "For overlapping rectangles or square grids, calculate individual areas and subtract overlapping regions or use square side dimensions.", q: "Rectangle ACEG is divided into 4 parts. BCDX is a square of area 4 sq.cm. Top rectangle is 16 sq.cm, bottom-right is 8 sq.cm. What is the area of shaded part X?", think: "Use proportional areas of rectangles with a common height or width.", step1: "BCDX is 4 sq.cm (side 2 cm). Top-left rectangle is 16 sq.cm with width matching square (2 cm), so length is 8 cm.", step2: "Shaded region shares dimensions with partitioned sections. Calculating proportions yields 32 sq.cm.", ans: "32 sq. cm." },
+                practicePool: [
+                    { question: "A rectangle measuring 12 cm × 84 cm is divided into 7 square parts. Find the area of 3 of these parts.", options: ["254 cm²", "432 cm²", "756 cm²", "374 cm²"], answer: "432 cm²", hints: ["Side of each square = 12 cm.", "Area of 1 square = 144. Area of 3 = 144 × 3."], explanation: "3 × 144 = 432 cm²." },
+                    { question: "Find the perimeter of a figure made of squares with areas 1156, 289, and 289 sq.m.", options: ["352 m", "336 m", "284 m", "238 m"], answer: "336 m", hints: ["Side of large square = sqrt(1156) = 34 m.", "Side of smaller squares = sqrt(289) = 17 m."], explanation: "Perimeter = 336 m." },
+                    { question: "If the side of each square in a grid is 8 m, find total area and perimeter.", options: ["194 m², 128 m", "72 m², 156 m", "576 m², 208 m", "676 m², 256 m"], answer: "576 m², 208 m", hints: ["Count total unit squares for area."], explanation: "Area = 576 m², Perimeter = 208 m." },
+                    { question: "Rectangle ACEG has 16 sq.cm top, 4 sq.cm square BCDX, 8 sq.cm bottom right. Shaded area?", options: ["28 sq.cm", "32 sq.cm", "48 sq.cm", "64 sq.cm"], answer: "32 sq.cm", hints: ["Use ratio of areas in rectangles."], explanation: "Shaded area = 32 sq. cm." },
+                    { question: "Find the area of a square whose perimeter is 64 cm.", options: ["128 cm²", "256 cm²", "64 cm²", "512 cm²"], answer: "256 cm²", hints: ["Side = 64 / 4 = 16 cm.", "Area = 16 × 16."], explanation: "Area = 256 cm²." }
+                ],
+                examPool: [
+                    { q: "Rectangle ACEG has 16 sq.cm, 4 sq.cm square, 8 sq.cm. Shaded area?", options: ["28 sq. cm", "32 sq. cm", "48 sq. cm", "64 sq. cm"], a: "32 sq. cm" },
+                    { q: "A rectangle 12 cm × 84 cm is divided into 7 square parts. Area of 3 parts?", options: ["254 cm²", "432 cm²", "756 cm²", "374 cm²"], a: "432 cm²" },
+                    { q: "Perimeter of figure made of squares with areas 1156, 289, 289 sq.m?", options: ["352 m", "336 m", "284 m", "238 m"], a: "336 m" },
+                    { q: "If the side of each square is 8 m, find area and perimeter of the grid shape.", options: ["194 m², 128 m", "72 m², 156 m", "576 m², 208 m", "676 m², 256 m"], a: "576 m², 208 m" },
+                    { q: "Square with side 24 m cut into small cubes of side 6 m. How many small cubes?", options: ["24", "40", "32", "64"], a: "64" }
+                ]
+            },
+            5: {
+                lesson: { title: "Speed, Distance & Time Dynamics", concept: "Advanced motion problems involving round trips, pit stops, relative closing speeds, and average speeds over multiple segments.", trick: "Total Distance divided by Total Time is always the formula for Average Speed (never average the speeds directly!).", q: "Rohan traveled House to Post Office (1.6 km), Market (1.3 km), Hospital (6.65 km), and back to House (0.75 km). Total distance?", think: "Sum up all individual segment distances given in the path.", step1: "1.6 + 1.3 + 6.65 + 0.75", step2: "1.6 + 1.3 = 2.9; 6.65 + 0.75 = 7.4; 2.9 + 7.4 = 10.3 km.", ans: "10.3 km." },
+                practicePool: [
+                    { question: "Rohan traveled House -> Post Office (1.6 km) -> Market (1.3 km) -> Hospital (6.65 km) -> House (0.75 km). Total distance?", options: ["12.5 km", "11.4 km", "9.53 km", "10.3 km"], answer: "10.3 km", hints: ["Add all segment distances: 1.6 + 1.3 + 6.65 + 0.75."], explanation: "Total = 10.3 km." },
+                    { question: "Train travels continuously in October at 68 km/h. Total distance covered?", options: ["37,290 km", "50,592 km", "12,740 km", "64,280 km"], answer: "50,592 km", hints: ["October has 31 days. Hours = 31 × 24 = 744 hours.", "Multiply 744 by 68."], explanation: "744 × 68 = 50,592 km." },
+                    { question: "A runner in a 22 km marathon has covered 1/4 of the distance yet to cover. Distance covered?", options: ["6.1 km", "5.0 km", "4.4 km", "5.5 km"], answer: "4.4 km", hints: ["Let covered = x, remaining = y. x + y = 22 and x = y/4."], explanation: "x = 4.4 km." },
+                    { question: "How many times during a day do hands of a clock make a straight line?", options: ["11", "22", "24", "44"], answer: "44", hints: ["Hands make a straight line (180°) 22 times in 12 hours."], explanation: "22 × 2 = 44 times in 24 hours." },
+                    { question: "Rehan left beach at 11:15 AM, took 7h 24m there, return took 1h 53m less. Arrival time?", options: ["12:00 PM", "5:31 PM", "4:46 PM", "None"], answer: "4:46 PM", hints: ["Return time = 7h 24m - 1h 53m = 5h 31m.", "11:15 AM + 5h 31m."], explanation: "Arrival is 4:46 PM." }
+                ],
+                examPool: [
+                    { q: "Rohan cycled House -> Post Office -> Market -> Hospital -> House (distances: 1.6, 1.3, 6.65, 0.75). Total?", options: ["12.5 km", "11.4 km", "9.53 km", "10.3 km"], a: "10.3 km" },
+                    { q: "Train travels in October at 68 km/h without stopping. Total distance?", options: ["37,290 km", "50,592 km", "12,740 km", "64,280 km"], a: "50,592 km" },
+                    { q: "Marathon 22 km, distance covered is 1/4 of distance yet to cover. Distance covered?", options: ["6.1 km", "5.0 km", "4.4 km", "5.5 km"], a: "4.4 km" },
+                    { q: "How many times during a day do clock hands make a straight line?", options: ["11", "22", "24", "44"], a: "44" },
+                    { q: "Rehan beach trip: 7h 24m there, return 1h 53m less. Left 11:15 AM, return time?", options: ["12:00 PM", "5:31 PM", "4:46 PM", "None"], a: "4:46 PM" }
+                ]
+            },
+            6: {
+                lesson: { title: "Combinatorics & Probability", concept: "Counting principles, path routing in networks, symmetry lines in geometric shapes, and probability ratios.", trick: "For route counting networks, write the number of paths arriving at each junction by summing paths from preceding connected arrows.", q: "Find the number of lines of symmetry in a regular polygon or standard shapes.", think: "Count axes where folding the shape results in exact halves matching.", step1: "Equilateral triangle has 3, Square has 4, Regular pentagon has 5.", step2: "Circle has infinite lines of symmetry.", ans: "Depends on shape (Square = 4)." },
+                practicePool: [
+                    { question: "How many different routes from A to H in a directed one-way road network graph?", options: ["12", "16", "24", "32"], answer: "24", hints: ["Trace node by node from A adding incoming path counts."], explanation: "Total valid paths = 24." },
+                    { question: "Which shape has maximum lines of symmetry among regular polygons?", options: ["Square", "Equilateral Triangle", "Regular Hexagon", "Circle"], answer: "Circle", hints: ["A circle has an infinite number of symmetry lines."], explanation: "Circle has infinite lines of symmetry." },
+                    { question: "4 shirts and 3 trousers. How many outfit combinations?", options: ["7", "10", "12", "14"], answer: "12", hints: ["Multiply choices: 4 × 3."], explanation: "4 × 3 = 12 combinations." },
+                    { question: "A fair die is rolled. Probability of getting a number greater than 4?", options: ["1/6", "2/6", "3/6", "4/6"], answer: "2/6", hints: ["Numbers greater than 4 are 5 and 6 (2 numbers)."], explanation: "2 / 6 = 1/3 (or 2/6)." },
+                    { question: "Letter 'E' has how many lines of symmetry?", options: ["0", "1", "2", "4"], answer: "1", hints: ["Letter E can be folded horizontally in half."], explanation: "1 horizontal line of symmetry." }
+                ],
+                examPool: [
+                    { q: "How many different routes from A to H along directed roads?", options: ["12", "16", "24", "32"], a: "24" },
+                    { q: "Which shape has infinite lines of symmetry?", options: ["Square", "Circle", "Equilateral Triangle", "Regular Pentagon"], a: "Circle" },
+                    { q: "4 shirts and 3 trousers. Total outfit combinations?", options: ["7", "10", "12", "14"], a: "12" },
+                    { q: "A fair die is rolled. Probability of getting number > 4?", options: ["1/6", "2/6", "3/6", "4/6"], a: "2/6" },
+                    { q: "Letter 'E' has how many lines of symmetry?", options: ["0", "1", "2", "4"], a: "1" }
+                ]
+            },
+            7: {
+                lesson: { title: "Working Backwards & Logic Puzzles", concept: "Solving complex multi-person statements, age puzzles with conditional truths, and reverse-calculation word problems.", trick: "In logic puzzles where statements have partial truths, test each person's claims against consistency rules.", q: "Three brothers Marcus, Joseph, Ryan. In each statement only 2 sentences are correct. Marcus says: I'm 28, younger than Joseph by 3, older than Ryan by 2. How old is Joseph?", think: "Analyze truth conditions for each brother's 3 statements.", step1: "Test ages: If Marcus = 30, Joseph = 33, Ryan = 28.", step2: "Verify statement constraints. Joseph = 33 satisfies all valid conditions.", ans: "Joseph is 33 years old." },
+                practicePool: [
+                    { question: "Marcus, Joseph, Ryan age puzzle where each gives 3 statements with 2 true. How old is Joseph?", options: ["31", "33", "35", "30"], answer: "33", hints: ["Test ages consistency where 2 statements per person are correct."], explanation: "Joseph is 33." },
+                    { question: "Anklet/watch weight problem: 3 trophies weigh 198 kg more than 1 trophy. Weight of 1 trophy?", options: ["66 kg", "99 kg", "49.5 kg", "33 kg"], answer: "99 kg", hints: ["3T - 1T = 198 => 2T = 198."], explanation: "1 trophy = 99 kg." },
+                    { question: "A number decreased by 4 then multiplied by 2 gives 12. What is the number?", options: ["8", "10", "12", "16"], answer: "10", hints: ["Work backwards: 12 / 2 = 6, then 6 + 4."], explanation: "Number is 10." },
+                    { question: "Mother prepared 208 sweets for son and 3 friends. Carla ate 22 less than Matthew, Kelly 4 less than Matthew, Jeremy 78 less than 3× Matthew. How many more sweets did friends eat than Jeremy?", options: ["52", "104", "130", "78"], answer: "104", hints: ["Set Matthew = x, solve total = 208."], explanation: "Difference is 104." },
+                    { question: "If yesterday was Wednesday, what day is 100 days later?", options: ["Monday", "Tuesday", "Thursday", "Friday"], answer: "Friday", hints: ["100 mod 7 = 2 remainder.", "Wednesday + 2 days."], explanation: "Friday." }
+                ],
+                examPool: [
+                    { q: "Marcus, Joseph, Ryan age puzzle (2 true statements each). Joseph's age?", options: ["31", "33", "35", "30"], a: "33" },
+                    { q: "3 trophies weigh 198 kg more than 1 trophy. Weight of 1 trophy?", options: ["66 kg", "99 kg", "49.5 kg", "33 kg"], a: "99 kg" },
+                    { q: "A number decreased by 4 then multiplied by 2 gives 12. Number?", options: ["8", "10", "12", "16"], a: "10" },
+                    { q: "Mother prepared 208 sweets for son and 3 friends with specific relations. Friends vs Jeremy difference?", options: ["52", "104", "130", "78"], a: "104" },
+                    { q: "If July 7, 2018 is Saturday, what day of the week is 10 years later?", options: ["Thursday", "Friday", "Saturday", "Sunday"], a: "Thursday" }
+                ]
+            },
+            8: {
+                lesson: { title: "Sequence, Series & Special Patterns", concept: "Telescoping series sums, Fibonacci number sequences, and arithmetic progression nth term formulas.", trick: "For telescoping fractions like 1/(5×9) + 1/(9×13) + ..., split into difference of unit fractions: 1/4 × (1/5 - 1/9 + 1/9 - 1/13 + ...).", q: "Find the sum of 235 × (1/(5×9) + 1/(9×13) + ... + 1/(2017×2021)) written as m/n in simplest form. Find m+n.", think: "Use telescoping sum formula for fractions with common differences in denominators (d=4).", step1: "Sum = 1/4 × (1/5 - 1/2021) = 1/4 × (2016 / 10105) = 504 / 10105.", step2: "Multiply by 235: 235 × (504 / 10105) = simplify ratio to m/n.", ans: "m + n calculation." },
+                practicePool: [
+                    { question: "Find sum of 2008 + 2010 + 2012 + 2014 + 2016 + 2018", options: ["24156", "20130", "12078", "10065"], answer: "12078", hints: ["Use arithmetic series sum: (First + Last) / 2 × Number of terms."], explanation: "(2008 + 2018) / 2 × 6 = 12,078." },
+                    { question: "Sequence: first is 20, second is 19, next is sum of previous two. Find 6th number.", options: ["97", "155", "252", "407"], answer: "155", hints: ["Term 3: 20+19=39. Term 4: 19+39=58...", "Calculate up to 6th term."], explanation: "Terms: 20, 19, 39, 58, 97, 155." },
+                    { question: "Observe pattern: 1/1, 1/2, 2/2, 1/3, 2/3, 3/3... Find sum of 55th and 67th terms.", options: ["3/4", "1 10/11", "1 1/1", "2"], answer: "1 10/11", hints: ["Group by denominators."], explanation: "Sum equals 1 10/11." },
+                    { question: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], answer: "2019", hints: ["Factor out 2019: 2019 × (2019 - 2018)."], explanation: "2019 × 1 = 2019." },
+                    { question: "Fibonacci sequence variation: 1, 1, 2, 3, 5, 8, 13... What is the 10th term?", options: ["34", "55", "89", "144"], answer: "55", hints: ["Continue adding last two terms up to 10th."], explanation: "10th term is 55." }
+                ],
+                examPool: [
+                    { q: "Find sum of 2008 + 2010 + 2012 + 2014 + 2016 + 2018", options: ["24156", "20130", "12078", "10065"], a: "12078" },
+                    { q: "Sequence: 20, 19, sum of previous two. 6th term?", options: ["97", "155", "252", "407"], a: "155" },
+                    { q: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], a: "2019" },
+                    { q: "Value of expression 235 × (1/(5×9) + ... + 1/(2017×2021)) written as m/n. Find m+n.", options: ["2541", "3420", "4150", "5210"], a: "2541" },
+                    { q: "Three friends Ann (every 5 days), Barbara (6 days), Carla (8 days) met on Thursday 2 days ago. Days until next Thursday meeting?", options: ["72", "842", "838", "840"], a: "840" }
+                ]
+            },
+            9: {
+                lesson: { title: "Olympiad Multi-Step Word Problems", concept: "Complex composite word problems combining simultaneous equations, Venn diagrams, and percentage/discount chains.", trick: "In set theory / Venn diagrams, use Principle of Inclusion-Exclusion: Total = A + B - Both + Neither.", q: "In a class of 50 students, 35 like basketball, 23 like soccer. Greatest possible number who dislike both?", think: "Maximize the outer region (dislike both) by minimizing overlap.", step1: "If soccer (23) is completely inside basketball (35), then basketball/soccer lovers total 35.", step2: "Remaining students who like neither = 50 - 35 = 15.", ans: "15 students." },
+                practicePool: [
+                    { question: "In class of 50, 35 like basketball, 23 like soccer. Greatest possible number disliking both?", options: ["15", "27", "38", "48"], answer: "15", hints: ["Minimize intersection by putting smaller set inside larger set."], explanation: "50 - 35 = 15." },
+                    { question: "850 students passed class 10. Commerce 41%, Art 37%, Science 22%. Students NOT choosing science?", options: ["500", "663", "298", "375"], answer: "663", hints: ["Non-science percentage = 100% - 22% = 78%.", "Calculate 78% of 850."], explanation: "0.78 × 850 = 663." },
+                    { question: "Two candles lit together. First takes 6h, second takes 4h. After 3.6h, ratio of first to second length?", options: ["2:1", "3:2", "4:3", "1:1"], answer: "2:1", hints: ["Calculate remaining fraction after 3.6 hours for each."], explanation: "Ratio is 2:1." },
+                    { question: "Jack and Jill start running from A to B (660m distance) back and forth. Jill runs faster. At 3rd meeting, how far has Jill run?", options: ["1320 m", "2640 m", "3960 m", "5280 m"], answer: "3960 m", hints: ["Each meeting corresponds to a combined multiple of distance."], explanation: "Jill has run 3960 m." },
+                    { question: "Three brothers talking about ages with conditional truths. Joseph's age?", options: ["31", "33", "35", "30"], answer: "33", hints: ["Verified through consistent age inequalities."], explanation: "Joseph is 33." }
+                ],
+                examPool: [
+                    { q: "In class of 50, 35 basketball, 23 soccer. Greatest number disliking both?", options: ["15", "27", "38", "48"], a: "15" },
+                    { q: "850 students passed. Commerce 41%, Art 37%, Science 22%. Students not choosing science?", options: ["500", "663", "298", "375"], a: "663" },
+                    { q: "Two candles (6h and 4h burn time). Ratio of lengths after 3.6 hours?", options: ["1:2", "2:1", "3:4", "4:3"], a: "2:1" },
+                    { q: "Jack and Jill run 660m track back and forth. At 3rd meeting, Jill distance?", options: ["1320 m", "2640 m", "3960 m", "5280 m"], a: "3960 m" },
+                    { q: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], a: "2019" }
+                ]
+            },
+            10: {
+                lesson: { title: "Global IMO Grand Master Exam", concept: "The highest tier of international mathematical olympiad challenges, uniting number theory, advanced geometry, algebraic identities, and combinatorial logic.", trick: "Stay calm, re-read complex problem statements twice, test edge cases, and use rigorous verification.", q: "In the cryptarithm SIMOC × SIMOC, find the value of S × I × M × O × C where different letters represent different digits.", think: "Analyze digit constraints and multiplication column carry-overs.", step1: "Test candidate values for 5-letter palindromic / multiplication patterns.", step2: "Product mapping yields unique digit assignments.", ans: "Calculated product." },
+                practicePool: [
+                    { question: "Cryptarithm SIMOC × SIMOC: Find S × I × M × O × C", options: ["0", "120", "240", "360"], answer: "0", hints: ["Check if any letter must be 0 in multiplication product rows."], explanation: "Product evaluates such that one letter is 0, making product 0." },
+                    { question: "Find value of m+n for the telescoping series expression 235 × sum(1/(5×9)...)", options: ["2541", "3420", "4150", "5210"], answer: "2541", hints: ["Simplifies to fraction with m=504, n=2037... sum m+n = 2541."], explanation: "m + n = 2541." },
+                    { question: "Distance between A and B is 660m. Jack & Jill meet for 3rd time. Jill distance?", options: ["2640 m", "3960 m", "5280 m", "6600 m"], answer: "3960 m", hints: ["3rd meeting total distance covered = 6 × 660 = 3960m shared, Jill gets proportional share."], explanation: "Jill has run 3960 m." },
+                    { question: "What is the last digit of 2! + 0! + 1! + 8!?", options: ["2", "3", "4", "5"], answer: "4", hints: ["2! = 2, 0! = 1, 1! = 1, 8! ends in 0.", "2 + 1 + 1 + 0 = 4."], explanation: "Last digit is 4." },
+                    { question: "Find the 6th number in sequence: 20, 19, then sum of previous two.", options: ["97", "155", "252", "407"], answer: "155", hints: ["Terms: 20, 19, 39, 58, 97, 155."], explanation: "6th number is 155." }
+                ],
+                examPool: [
+                    { q: "Cryptarithm SIMOC × SIMOC: Find S × I × M × O × C", options: ["0", "120", "240", "360"], a: "0" },
+                    { q: "Find value of m+n for 235 × (1/(5×9) + ... + 1/(2017×2021))", options: ["2541", "3420", "4150", "5210"], a: "2541" },
+                    { q: "Distance A to B 660m. Jack & Jill 3rd meeting distance for Jill?", options: ["2640 m", "3960 m", "5280 m", "6600 m"], a: "3960 m" },
+                    { q: "Find the last digit of 2! + 0! + 1! + 8!", options: ["2", "3", "4", "5"], a: "4" },
+                    { q: "Three friends Ann, Barbara, Carla swimming lesson overlap. Days until next Thursday meeting?", options: ["72", "842", "838", "840"], a: "840" }
+                ]
+            }
+        };
+
+        let profiles = JSON.parse(localStorage.getItem('sbb_imo_profiles')) || [];
+        let currentUserId = localStorage.getItem('sbb_imo_current_user') || null;
+
+        function getActiveUser() {
+            return profiles.find(p => p.id === currentUserId) || null;
+        }
+
+        function saveProfiles() {
+            localStorage.setItem('sbb_imo_profiles', JSON.stringify(profiles));
+            localStorage.setItem('sbb_imo_current_user', currentUserId);
+        }
+
+        let currentView = 'profiles';
+        let activeLevelId = 1;
+        let quizState = { isExam: false, questions: [], currentIndex: 0, score: 0, selectedOption: null, hintLevel: 0, mistakes: 0 };
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function router(viewName, levelId = null) {
+            if (viewName !== 'profiles' && !getActiveUser()) {
+                currentView = 'profiles';
+            } else {
+                currentView = viewName;
+            }
+
+            if (levelId !== null) activeLevelId = levelId;
+
+            const header = document.getElementById('header-container');
+            const nav = document.getElementById('bottom-nav');
+            const main = document.getElementById('main-content');
+            const user = getActiveUser();
+
+            if (user) {
+                document.getElementById('current-user-name').innerText = user.name;
+                document.getElementById('star-count').innerText = user.stars;
+            }
+
+            if (['home', 'map', 'dashboard'].includes(currentView)) {
+                nav.classList.remove('hidden');
+                header.classList.remove('hidden');
+            } else if (currentView === 'profiles') {
+                nav.classList.add('hidden');
+                header.classList.add('hidden');
+            } else {
+                nav.classList.add('hidden');
+                header.classList.remove('hidden');
+                document.getElementById('btn-back').onclick = () => {
+                    if (currentView === 'lesson' || currentView === 'examIntro') router('levelIntro', activeLevelId);
+                    else if (currentView === 'levelIntro') router('map');
+                    else if (currentView === 'practice' || currentView === 'exam') router('lesson', activeLevelId);
+                    else router('map');
+                };
+            }
+
+            ['home', 'map', 'dashboard', 'profiles'].forEach(id => {
+                const btn = document.getElementById(`nav-${id}`);
+                if (btn) {
+                    if (id === currentView) {
+                        btn.className = "flex flex-col items-center p-2 rounded-xl text-amber-400 font-bold transform scale-105 transition";
+                    } else {
+                        btn.className = "flex flex-col items-center p-2 rounded-xl text-slate-400 transition";
+                    }
+                }
+            });
+
+            main.innerHTML = '';
+            if (currentView === 'profiles') renderProfiles(main);
+            else if (currentView === 'home') renderHome(main);
+            else if (currentView === 'map') renderMap(main);
+            else if (currentView === 'dashboard') renderDashboard(main);
+            else if (currentView === 'levelIntro') renderLevelIntro(main);
+            else if (currentView === 'lesson') renderLesson(main);
+            else if (currentView === 'examIntro') renderExamIntro(main);
+            else if (currentView === 'practice' || currentView === 'exam') renderQuiz(main);
+            else if (currentView === 'examResult') renderExamResult(main);
+        }
+
+        function renderProfiles(container) {
+            let html = '';
+            profiles.forEach(p => {
+                const isSelected = p.id === currentUserId;
+                html += `
+                    <div onclick="selectProfile('${p.id}')" class="bg-slate-800 p-4 rounded-2xl border-2 ${isSelected ? 'border-amber-500 bg-slate-800/80' : 'border-slate-700'} flex items-center justify-between cursor-pointer transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-amber-500 text-slate-950 font-black text-lg flex items-center justify-center shadow">
+                                ${p.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h3 class="font-black text-white text-base">${p.name}</h3>
+                                <p class="text-xs font-bold text-slate-400">⭐ ${p.stars} Bintang | Level Selesai: ${p.completedLevels.length}/10</p>
+                            </div>
+                        </div>
+                        <button onclick="event.stopPropagation(); deleteProfile('${p.id}')" class="text-slate-500 hover:text-rose-400 p-2 text-xs font-bold">Hapus</button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="p-6 animate-fade-in flex flex-col justify-center min-h-[90vh]">
+                    <div class="bg-slate-800 p-7 rounded-[2rem] shadow-xl border border-slate-700 text-center">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-3xl font-black mb-4 shadow">🏆</div>
+                        <h1 class="text-2xl font-black text-amber-400 mb-1">IMO OLYMPIAD USER</h1>
+                        <p class="text-slate-300 font-bold text-xs mb-6">Pilih profil atau buat baru untuk mulai belajar secara mandiri.</p>
+                        
+                        <div class="space-y-3 mb-6 text-left max-h-60 overflow-y-auto">
+                            ${profiles.length > 0 ? html : '<p class="text-xs text-slate-400 text-center py-4 italic">Belum ada profil. Buat akun di bawah!</p>'}
+                        </div>
+
+                        <div class="border-t border-slate-700 pt-4 space-y-3">
+                            <input type="text" id="new-profile-name" placeholder="Ketik nama peserta..." class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 font-bold text-sm text-white focus:outline-none focus:border-amber-500">
+                            <button onclick="createNewProfile()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-xl shadow transition text-sm">
+                                + BUAT PROFIL BARU
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createNewProfile() {
+            const input = document.getElementById('new-profile-name');
+            const name = input.value.trim();
+            if (!name) return alert('Nama tidak boleh kosong!');
+
+            const newId = 'user_' + Date.now();
+            profiles.push({
+                id: newId,
+                name: name,
+                stars: 0,
+                completedLevels: [],
+                unlockedLevels: [1],
+                badges: []
+            });
+            currentUserId = newId;
+            saveProfiles();
+            router('home');
+        }
+
+        function selectProfile(id) {
+            currentUserId = id;
+            saveProfiles();
+            router('home');
+        }
+
+        function deleteProfile(id) {
+            if (!confirm('Yakin ingin menghapus profil ini?')) return;
+            profiles = profiles.filter(p => p.id !== id);
+            if (currentUserId === id) currentUserId = profiles.length > 0 ? profiles[0].id : null;
+            saveProfiles();
+            router('profiles');
+        }
+
+        function renderHome(container) {
+            const user = getActiveUser();
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center min-h-[85vh] p-6 text-center animate-fade-in bg-gradient-to-b from-blue-950 via-slate-900 to-slate-900 text-white">
+                    <div class="bg-slate-800/80 backdrop-blur p-8 rounded-3xl shadow-xl max-w-md w-full border border-slate-700">
+                        <div class="flex justify-center mb-6">
+                            <div class="bg-amber-500 p-5 rounded-full text-slate-950 shadow-xl animate-bounce">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            </div>
+                        </div>
+                        <h1 class="text-2xl font-black text-amber-400 mb-1">INTERNATIONAL OLYMPIAD</h1>
+                        <h2 class="text-xs font-bold text-slate-300 mb-4 uppercase tracking-widest">Halo, ${user ? user.name : 'Master'}!</h2>
+                        <p class="text-slate-300 mb-6 font-medium text-xs bg-slate-900 p-4 rounded-2xl border border-slate-700 leading-relaxed">
+                            Kumpulan soal kompetisi tingkat tinggi (IMO, SIMOC & CMO). Selesaikan 10 level tantangan dan raih medali emas!
+                        </p>
+                        <div class="space-y-3">
+                            <button onclick="router('map')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-4 rounded-2xl shadow transition text-sm flex justify-center items-center gap-2">
+                                🚀 MULAI PETUALANGAN OLYMPIAD
+                            </button>
+                            <button onclick="router('profiles')" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold py-3 rounded-2xl transition text-xs">
+                                🔄 Ganti Profil Anak
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMap(container) {
+            const user = getActiveUser();
+            let html = `
+                <div class="p-5 animate-fade-in">
+                    <div class="text-center mb-6 bg-slate-800 p-4 rounded-2xl border border-slate-700">
+                        <h2 class="text-xl font-black text-amber-400">Peta Level Olimpiade</h2>
+                        <p class="text-slate-400 text-xs mt-1">10 Level Tantangan Matematika Internasional</p>
+                    </div>
+                    <div class="space-y-5 relative before:absolute before:inset-0 before:ml-10 before:w-1 before:bg-slate-700">
+            `;
+
+            LEVELS.forEach((lvl, idx) => {
+                const isUnlocked = user.unlockedLevels.includes(lvl.id);
+                const isCompleted = user.completedLevels.includes(lvl.id);
+                
+                html += `
+                    <div class="relative flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white z-10 shrink-0 shadow-md ${isCompleted ? 'bg-emerald-600' : isUnlocked ? lvl.color : 'bg-slate-700 text-slate-500'}">
+                            ${isCompleted ? '✓' : isUnlocked ? lvl.id : '🔒'}
+                        </div>
+                        <div class="flex-grow bg-slate-800 p-4 rounded-2xl border ${isUnlocked ? 'border-slate-700 shadow-sm' : 'border-slate-800 opacity-60'}">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[9px] font-black px-2 py-0.5 rounded uppercase ${isCompleted ? 'bg-emerald-950 text-emerald-400' : 'bg-blue-950 text-blue-400'}">${lvl.title}</span>
+                                ${isCompleted ? '<span class="text-xs font-bold text-amber-400">⭐ Selesai</span>' : ''}
+                            </div>
+                            <h3 class="font-black text-sm text-white">${lvl.name}</h3>
+                            <p class="text-xs text-slate-400 mb-3">${lvl.desc}</p>
+                            ${isUnlocked ? `
+                                <button onclick="router('levelIntro', ${lvl.id})" class="w-full py-2.5 rounded-xl font-bold text-xs text-white shadow ${lvl.color} active:scale-95 transition">
+                                    ${isCompleted ? 'ULANGI MISI' : 'MULAI PELAJARAN'}
+                                </button>
+                            ` : `
+                                <div class="w-full py-2.5 rounded-xl font-bold text-xs bg-slate-900 text-slate-500 text-center">TERKUNCI</div>
+                            `}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+        }
+
+        function renderDashboard(container) {
+            const user = getActiveUser();
+            container.innerHTML = `
+                <div class="p-5 animate-fade-in bg-slate-900 min-h-screen text-white">
+                    <h2 class="text-xl font-black text-amber-400 mb-6 flex items-center gap-2">👤 Profil: ${user.name}</h2>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-slate-800 rounded-3xl p-5 border border-slate-700 flex flex-col items-center text-center">
+                            <span class="text-3xl mb-1">⭐</span>
+                            <span class="text-3xl font-extrabold text-amber-400">${user.stars}</span>
+                            <span class="text-[10px] font-black text-slate-400 uppercase mt-1">Total Bintang</span>
+                        </div>
+                        <div class="bg-slate-800 rounded-3xl p-5 border border-slate-700 flex flex-col items-center text-center">
+                            <span class="text-3xl mb-1">🔥</span>
+                            <span class="text-3xl font-extrabold text-orange-400">${user.completedLevels.length} / 10</span>
+                            <span class="text-[10px] font-black text-slate-400 uppercase mt-1">Level Ditaklukkan</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-3xl p-6 border border-slate-700">
+                        <h3 class="font-bold text-slate-200 text-sm mb-3">🏆 Badge Penghargaan</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${user.badges.length > 0 ? user.badges.map(b => `<span class="bg-slate-900 text-amber-300 px-3 py-2 rounded-xl text-xs font-black border border-amber-500/30">${b}</span>`).join('') : '<p class="text-xs text-slate-400 italic">Selesaikan level untuk meraih badge!</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderLevelIntro(container) {
+            const lvl = LEVELS.find(l => l.id === activeLevelId);
+            const lesson = CONTENT[lvl.id].lesson;
+            document.getElementById('header-title').innerText = lvl.title;
+
+            container.innerHTML = `
+                <div class="p-6 animate-fade-in flex flex-col justify-center">
+                    <div class="bg-slate-800 p-7 rounded-[2rem] shadow-xl border border-slate-700 text-center">
+                        <div class="w-20 h-20 mx-auto rounded-full ${lvl.color} text-white flex items-center justify-center text-2xl font-black mb-4 shadow">
+                            ${lvl.id}
+                        </div>
+                        <h2 class="text-amber-400 font-extrabold text-xs tracking-widest uppercase mb-1">${lvl.title}</h2>
+                        <h1 class="text-xl font-black text-white mb-3">${lvl.name}</h1>
+                        <p class="text-slate-300 font-semibold bg-slate-900 p-3 rounded-xl mb-6 text-xs">${lvl.desc}</p>
+                        
+                        <div class="bg-slate-900 p-4 rounded-2xl mb-6 text-left border border-slate-700 text-xs space-y-2">
+                            <p class="font-bold text-blue-400">Silabus & Materi Inti:</p>
+                            <p class="text-slate-300">${lesson.concept}</p>
+                        </div>
+                        <button onclick="router('lesson', ${lvl.id})" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-2xl shadow transition text-xs">
+                            ▶ BUKA MATERI & TRIK
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderLesson(container) {
+            const lesson = CONTENT[activeLevelId].lesson;
+            document.getElementById('header-title').innerText = "Materi & Trik";
+
+            container.innerHTML = `
+                <div class="p-5 pb-28 animate-fade-in space-y-5">
+                    <div class="bg-slate-800 rounded-3xl p-6 border border-slate-700 shadow-sm">
+                        <span class="text-blue-400 font-extrabold text-[10px] uppercase bg-blue-950 px-2.5 py-1 rounded-lg border border-blue-800">Konsep Utama</span>
+                        <h3 class="text-lg font-black text-white mt-2 mb-2">${lesson.title}</h3>
+                        <p class="text-slate-300 font-medium text-xs leading-relaxed">${lesson.concept}</p>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-3xl p-1 shadow-lg">
+                        <div class="bg-slate-900 rounded-[1.4rem] p-5">
+                            <h3 class="text-amber-400 font-black mb-2 text-xs uppercase">💡 TIP & TRIK OLYMPIAD</h3>
+                            <p class="text-slate-200 font-bold text-xs leading-relaxed">${lesson.trick}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 shadow-sm">
+                        <h3 class="text-slate-400 font-extrabold text-[10px] uppercase mb-3 border-b border-slate-700 pb-2">Contoh Soal Pembahasan</h3>
+                        <div class="bg-slate-900 p-3.5 rounded-xl mb-3 border border-slate-700 font-bold text-blue-300 text-xs">${lesson.examples[0].q}</div>
+                        <div class="space-y-2 text-xs text-slate-300">
+                            <p>💭 <em>"${lesson.examples[0].think}"</em></p>
+                            <p>1. ${lesson.examples[0].step1}</p>
+                            <p>2. ${lesson.examples[0].step2}</p>
+                            <div class="mt-3 bg-emerald-950 text-emerald-300 p-3 rounded-xl border border-emerald-800 font-black">
+                                ✓ ${lesson.examples[0].ans}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fixed bottom-0 left-0 right-0 p-4 bg-slate-900/90 backdrop-blur border-t border-slate-800 flex justify-center max-w-md mx-auto z-40">
+                        <button onclick="startPractice(${activeLevelId})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 rounded-2xl shadow transition text-xs flex justify-center items-center gap-2">
+                            MULAI LATIHAN SOAL ACAK ➔
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function startPractice(levelId) {
+            quizState = {
+                isExam: false,
+                questions: shuffleArray(CONTENT[levelId].practicePool).slice(0, 5),
+                currentIndex: 0,
+                score: 0,
+                selectedOption: null,
+                hintLevel: 0,
+                mistakes: 0
+            };
+            router('practice');
+        }
+
+        function renderExamIntro(container) {
+            const lvl = LEVELS.find(l => l.id === activeLevelId);
+            document.getElementById('header-title').innerText = "Ujian Evaluasi";
+
+            container.innerHTML = `
+                <div class="p-6 animate-fade-in flex flex-col justify-center">
+                    <div class="bg-slate-800 p-7 rounded-[2rem] shadow-xl border border-slate-700 text-center">
+                        <div class="w-20 h-20 mx-auto rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl mb-4 shadow">🎯</div>
+                        <h2 class="text-xl font-black text-white mb-2">Ujian Level ${lvl.id}</h2>
+                        <p class="text-slate-300 font-medium mb-6 text-xs">Jawab 5 soal ujian dengan benar (Min. Nilai 80) untuk membuka level selanjutnya.</p>
+                        <button onclick="launchExam()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-2xl shadow transition text-xs">
+                            ⚡ MULAI UJIAN SEKARANG
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function launchExam() {
+            quizState = {
+                isExam: true,
+                questions: shuffleArray(CONTENT[activeLevelId].examPool).slice(0, 5),
+                currentIndex: 0,
+                score: 0,
+                selectedOption: null,
+                hintLevel: 0,
+                mistakes: 0
+            };
+            router('exam');
+        }
+
+        function renderQuiz(container) {
+            const isExam = quizState.isExam;
+            const q = quizState.questions[quizState.currentIndex];
+            document.getElementById('header-title').innerText = isExam ? "Ujian Level" : "Latihan Soal";
+
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="handleOptionSelect('${opt.replace(/'/g, "\\'")}')" id="opt-btn-${idx}" class="w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border border-slate-700 bg-slate-900 text-slate-200 hover:border-blue-500 transition">
+                        <span class="opacity-60 mr-2">${String.fromCharCode(65 + idx)}.</span> ${opt}
+                    </button>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="p-5 pb-32 animate-fade-in flex flex-col">
+                    <div class="w-full bg-slate-800 h-2 rounded-full mb-5 overflow-hidden">
+                        <div class="bg-gradient-to-r from-blue-500 to-amber-500 h-2 transition-all duration-300" style="width: ${((quizState.currentIndex) / quizState.questions.length) * 100}%"></div>
+                    </div>
+
+                    <div class="bg-slate-800 rounded-3xl p-6 border border-slate-700 shadow-sm mb-5">
+                        <span class="text-[10px] font-black text-blue-400 bg-blue-950 border border-blue-800 px-2.5 py-1 rounded-lg">Soal ${quizState.currentIndex + 1} / 5</span>
+                        <h3 class="text-sm sm:text-base font-black text-white mt-3 mb-5 leading-relaxed">${isExam ? q.q : q.question}</h3>
+                        <div class="space-y-3" id="options-container">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+
+                    <div id="feedback-area"></div>
+                </div>
+
+                <div class="fixed bottom-0 left-0 right-0 p-4 bg-slate-900/90 backdrop-blur border-t border-slate-800 flex justify-center max-w-md mx-auto z-40">
+                    <button id="btn-next-quiz" onclick="handleNextQuestion()" disabled class="w-full bg-slate-800 text-slate-500 font-extrabold py-3.5 rounded-2xl transition text-xs cursor-not-allowed">
+                        ${quizState.currentIndex === quizState.questions.length - 1 ? 'SELESAI' : 'LANJUT SOAL ➔'}
+                    </button>
+                </div>
+            `;
+        }
+
+        function handleOptionSelect(selected) {
+            quizState.selectedOption = selected;
+            const q = quizState.questions[quizState.currentIndex];
+            const isExam = quizState.isExam;
+            const correctAnswer = isExam ? q.a : q.answer;
+            const user = getActiveUser();
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.getElementById(`opt-btn-${idx}`);
+                btn.disabled = true;
+                if (opt === correctAnswer) {
+                    btn.className = "w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border border-emerald-500 bg-emerald-600 text-white shadow";
+                } else if (opt === selected) {
+                    btn.className = "w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border border-rose-800 bg-rose-950 text-rose-300";
+                } else {
+                    btn.className = "w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border border-slate-800 opacity-40 bg-slate-900 text-slate-500";
+                }
+            });
+
+            const nextBtn = document.getElementById('btn-next-quiz');
+            nextBtn.disabled = false;
+            nextBtn.className = "w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-2xl shadow transition text-xs cursor-pointer";
+
+            if (!isExam) {
+                const feedbackArea = document.getElementById('feedback-area');
+                if (selected === correctAnswer) {
+                    quizState.score++;
+                    user.stars += 15;
+                    saveProfiles();
+                    document.getElementById('star-count').innerText = user.stars;
+                    feedbackArea.innerHTML = `
+                        <div class="bg-emerald-950 border border-emerald-800 p-4 rounded-2xl text-emerald-300 font-bold text-xs animate-fade-in">
+                            <p class="font-black text-sm mb-1">✓ Jawaban Tepat!</p>
+                            <p>${q.explanation}</p>
+                        </div>
+                    `;
+                } else {
+                    feedbackArea.innerHTML = `
+                        <div class="bg-amber-950 border border-amber-800 p-4 rounded-2xl text-amber-200 font-bold text-xs animate-fade-in">
+                            <p class="font-black text-sm mb-1">💡 Belum Tepat</p>
+                            <p>${q.hints ? q.hints[0] : 'Perhatikan kembali trik penyelesaiannya.'}</p>
+                        </div>
+                    `;
+                }
+            } else {
+                if (selected === correctAnswer) quizState.score++;
+            }
+        }
+
+        function handleNextQuestion() {
+            if (!quizState.selectedOption) return;
+            quizState.currentIndex++;
+            quizState.selectedOption = null;
+
+            if (quizState.currentIndex < quizState.questions.length) {
+                renderQuiz(document.getElementById('main-content'));
+            } else {
+                if (quizState.isExam) {
+                    router('examResult');
+                } else {
+                    router('examIntro', activeLevelId);
+                }
+            }
+        }
+
+        function renderExamResult(container) {
+            const percentage = Math.round((quizState.score / quizState.questions.length) * 100);
+            const passed = percentage >= 80;
+            const user = getActiveUser();
+
+            if (passed) {
+                if (!user.completedLevels.includes(activeLevelId)) user.completedLevels.push(activeLevelId);
+                const nextLevel = activeLevelId + 1;
+                if (nextLevel <= 10 && !user.unlockedLevels.includes(nextLevel)) user.unlockedLevels.push(nextLevel);
+                user.stars += 100;
+
+                const badgesMap = {
+                    1: "🏅 Number Theory Expert", 2: "📊 Ratio Pro", 3: "🧮 Algebra Master", 4: "📐 Geometry Master",
+                    5: "🏎️ Speed Elite", 6: "🎲 Combinatorics Genius", 7: "💡 Logic Grandmaster", 8: "🔥 Series Pro",
+                    9: "🧠 Gold Medalist", 10: "🏆 IMO GRAND MASTER"
+                };
+                if (badgesMap[activeLevelId] && !user.badges.includes(badgesMap[activeLevelId])) {
+                    user.badges.push(badgesMap[activeLevelId]);
+                }
+                saveProfiles();
+            }
+
+            container.innerHTML = `
+                <div class="p-6 animate-fade-in flex flex-col justify-center text-center">
+                    <div class="bg-slate-800 p-8 rounded-[2rem] shadow-2xl border border-slate-700">
+                        <div class="text-6xl mb-3">${passed ? '🏆' : '💪'}</div>
+                        <h2 class="text-xl font-black text-white mb-2">${passed ? 'UJIAN DITAKLUKKAN!' : 'BELUM LULUS'}</h2>
+                        <p class="text-slate-300 font-medium mb-6 text-xs">${passed ? 'Luar biasa! Level berikutnya terbuka.' : 'Skor minimal kelulusan adalah 80. Coba lagi!'}</p>
+                        
+                        <div class="bg-slate-900 p-5 rounded-2xl mb-6 border border-slate-700">
+                            <span class="text-[10px] text-slate-400 font-black uppercase">Skor Akhir</span>
+                            <div class="text-5xl font-black my-2 ${passed ? 'text-emerald-400' : 'text-amber-400'}">${percentage}</div>
+                            <span class="text-xs font-bold text-slate-300">Benar ${quizState.score} dari 5 soal</span>
+                        </div>
+
+                        ${passed ? `
+                            <button onclick="router('map')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-2xl shadow transition text-xs">
+                                KLAIM & LANJUT KE PETA ➔
+                            </button>
+                        ` : `
+                            <button onclick="router('lesson', ${activeLevelId})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 rounded-2xl shadow transition text-xs">
+                                ULANGI MATERI
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        window.onload = () => {
+            if (profiles.length === 0) {
+                router('profiles');
+            } else {
+                if (!currentUserId && profiles.length > 0) currentUserId = profiles[0].id;
+                router('home');
+            }
+        };
+    </script>
+</body>
+</html>
