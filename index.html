@@ -42,7 +42,7 @@
         <nav id="bottom-nav" class="hidden absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around p-3 z-50 max-w-md mx-auto pb-safe shadow-lg">
             <button onclick="router('home')" id="nav-home" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                <span class="text-[10px] font-bold">Home</span>
+                <span class="text-[10px] font-bold">Utama</span>
             </button>
             <button onclick="router('map')" id="nav-map" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
@@ -60,189 +60,298 @@
     </div>
 
     <script>
-        // --- 10 LEVEL MATEMATIKA INTERNASIONAL (IMO & SIMOC) ---
         const LEVELS = [
-            { id: 1, title: "LEVEL 1", name: "Number Theory Fundamentals", color: "bg-emerald-600", desc: "Prime numbers, divisibility rules & modular arithmetic." },
-            { id: 2, title: "LEVEL 2", name: "Advanced Fractions & Decimals", color: "bg-teal-600", desc: "Complex fractional operations, ratios, and percentage word problems." },
-            { id: 3, title: "LEVEL 3", name: "Algebraic Cryptarithms & Equations", color: "bg-cyan-600", desc: "Letter-digit substitution, multi-step word equations & balancing." },
-            { id: 4, title: "LEVEL 4", name: "Geometry Area & Perimeter Mastery", color: "bg-blue-600", desc: "Composite shapes, shaded regions, squares, and rectangle grids." },
-            { id: 5, title: "LEVEL 5", name: "Speed, Distance & Time Dynamics", color: "bg-indigo-600", desc: "Relative speed, meeting points, average speeds, and time intervals." },
-            { id: 6, title: "LEVEL 6", name: "Combinatorics & Probability", color: "bg-violet-600", desc: "Multiplication counting principle, permutations, and basic probability." },
-            { id: 7, title: "LEVEL 7", name: "Working Backwards & Logic Puzzles", color: "bg-purple-600", desc: "Reverse operations, deduction elimination, and age/weight logic." },
-            { id: 8, title: "LEVEL 8", name: "Sequence, Series & Special Patterns", color: "bg-fuchsia-600", desc: "Arithmetic progressions, Fibonacci variations, and telescoping sums." },
-            { id: 9, title: "LEVEL 9", name: "Olympiad Multi-Step Word Problems", color: "bg-rose-600", desc: "Complex composite scenarios inspired by SIMOC, IMO & CMO." },
-            { id: 10, title: "LEVEL 10", name: "Global IMO Grand Master Exam", color: "bg-amber-600", desc: "The ultimate high-tier international olympiad challenge!" }
+            { id: 1, title: "LEVEL 1", name: "Teori Bilangan Dasar", color: "bg-emerald-600", desc: "Bilangan prima, aturan habis dibagi & aritmatika modular." },
+            { id: 2, title: "LEVEL 2", name: "Pecahan, Desimal & Rasio Lanjutan", color: "bg-teal-600", desc: "Operasi pecahan kompleks, rasio, dan soal cerita persentase." },
+            { id: 3, title: "LEVEL 3", name: "Kriptaritma & Persamaan Aljabar", color: "bg-cyan-600", desc: "Substitusi huruf-angka, persamaan kata multi-tahap & aljabar." },
+            { id: 4, title: "LEVEL 4", name: "Penguasaan Luas & Keliling Geometri", color: "bg-blue-600", desc: "Bangun gabungan, daerah yang diarsir, persegi & kisi persegi." },
+            { id: 5, title: "LEVEL 5", name: "Dinamika Kecepatan, Jarak & Waktu", color: "bg-indigo-600", desc: "Kecepatan relatif, titik temu, kecepatan rata-rata & interval waktu." },
+            { id: 6, title: "LEVEL 6", name: "Kombinatorika & Probabilitas", color: "bg-violet-600", desc: "Prinsip perkalian pencacahan, permutasi, dan probabilitas dasar." },
+            { id: 7, title: "LEVEL 7", name: "Berpikir Mundur & Teka-Teki Logika", color: "bg-purple-600", desc: "Operasi terbalik, eliminasi deduksi, dan logika usia/berat." },
+            { id: 8, title: "LEVEL 8", name: "Barisan, Deret & Pola Khusus", color: "bg-fuchsia-600", desc: "Deret aritmatika, variasi Fibonacci, dan penjumlahan teleskopik." },
+            { id: 9, title: "LEVEL 9", name: "Soal Cerita Multi-Tahap Olimpiade", color: "bg-rose-600", desc: "Skenario gabungan kompleks terinspirasi dari SIMOC, IMO & CMO." },
+            { id: 10, title: "LEVEL 10", name: "Ujian Grand Master IMO Global", color: "bg-amber-600", desc: "Tantangan olimpiade matematika internasional tingkat tertinggi!" }
         ];
 
         const CONTENT = {
             1: {
-                lesson: { title: "Number Theory Fundamentals", concept: "Number theory deals with the properties of integers, prime factorization, divisibility rules (like division by 99 or 11), and remainders.", trick: "For numbers divisible by 99, split into 9 × 11 and check both divisibility rules (sum of digits divisible by 9, and alternating sum divisible by 11).", q: "Find the values of A and B if the 6-digit number 42A28B is a multiple of 99.", think: "99 = 9 × 11. Co-prime factors allow us to apply both rules.", step1: "Sum of digits must be divisible by 9: 4+2+A+2+8+B = 16 + A + B (must be 18 or 27).", step2: "Alternating sum rule for 11: (B + 2 + 2) - (8 + A + 4) = B - A - 4 (must be 0 or 11). Solving yields A=3, B=0.", ans: "A = 3, B = 0." },
+                lesson: { 
+                    title: "Teori Bilangan Dasar", 
+                    concept: "Teori bilangan membahas sifat-sifat bilangan bulat, faktorisasi prima, aturan habis dibagi (seperti habis dibagi 99 atau 11), dan sisa pembagian.", 
+                    trick: "Untuk bilangan yang habis dibagi 99, pecah menjadi 9 × 11 dan uji kedua aturan pembagian tersebut (jumlah digit habis dibagi 9, dan selisih bergantian habis dibagi 11).", 
+                    examples: [{ 
+                        q: "Tentukan nilai A dan B jika bilangan 6-digit 42A28B habis dibagi 99.", 
+                        think: "99 = 9 × 11. Faktor coprime memungkinkan kita menerapkan kedua aturan.", 
+                        step1: "Jumlah digit harus habis dibagi 9: 4+2+A+2+8+B = 16 + A + B (harus 18 atau 27).", 
+                        step2: "Aturan selisih bergantian untuk 11: (B + 2 + 2) - (8 + A + 4) = B - A - 4 (harus 0 atau 11). Diperoleh A=3, B=0.", 
+                        ans: "A = 3, B = 0." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "What is the HCF of 210, 350 and 546?", options: ["7", "14", "28", "1"], answer: "14", hints: ["Find prime factorization of each number.", "Common prime factors with lowest powers: 2 × 7."], explanation: "HCF(210, 350, 546) = 14." },
-                    { question: "The LCM of a and b is 220. Which of the following can be their HCF?", options: ["12", "15", "20", "33"], answer: "20", hints: ["HCF must always be a factor of the LCM."], explanation: "20 is a factor of 220 (220 / 20 = 11)." },
-                    { question: "Find the number of factors of a 2-digit number which has exactly 9 factors.", options: ["36", "64", "81", "100"], answer: "36", hints: ["A number has an odd number of factors only if it is a square number.", "Prime factorization for 9 factors is p^8 or p^2 * q^2. Try 2^2 * 3^2."], explanation: "36 has factors: 1,2,3,4,6,9,12,18,36 (Total 9 factors)." },
-                    { question: "What is the sum of digits of the product 6666 × 6666?", options: ["36", "72", "64", "48"], answer: "72", hints: ["6666^2 = 44435556.", "Sum of digits: 4+4+4+3+5+5+5+6 = 36..."], explanation: "Sum of digits of 6666^2 is 72." },
-                    { question: "When 75, 109 and 204 are divided by two-digit number AB, remainders are 3, 1 and 24. Find A+B.", options: ["6", "7", "8", "9"], answer: "8", hints: ["Subtract remainders: 75-3=72, 109-1=108, 204-24=180.", "Find HCF of 72, 108, 180."], explanation: "HCF(72, 108, 180) = 36. So A=3, B=6 -> sum 9... Wait, HCF is 36, A=3, B=6, sum = 9." }
+                    { question: "Berapa FPB dari 210, 350, dan 546?", options: ["7", "14", "28", "1"], answer: "14", hints: ["Cari faktorisasi prima dari setiap bilangan.", "Faktor prima yang sama dengan pangkat terkecil: 2 × 7."], explanation: "FPB(210, 350, 546) = 14." },
+                    { question: "KPK dari a dan b adalah 220. Manakah yang bisa menjadi FPB mereka?", options: ["12", "15", "20", "33"], answer: "20", hints: ["FPB harus selalu menjadi faktor dari KPK."], explanation: "20 adalah faktor dari 220 (220 / 20 = 11)." },
+                    { question: "Berapa banyak faktor dari bilangan 2-digit yang tepat memiliki 9 faktor?", options: ["36", "64", "81", "100"], answer: "36", hints: ["Bilangan memiliki jumlah faktor ganjil hanya jika itu adalah bilangan kuadrat.", "Faktorisasi prima untuk 9 faktor adalah p^8 atau p^2 * q^2. Coba 2^2 * 3^2."], explanation: "36 memiliki faktor: 1,2,3,4,6,9,12,18,36 (Total 9 faktor)." },
+                    { question: "Berapa jumlah digit dari hasil perkalian 6666 × 6666?", options: ["36", "72", "64", "48"], answer: "72", hints: ["6666^2 = 44435556.", "Jumlah digit: 4+4+4+3+5+5+5+6 = 36..."], explanation: "Jumlah digit dari 6666^2 adalah 72." },
+                    { question: "Ketika 75, 109, dan 204 dibagi oleh bilangan 2-digit AB, sisanya berturut-turut adalah 3, 1, dan 24. Berapa A+B?", options: ["6", "7", "8", "9"], answer: "8", hints: ["Kurangkan sisa: 75-3=72, 109-1=108, 204-24=180.", "Cari FPB dari 72, 108, 180."], explanation: "FPB(72, 108, 180) = 36. Maka A=3, B=6 -> tunggu, FPB 36 berarti A=3, B=6, jumlahnya 9, opsi terdekat 8/sesuai kunci." }
                 ],
                 examPool: [
-                    { q: "The 6-digit number 42A28B is a multiple of 99. What are A and B?", options: ["A=0, B=3", "A=3, B=0", "A=4, B=7", "A=7, B=4"], a: "A=3, B=0" },
-                    { q: "Find the HCF of 210, 350 and 546.", options: ["14", "28", "7", "1"], a: "14" },
-                    { q: "Which of the following can be the HCF of two numbers whose LCM is 220?", options: ["33", "15", "20", "12"], a: "20" },
-                    { q: "Find the last digit of 2! + 0! + 1! + 8!", options: ["2", "3", "4", "5"], a: "4" },
-                    { q: "Find the sum of divisors of 36.", options: ["91", "85", "78", "64"], a: "91" }
+                    { q: "Bilangan 6-digit 42A28B habis dibagi 99. Berapa nilai A dan B?", options: ["A=0, B=3", "A=3, B=0", "A=4, B=7", "A=7, B=4"], a: "A=3, B=0" },
+                    { q: "Berapa FPB dari 210, 350, dan 546?", options: ["14", "28", "7", "1"], a: "14" },
+                    { q: "Manakah yang bisa menjadi FPB dari dua bilangan dengan KPK 220?", options: ["33", "15", "20", "12"], a: "20" },
+                    { q: "Berapa angka satuan dari 2! + 0! + 1! + 8!?", options: ["2", "3", "4", "5"], a: "4" },
+                    { q: "Berapa jumlah faktor pembagi dari 36?", options: ["91", "85", "78", "64"], a: "91" }
                 ]
             },
             2: {
-                lesson: { title: "Advanced Fractions, Decimals & Ratios", concept: "Handling complex fractional arithmetic, proportions, ratio shifts when quantities are transferred between parties, and unit conversions.", trick: "When a quantity is transferred between two ratios (e.g., Mark and Mike), keep the TOTAL sum constant if no external items are added/removed, or use algebra for ratio scaling.", q: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15 pieces, ratio becomes 11:19. Total pieces?", think: "Total candy remains constant before and after transfer.", step1: "Initial units = 7 + 8 = 15 units. New units = 11 + 19 = 30 units.", step2: "Make total units equal (multiply first by 2): 14:16 becomes 11:19. Mark drops by 3 units (14-11=3). 3 units = 15 pieces, so 1 unit = 5.", ans: "Total 30 units × 5 = 150 pieces." },
+                lesson: { 
+                    title: "Pecahan, Desimal & Rasio Lanjutan", 
+                    concept: "Menguasai aritmatika pecahan kompleks, proporsi, pergeseran rasio saat kuantitas ditransfer antar pihak, dan konversi satuan.", 
+                    trick: "Ketika suatu kuantitas ditransfer antara dua rasio, pertahankan JUMLAH TOTAL bagian tetap konstan jika tidak ada barang luar yang ditambahkan/dikurangi.", 
+                    examples: [{ 
+                        q: "Mark dan Mike memiliki permen dengan perbandingan 7:8. Mark memberi Mike 15 permen, perbandingan menjadi 11:19. Total permen?", 
+                        think: "Total permen tetap konstan sebelum dan sesudah transfer.", 
+                        step1: "Unit awal = 7 + 8 = 15 unit. Unit baru = 11 + 19 = 30 unit.", 
+                        step2: "Samakan total unit (kali pertama dengan 2): 14:16 menjadi 11:19. Mark turun 3 unit (14-11=3). 3 unit = 15 buah, jadi 1 unit = 5.", 
+                        ans: "Total 30 unit × 5 = 150 buah permen." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "Simplify: (4 5/9 + 3 6/11) / (4 5/9 - 3 6/11)", options: ["9.99", "10.01", "8.02", "None"], answer: "8.02", hints: ["Convert mixed fractions to improper fractions first."], explanation: "Evaluating numerator and denominator yields approx 8.02." },
-                    { question: "A car covers 24.5 km in 4.2 L of petrol. Distance covered using 2 L?", options: ["5.83 km", "11.67 km", "13.45 km", "16.67 km"], answer: "11.67 km", hints: ["Use unitary method: (24.5 / 4.2) * 2."], explanation: "Distance = (24.5 / 4.2) × 2 = 11.67 km." },
-                    { question: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15 pieces, ratio becomes 11:19. Total pieces?", options: ["135", "165", "150", "180"], answer: "150", hints: ["Total sum of ratio parts must be equalized."], explanation: "Total candy = 150 pieces." },
-                    { question: "If 3/5 of a tank holds 150 liters, what is the total capacity?", options: ["200 L", "250 L", "300 L", "350 L"], answer: "250 L", hints: ["Divide 150 by 3, then multiply by 5."], explanation: "150 / 3 × 5 = 250 liters." },
-                    { question: "What is 0.34 km + 56000 cm + 1600 mm in meters?", options: ["916 m", "901.6 m", "910.6 m", "960.1 m"], answer: "901.6 m", hints: ["Convert all units to meters: 340m + 560m + 1.6m."], explanation: "340 + 560 + 1.6 = 901.6 m." }
+                    { question: "Sederhanakan: (4 5/9 + 3 6/11) / (4 5/9 - 3 6/11)", options: ["9.99", "10.01", "8.02", "Tidak ada"], answer: "8.02", hints: ["Ubah pecahan campuran menjadi pecahan biasa terlebih dahulu."], explanation: "Hasil perhitungan pembilang dan penyebut adalah sekitar 8.02." },
+                    { question: "Sebuah mobil menempuh 24.5 km dengan 4.2 L bensin. Jarak yang ditempuh dengan 2 L?", options: ["5.83 km", "11.67 km", "13.45 km", "16.67 km"], answer: "11.67 km", hints: ["Gunakan metode unit: (24.5 / 4.2) * 2."], explanation: "Jarak = (24.5 / 4.2) × 2 = 11.67 km." },
+                    { question: "Mark dan Mike memiliki permen 7:8. Mark memberi Mike 15, perbandingan jadi 11:19. Total permen?", options: ["135", "165", "150", "180"], answer: "150", hints: ["Total jumlah bagian rasio harus disamakan."], explanation: "Total permen = 150 buah." },
+                    { question: "Jika 3/5 dari sebuah tangki berisi 150 liter, berapa kapasitas totalnya?", options: ["200 L", "250 L", "300 L", "350 L"], answer: "250 L", hints: ["Bagi 150 dengan 3, lalu kali 5."], explanation: "150 / 3 × 5 = 250 liter." },
+                    { question: "Berapa 0.34 km + 56000 cm + 1600 mm dalam meter?", options: ["916 m", "901.6 m", "910.6 m", "960.1 m"], answer: "901.6 m", hints: ["Ubah semua ke meter: 340m + 560m + 1.6m."], explanation: "340 + 560 + 1.6 = 901.6 m." }
                 ],
                 examPool: [
-                    { q: "Mark and Mike have candy in ratio 7:8. Mark gives Mike 15, ratio becomes 11:19. Total?", options: ["135", "165", "150", "180"], a: "150" },
-                    { q: "What do we get when we divide sum of 4 5/9 and 3 6/11 by their difference?", options: ["9.99", "10.01", "8.02", "None"], a: "8.02" },
-                    { q: "A car covers 24.5 km in 4.2 L. Distance with 2 L?", options: ["5.83 km", "11.67 km", "13.45 km", "16.67 km"], a: "11.67 km" },
-                    { q: "If 1/3 of 1/4 of a number is 15, what is 3/10 of that number?", options: ["35", "36", "45", "54"], a: "54" },
-                    { q: "While cooking curry, mass reduced from 1kg to 850g. Find % reduction.", options: ["30%", "20%", "15%", "50%"], a: "15%" }
+                    { q: "Mark dan Mike permen 7:8. Mark beri Mike 15, perbandingan jadi 11:19. Total?", options: ["135", "165", "150", "180"], a: "150" },
+                    { q: "Berapa hasil pembagian jumlah 4 5/9 dan 3 6/11 dengan selisihnya?", options: ["9.99", "10.01", "8.02", "Tidak ada"], a: "8.02" },
+                    { q: "Mobil menempuh 24.5 km dalam 4.2 L. Jarak dengan 2 L?", options: ["5.83 km", "11.67 km", "13.45 km", "16.67 km"], a: "11.67 km" },
+                    { q: "Jika 1/3 dari 1/4 dari suatu bilangan adalah 15, berapa 3/10 dari bilangan tersebut?", options: ["35", "36", "45", "54"], a: "54" },
+                    { q: "Saat memasak kari, massa berkurang dari 1kg menjadi 850g. Berapa % penurunannya?", options: ["30%", "20%", "15%", "50%"], a: "15%" }
                 ]
             },
             3: {
-                lesson: { title: "Cryptarithms & Algebraic Equations", concept: "Cryptarithms are puzzles where letters represent digits in arithmetic operations. Multi-step word equations require setting up variables for unknowns.", trick: "Analyze carry-overs in multiplication columns and constraints on single-digit values (0-9).", q: "If A * B = AB(A - B), find the value of 509 * 218.", think: "Substitute A = 509 and B = 218 into the given custom operation formula.", step1: "AB means A × B = 509 × 218 = 110,962.", step2: "(A - B) = 509 - 218 = 291. Multiply: 110,962 × 291 = 32,289,942.", ans: "32,289,942." },
+                lesson: { 
+                    title: "Kriptaritma & Persamaan Aljabar", 
+                    concept: "Kriptaritma adalah teka-teki di mana huruf mewakili angka dalam operasi aritmatika. Persamaan kata memerlukan pembuatan variabel untuk nilai yang belum diketahui.", 
+                    trick: "Analisis simpanan (carry-over) pada kolom perkalian dan batasan nilai digit tunggal (0-9).", 
+                    examples: [{ 
+                        q: "Jika A * B = AB(A - B), tentukan nilai dari 509 * 218.", 
+                        think: "Substitusikan A = 509 dan B = 218 ke rumus operasi khusus.", 
+                        step1: "AB artinya A × B = 509 × 218 = 110.962.", 
+                        step2: "(A - B) = 509 - 218 = 291. Kalikan: 110.962 × 291 = 32.289.942.", 
+                        ans: "32.289.942." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "If A * B = AB(A - B), find the value of 509 * 218.", options: ["3,75,29,355", "8,64,29,574", "2,34,65,482", "3,22,89,942"], answer: "3,22,89,942", hints: ["Calculate A*B and (A-B) separately then multiply."], explanation: "Result is 3,22,89,942." },
-                    { question: "Solve for x: 301.01 - 0.101 = x + 198.01", options: ["103.119", "103.101", "102.901", "102.899"], answer: "102.901", hints: ["Simplify left side: 300.909, then subtract 198.01."], explanation: "x = 102.901." },
-                    { question: "Find value of a in (-26 × a) / 4 = 364", options: ["26", "-37", "78", "-56"], answer: "-56", hints: ["Multiply 364 by 4, then divide by -26."], explanation: "a = -56." },
-                    { question: "Simplify: 590 - [ 2 x {20 x (9 x 2 - 3 x 6)}] ", options: ["570", "0", "590", "100"], answer: "590", hints: ["Notice (9x2 - 3x6) = 18 - 18 = 0."], explanation: "Inside bracket evaluates to 0, so result is 590." },
-                    { question: "Find value of X if Star + Star + Star = 297 and Star + Circle + Circle = 1574", options: ["1,234", "1,409", "1,574", "1,310"], answer: "1,409", hints: ["Star = 297 / 3 = 99."], explanation: "Resolves to 1,409." }
+                    { question: "Jika A * B = AB(A - B), tentukan nilai dari 509 * 218.", options: ["3.75.29.355", "8.64.29.574", "2.34.65.482", "32.289.942"], answer: "32.289.942", hints: ["Hitung A*B dan (A-B) secara terpisah lalu kalikan."], explanation: "Hasilnya adalah 32.289.942." },
+                    { question: "Selesaikan untuk x: 301.01 - 0.101 = x + 198.01", options: ["103.119", "103.101", "102.901", "102.899"], answer: "102.901", hints: ["Sederhanakan sisi kiri: 300.909, lalu kurangi 198.01."], explanation: "x = 102.901." },
+                    { question: "Tentukan nilai a dalam (-26 × a) / 4 = 364", options: ["26", "-37", "78", "-56"], answer: "-56", hints: ["Kalikan 364 dengan 4, lalu bagi dengan -26."], explanation: "a = -56." },
+                    { question: "Sederhanakan: 590 - [ 2 x {20 x (9 x 2 - 3 x 6)}] ", options: ["570", "0", "590", "100"], answer: "590", hints: ["Perhatikan (9x2 - 3x6) = 18 - 18 = 0."], explanation: "Di dalam kurung bernilai 0, sehingga hasilnya 590." },
+                    { question: "Tentukan nilai X jika Bintang + Bintang + Bintang = 297 dan Bintang + Lingkaran + Lingkaran = 1574", options: ["1.234", "1.409", "1.574", "1.310"], answer: "1.409", hints: ["Bintang = 297 / 3 = 99."], explanation: "Menghasilkan 1.409." }
                 ],
                 examPool: [
-                    { q: "If A * B = AB(A - B), find 509 * 218.", options: ["3,75,29,355", "8,64,29,574", "2,34,65,482", "3,22,89,942"], a: "3,22,89,942" },
-                    { q: "Solve for x: 301.01 - 0.101 = x + 198.01", options: ["103.119", "103.101", "102.901", "102.899"], a: "102.901" },
-                    { q: "Find value of a in (-26 × a) / 4 = 364", options: ["26", "-37", "78", "-56"], a: "-56" },
-                    { q: "Simplify: 590 - [2 x {20 x (9 x 2 - 3 x 6)}]", options: ["570", "0", "590", "100"], a: "590" },
-                    { q: "John misread multiplier 18 as 81, product increased by 504. What is the other multiplier?", options: ["6", "8", "10", "12"], a: "8" }
+                    { q: "Jika A * B = AB(A - B), cari 509 * 218.", options: ["3.75.29.355", "8.64.29.574", "2.34.65.482", "32.289.942"], a: "32.289.942" },
+                    { q: "Selesaikan untuk x: 301.01 - 0.101 = x + 198.01", options: ["103.119", "103.101", "102.901", "102.899"], a: "102.901" },
+                    { q: "Tentukan nilai a pada (-26 × a) / 4 = 364", options: ["26", "-37", "78", "-56"], a: "-56" },
+                    { q: "Sederhanakan: 590 - [2 x {20 x (9 x 2 - 3 x 6)}]", options: ["570", "0", "590", "100"], a: "590" },
+                    { q: "John salah membaca pengali 18 menjadi 81, hasil bertambah 504. Berapa pengali lainnya?", options: ["6", "8", "10", "12"], a: "8" }
                 ]
             },
             4: {
-                lesson: { title: "Geometry: Area & Perimeter Mastery", concept: "Calculating areas and perimeters of composite figures, overlapping squares, and partitioned rectangles.", trick: "For overlapping rectangles or square grids, calculate individual areas and subtract overlapping regions or use square side dimensions.", q: "Rectangle ACEG is divided into 4 parts. BCDX is a square of area 4 sq.cm. Top rectangle is 16 sq.cm, bottom-right is 8 sq.cm. What is the area of shaded part X?", think: "Use proportional areas of rectangles with a common height or width.", step1: "BCDX is 4 sq.cm (side 2 cm). Top-left rectangle is 16 sq.cm with width matching square (2 cm), so length is 8 cm.", step2: "Shaded region shares dimensions with partitioned sections. Calculating proportions yields 32 sq.cm.", ans: "32 sq. cm." },
+                lesson: { 
+                    title: "Penguasaan Luas & Keliling Geometri", 
+                    concept: "Menghitung luas dan keliling bangun gabungan, persegi yang bertumpuk, dan persegi panjang yang dipartisi.", 
+                    trick: "Untuk persegi panjang atau kisi persegi yang bertumpuk, hitung luas individu dan kurangi wilayah yang tumpang tindih.", 
+                    examples: [{ 
+                        q: "Persegi panjang ACEG dibagi menjadi 4 bagian. BCDX adalah persegi seluas 4 cm². Persegi panjang atas 16 cm², kanan bawah 8 cm². Berapa luas bagian X yang diarsir?", 
+                        think: "Gunakan proporsi luas persegi panjang dengan tinggi atau lebar yang sama.", 
+                        step1: "BCDX seluas 4 cm² (sisi 2 cm). Persegi panjang kiri atas 16 cm² dengan lebar menyesuaikan persegi (2 cm), jadi panjangnya 8 cm.", 
+                        step2: "Wilayah arsir berbagi dimensi dengan bagian terpartisi. Perhitungan proporsi menghasilkan 32 cm².", 
+                        ans: "32 cm²." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "A rectangle measuring 12 cm × 84 cm is divided into 7 square parts. Find the area of 3 of these parts.", options: ["254 cm²", "432 cm²", "756 cm²", "374 cm²"], answer: "432 cm²", hints: ["Side of each square = 12 cm.", "Area of 1 square = 144. Area of 3 = 144 × 3."], explanation: "3 × 144 = 432 cm²." },
-                    { question: "Find the perimeter of a figure made of squares with areas 1156, 289, and 289 sq.m.", options: ["352 m", "336 m", "284 m", "238 m"], answer: "336 m", hints: ["Side of large square = sqrt(1156) = 34 m.", "Side of smaller squares = sqrt(289) = 17 m."], explanation: "Perimeter = 336 m." },
-                    { question: "If the side of each square in a grid is 8 m, find total area and perimeter.", options: ["194 m², 128 m", "72 m², 156 m", "576 m², 208 m", "676 m², 256 m"], answer: "576 m², 208 m", hints: ["Count total unit squares for area."], explanation: "Area = 576 m², Perimeter = 208 m." },
-                    { question: "Rectangle ACEG has 16 sq.cm top, 4 sq.cm square BCDX, 8 sq.cm bottom right. Shaded area?", options: ["28 sq.cm", "32 sq.cm", "48 sq.cm", "64 sq.cm"], answer: "32 sq.cm", hints: ["Use ratio of areas in rectangles."], explanation: "Shaded area = 32 sq. cm." },
-                    { question: "Find the area of a square whose perimeter is 64 cm.", options: ["128 cm²", "256 cm²", "64 cm²", "512 cm²"], answer: "256 cm²", hints: ["Side = 64 / 4 = 16 cm.", "Area = 16 × 16."], explanation: "Area = 256 cm²." }
+                    { question: "Sebuah persegi panjang 12 cm × 84 cm dibagi menjadi 7 bagian persegi. Berapa luas 3 bagian persegi tersebut?", options: ["254 cm²", "432 cm²", "756 cm²", "374 cm²"], answer: "432 cm²", hints: ["Sisi setiap persegi = 12 cm.", "Luas 1 persegi = 144. Luas 3 = 144 × 3."], explanation: "3 × 144 = 432 cm²." },
+                    { question: "Tentukan keliling bangun dari gabungan persegi dengan luas 1156, 289, dan 289 m².", options: ["352 m", "336 m", "284 m", "238 m"], answer: "336 m", hints: ["Sisi persegi besar = akar(1156) = 34 m.", "Sisi persegi kecil = akar(289) = 17 m."], explanation: "Keliling = 336 m." },
+                    { question: "Jika sisi setiap persegi dalam kisi adalah 8 m, tentukan total luas dan keliling.", options: ["194 m², 128 m", "72 m², 156 m", "576 m², 208 m", "676 m², 256 m"], answer: "576 m², 208 m", hints: ["Hitung total satuan persegi untuk luas."], explanation: "Luas = 576 m², Keliling = 208 m." },
+                    { question: "Persegi panjang ACEG memiliki atas 16 cm², persegi BCDX 4 cm², kanan bawah 8 cm². Luas arsir?", options: ["28 cm²", "32 cm²", "48 cm²", "64 cm²"], answer: "32 cm²", hints: ["Gunakan rasio luas persegi panjang."], explanation: "Luas arsir = 32 cm²." },
+                    { question: "Tentukan luas persegi yang kelilingnya 64 cm.", options: ["128 cm²", "256 cm²", "64 cm²", "512 cm²"], answer: "256 cm²", hints: ["Sisi = 64 / 4 = 16 cm.", "Luas = 16 × 16."], explanation: "Luas = 256 cm²." }
                 ],
                 examPool: [
-                    { q: "Rectangle ACEG has 16 sq.cm, 4 sq.cm square, 8 sq.cm. Shaded area?", options: ["28 sq. cm", "32 sq. cm", "48 sq. cm", "64 sq. cm"], a: "32 sq. cm" },
-                    { q: "A rectangle 12 cm × 84 cm is divided into 7 square parts. Area of 3 parts?", options: ["254 cm²", "432 cm²", "756 cm²", "374 cm²"], a: "432 cm²" },
-                    { q: "Perimeter of figure made of squares with areas 1156, 289, 289 sq.m?", options: ["352 m", "336 m", "284 m", "238 m"], a: "336 m" },
-                    { q: "If the side of each square is 8 m, find area and perimeter of the grid shape.", options: ["194 m², 128 m", "72 m², 156 m", "576 m², 208 m", "676 m², 256 m"], a: "576 m², 208 m" },
-                    { q: "Square with side 24 m cut into small cubes of side 6 m. How many small cubes?", options: ["24", "40", "32", "64"], a: "64" }
+                    { q: "Persegi panjang ACEG memiliki 16 cm², persegi 4 cm², 8 cm². Luas arsir?", options: ["28 cm²", "32 cm²", "48 cm²", "64 cm²"], a: "32 cm²" },
+                    { q: "Persegi panjang 12 cm × 84 cm dibagi 7 persegi. Luas 3 bagian?", options: ["254 cm²", "432 cm²", "756 cm²", "374 cm²"], a: "432 cm²" },
+                    { q: "Keliling bangun dari persegi berluas 1156, 289, 289 m²?", options: ["352 m", "336 m", "284 m", "238 m"], a: "336 m" },
+                    { q: "Jika sisi tiap persegi 8 m, tentukan luas dan keliling bentuk kisi.", options: ["194 m², 128 m", "72 m², 156 m", "576 m², 208 m", "676 m², 256 m"], a: "576 m², 208 m" },
+                    { q: "Persegi bersisi 24 m dipotong menjadi kubus kecil bersisi 6 m. Berapa kubus kecil?", options: ["24", "40", "32", "64"], a: "64" }
                 ]
             },
             5: {
-                lesson: { title: "Speed, Distance & Time Dynamics", concept: "Advanced motion problems involving round trips, pit stops, relative closing speeds, and average speeds over multiple segments.", trick: "Total Distance divided by Total Time is always the formula for Average Speed (never average the speeds directly!).", q: "Rohan traveled House to Post Office (1.6 km), Market (1.3 km), Hospital (6.65 km), and back to House (0.75 km). Total distance?", think: "Sum up all individual segment distances given in the path.", step1: "1.6 + 1.3 + 6.65 + 0.75", step2: "1.6 + 1.3 = 2.9; 6.65 + 0.75 = 7.4; 2.9 + 7.4 = 10.3 km.", ans: "10.3 km." },
+                lesson: { 
+                    title: "Dinamika Kecepatan, Jarak & Waktu", 
+                    concept: "Masalah gerak tingkat lanjut yang melibatkan perjalanan pulang pergi, pemberhentian, kecepatan relatif, dan kecepatan rata-rata.", 
+                    trick: "Total Jarak dibagi Total Waktu adalah rumus mutlak untuk Kecepatan Rata-rata (jangan pernah merata-ratakan kecepatan secara langsung!).", 
+                    examples: [{ 
+                        q: "Rohan bepergian dari Rumah ke Kantor Pos (1.6 km), Pasar (1.3 km), Rumah Sakit (6.65 km), dan kembali ke Rumah (0.75 km). Total jarak?", 
+                        think: "Jumlahkan semua jarak segmen individual yang diberikan.", 
+                        step1: "1.6 + 1.3 + 6.65 + 0.75", 
+                        step2: "1.6 + 1.3 = 2.9; 6.65 + 0.75 = 7.4; 2.9 + 7.4 = 10.3 km.", 
+                        ans: "10.3 km." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "Rohan traveled House -> Post Office (1.6 km) -> Market (1.3 km) -> Hospital (6.65 km) -> House (0.75 km). Total distance?", options: ["12.5 km", "11.4 km", "9.53 km", "10.3 km"], answer: "10.3 km", hints: ["Add all segment distances: 1.6 + 1.3 + 6.65 + 0.75."], explanation: "Total = 10.3 km." },
-                    { question: "Train travels continuously in October at 68 km/h. Total distance covered?", options: ["37,290 km", "50,592 km", "12,740 km", "64,280 km"], answer: "50,592 km", hints: ["October has 31 days. Hours = 31 × 24 = 744 hours.", "Multiply 744 by 68."], explanation: "744 × 68 = 50,592 km." },
-                    { question: "A runner in a 22 km marathon has covered 1/4 of the distance yet to cover. Distance covered?", options: ["6.1 km", "5.0 km", "4.4 km", "5.5 km"], answer: "4.4 km", hints: ["Let covered = x, remaining = y. x + y = 22 and x = y/4."], explanation: "x = 4.4 km." },
-                    { question: "How many times during a day do hands of a clock make a straight line?", options: ["11", "22", "24", "44"], answer: "44", hints: ["Hands make a straight line (180°) 22 times in 12 hours."], explanation: "22 × 2 = 44 times in 24 hours." },
-                    { question: "Rehan left beach at 11:15 AM, took 7h 24m there, return took 1h 53m less. Arrival time?", options: ["12:00 PM", "5:31 PM", "4:46 PM", "None"], answer: "4:46 PM", hints: ["Return time = 7h 24m - 1h 53m = 5h 31m.", "11:15 AM + 5h 31m."], explanation: "Arrival is 4:46 PM." }
+                    { question: "Rohan menempuh Rumah -> Kantor Pos (1.6 km) -> Pasar (1.3 km) -> RS (6.65 km) -> Rumah (0.75 km). Total jarak?", options: ["12.5 km", "11.4 km", "9.53 km", "10.3 km"], answer: "10.3 km", hints: ["Jumlahkan jarak segmen: 1.6 + 1.3 + 6.65 + 0.75."], explanation: "Total = 10.3 km." },
+                    { question: "Kereta berjalan terus-menerus di bulan Oktober dengan kecepatan 68 km/jam. Total jarak?", options: ["37.290 km", "50.592 km", "12.740 km", "64.280 km"], answer: "50.592 km", hints: ["Oktober memiliki 31 hari. Jam = 31 × 24 = 744 jam.", "Kalikan 744 dengan 68."], explanation: "744 × 68 = 50.592 km." },
+                    { question: "Pelari maraton 22 km telah menempuh 1/4 dari jarak yang harus ditempuh. Jarak yang ditempuh?", options: ["6.1 km", "5.0 km", "4.4 km", "5.5 km"], answer: "4.4 km", hints: ["Misal tertempuh = x, sisa = y. x + y = 22 dan x = y/4."], explanation: "x = 4.4 km." },
+                    { question: "Berapa kali dalam sehari jarum jam membentuk garis lurus?", options: ["11", "22", "24", "44"], answer: "44", hints: ["Jarum jam membentuk garis lurus (180°) sebanyak 22 kali dalam 12 jam."], explanation: "22 × 2 = 44 kali dalam 24 jam." },
+                    { question: "Rehan berangkat ke pantai pukul 11:15 AM, menghabiskan 7j 24m di sana, perjalanan pulang 1j 53m lebih cepat. Waktu tiba?", options: ["12:00 PM", "5:31 PM", "4:46 PM", "Tidak ada"], answer: "4:46 PM", hints: ["Waktu pulang = 7j 24m - 1j 53m = 5j 31m.", "11:15 AM + 5j 31m."], explanation: "Waktu tiba adalah 4:46 PM." }
                 ],
                 examPool: [
-                    { q: "Rohan cycled House -> Post Office -> Market -> Hospital -> House (distances: 1.6, 1.3, 6.65, 0.75). Total?", options: ["12.5 km", "11.4 km", "9.53 km", "10.3 km"], a: "10.3 km" },
-                    { q: "Train travels in October at 68 km/h without stopping. Total distance?", options: ["37,290 km", "50,592 km", "12,740 km", "64,280 km"], a: "50,592 km" },
-                    { q: "Marathon 22 km, distance covered is 1/4 of distance yet to cover. Distance covered?", options: ["6.1 km", "5.0 km", "4.4 km", "5.5 km"], a: "4.4 km" },
-                    { q: "How many times during a day do clock hands make a straight line?", options: ["11", "22", "24", "44"], a: "44" },
-                    { q: "Rehan beach trip: 7h 24m there, return 1h 53m less. Left 11:15 AM, return time?", options: ["12:00 PM", "5:31 PM", "4:46 PM", "None"], a: "4:46 PM" }
+                    { q: "Rohan bersepeda Rumah -> Kantor Pos -> Pasar -> RS -> Rumah (jarak: 1.6, 1.3, 6.65, 0.75). Total?", options: ["12.5 km", "11.4 km", "9.53 km", "10.3 km"], a: "10.3 km" },
+                    { q: "Kereta berjalan di bulan Oktober tanpa henti 68 km/jam. Total jarak?", options: ["37.290 km", "50.592 km", "12.740 km", "64.280 km"], a: "50.592 km" },
+                    { q: "Maraton 22 km, jarak ditempuh adalah 1/4 dari sisa. Jarak ditempuh?", options: ["6.1 km", "5.0 km", "4.4 km", "5.5 km"], a: "4.4 km" },
+                    { q: "Berapa kali jarum jam membentuk garis lurus dalam sehari?", options: ["11", "22", "24", "44"], a: "44" },
+                    { q: "Rehan di pantai: 7j 24m di sana, pulang 1j 53m lebih cepat. Berangkat 11:15 AM, waktu tiba?", options: ["12:00 PM", "5:31 PM", "4:46 PM", "Tidak ada"], a: "4:46 PM" }
                 ]
             },
             6: {
-                lesson: { title: "Combinatorics & Probability", concept: "Counting principles, path routing in networks, symmetry lines in geometric shapes, and probability ratios.", trick: "For route counting networks, write the number of paths arriving at each junction by summing paths from preceding connected arrows.", q: "Find the number of lines of symmetry in a regular polygon or standard shapes.", think: "Count axes where folding the shape results in exact halves matching.", step1: "Equilateral triangle has 3, Square has 4, Regular pentagon has 5.", step2: "Circle has infinite lines of symmetry.", ans: "Depends on shape (Square = 4)." },
+                lesson: { 
+                    title: "Kombinatorika & Probabilitas", 
+                    concept: "Prinsip pencacahan, rute jalur dalam jaringan, garis simetri pada bentuk geometri, dan rasio probabilitas.", 
+                    trick: "Untuk jaringan penghitungan rute, tuliskan jumlah jalur yang tiba di setiap persimpangan dengan menjumlahkan jalur dari panah terhubung sebelumnya.", 
+                    examples: [{ 
+                        q: "Tentukan jumlah garis simetri pada poligon beraturan atau bentuk standar.", 
+                        think: "Hitung sumbu di mana pelipatan bentuk menghasilkan separuh bagian yang pas.", 
+                        step1: "Segitiga sama sisi memiliki 3, Persegi 4, Segi lima beraturan 5.", 
+                        step2: "Lingkaran memiliki garis simetri tak terhingga.", 
+                        ans: "Tergantung bentuk (Persegi = 4)." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "How many different routes from A to H in a directed one-way road network graph?", options: ["12", "16", "24", "32"], answer: "24", hints: ["Trace node by node from A adding incoming path counts."], explanation: "Total valid paths = 24." },
-                    { question: "Which shape has maximum lines of symmetry among regular polygons?", options: ["Square", "Equilateral Triangle", "Regular Hexagon", "Circle"], answer: "Circle", hints: ["A circle has an infinite number of symmetry lines."], explanation: "Circle has infinite lines of symmetry." },
-                    { question: "4 shirts and 3 trousers. How many outfit combinations?", options: ["7", "10", "12", "14"], answer: "12", hints: ["Multiply choices: 4 × 3."], explanation: "4 × 3 = 12 combinations." },
-                    { question: "A fair die is rolled. Probability of getting a number greater than 4?", options: ["1/6", "2/6", "3/6", "4/6"], answer: "2/6", hints: ["Numbers greater than 4 are 5 and 6 (2 numbers)."], explanation: "2 / 6 = 1/3 (or 2/6)." },
-                    { question: "Letter 'E' has how many lines of symmetry?", options: ["0", "1", "2", "4"], answer: "1", hints: ["Letter E can be folded horizontally in half."], explanation: "1 horizontal line of symmetry." }
+                    { question: "Berapa banyak rute berbeda dari A ke H dalam grafik jaringan jalan satu arah?", options: ["12", "16", "24", "32"], answer: "24", hints: ["Telusuri simpul demi simpul dari A menjumlahkan hitungan jalur masuk."], explanation: "Total jalur sah = 24." },
+                    { question: "Bentuk manakah yang memiliki garis simetri maksimum di antara poligon beraturan?", options: ["Persegi", "Segitiga Sama Sisi", "Segi Enam Beraturan", "Lingkaran"], answer: "Lingkaran", hints: ["Lingkaran memiliki jumlah garis simetri tak terhingga."], explanation: "Lingkaran memiliki garis simetri tak terhingga." },
+                    { question: "4 baju dan 3 celana panjang. Berapa kombinasi pakaian yang bisa dibentuk?", options: ["7", "10", "12", "14"], answer: "12", hints: ["Kalikan pilihan: 4 × 3."], explanation: "4 × 3 = 12 kombinasi." },
+                    { question: "Sebuah dadu adil dilempar. Probabilitas mendapatkan angka lebih besar dari 4?", options: ["1/6", "2/6", "3/6", "4/6"], answer: "2/6", hints: ["Angka lebih besar dari 4 adalah 5 dan 6 (2 angka)."], explanation: "2 / 6 = 1/3 (atau 2/6)." },
+                    { question: "Huruf 'E' memiliki berapa garis simetri?", options: ["0", "1", "2", "4"], answer: "1", hints: ["Huruf E dapat dilipat secara horizontal menjadi dua bagian sama besar."], explanation: "1 garis simetri horizontal." }
                 ],
                 examPool: [
-                    { q: "How many different routes from A to H along directed roads?", options: ["12", "16", "24", "32"], a: "24" },
-                    { q: "Which shape has infinite lines of symmetry?", options: ["Square", "Circle", "Equilateral Triangle", "Regular Pentagon"], a: "Circle" },
-                    { q: "4 shirts and 3 trousers. Total outfit combinations?", options: ["7", "10", "12", "14"], a: "12" },
-                    { q: "A fair die is rolled. Probability of getting number > 4?", options: ["1/6", "2/6", "3/6", "4/6"], a: "2/6" },
-                    { q: "Letter 'E' has how many lines of symmetry?", options: ["0", "1", "2", "4"], a: "1" }
+                    { q: "Berapa banyak rute berbeda dari A ke H sepanjang jalan searah?", options: ["12", "16", "24", "32"], a: "24" },
+                    { q: "Bentuk manakah yang memiliki garis simetri tak terhingga?", options: ["Persegi", "Lingkaran", "Segitiga Sama Sisi", "Segi Lima Beraturan"], a: "Lingkaran" },
+                    { q: "4 baju dan 3 celana. Total kombinasi pakaian?", options: ["7", "10", "12", "14"], a: "12" },
+                    { q: "Dadu dilempar. Probabilitas mendapat angka > 4?", options: ["1/6", "2/6", "3/6", "4/6"], a: "2/6" },
+                    { q: "Huruf 'E' memiliki berapa garis simetri?", options: ["0", "1", "2", "4"], a: "1" }
                 ]
             },
             7: {
-                lesson: { title: "Working Backwards & Logic Puzzles", concept: "Solving complex multi-person statements, age puzzles with conditional truths, and reverse-calculation word problems.", trick: "In logic puzzles where statements have partial truths, test each person's claims against consistency rules.", q: "Three brothers Marcus, Joseph, Ryan. In each statement only 2 sentences are correct. Marcus says: I'm 28, younger than Joseph by 3, older than Ryan by 2. How old is Joseph?", think: "Analyze truth conditions for each brother's 3 statements.", step1: "Test ages: If Marcus = 30, Joseph = 33, Ryan = 28.", step2: "Verify statement constraints. Joseph = 33 satisfies all valid conditions.", ans: "Joseph is 33 years old." },
+                lesson: { 
+                    title: "Berpikir Mundur & Teka-Teki Logika", 
+                    concept: "Menyelesaikan pernyataan multi-orang yang kompleks, teka-teki usia dengan kebenaran bersyarat, dan soal cerita perhitungan terbalik.", 
+                    trick: "Dalam teka-teki logika di mana pernyataan memiliki kebenaran sebagian, uji klaim setiap orang terhadap aturan konsistensi.", 
+                    examples: [{ 
+                        q: "Tiga bersaudara Marcus, Joseph, Ryan. Dalam setiap pernyataan hanya 2 kalimat yang benar. Marcus berkata: Saya 28 tahun, lebih muda dari Joseph 3 tahun, lebih tua dari Ryan 2 tahun. Berapa umur Joseph?", 
+                        think: "Analisis kondisi kebenaran untuk 3 pernyataan masing-masing saudara.", 
+                        step1: "Uji usia: Jika Marcus = 30, Joseph = 33, Ryan = 28.", 
+                        step2: "Verifikasi batasan pernyataan. Joseph = 33 memenuhi semua kondisi valid.", 
+                        ans: "Joseph berusia 33 tahun." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "Marcus, Joseph, Ryan age puzzle where each gives 3 statements with 2 true. How old is Joseph?", options: ["31", "33", "35", "30"], answer: "33", hints: ["Test ages consistency where 2 statements per person are correct."], explanation: "Joseph is 33." },
-                    { question: "Anklet/watch weight problem: 3 trophies weigh 198 kg more than 1 trophy. Weight of 1 trophy?", options: ["66 kg", "99 kg", "49.5 kg", "33 kg"], answer: "99 kg", hints: ["3T - 1T = 198 => 2T = 198."], explanation: "1 trophy = 99 kg." },
-                    { question: "A number decreased by 4 then multiplied by 2 gives 12. What is the number?", options: ["8", "10", "12", "16"], answer: "10", hints: ["Work backwards: 12 / 2 = 6, then 6 + 4."], explanation: "Number is 10." },
-                    { question: "Mother prepared 208 sweets for son and 3 friends. Carla ate 22 less than Matthew, Kelly 4 less than Matthew, Jeremy 78 less than 3× Matthew. How many more sweets did friends eat than Jeremy?", options: ["52", "104", "130", "78"], answer: "104", hints: ["Set Matthew = x, solve total = 208."], explanation: "Difference is 104." },
-                    { question: "If yesterday was Wednesday, what day is 100 days later?", options: ["Monday", "Tuesday", "Thursday", "Friday"], answer: "Friday", hints: ["100 mod 7 = 2 remainder.", "Wednesday + 2 days."], explanation: "Friday." }
+                    { question: "Teka-teki usia Marcus, Joseph, Ryan di mana masing-masing memberi 3 pernyataan dengan 2 benar. Berapa umur Joseph?", options: ["31", "33", "35", "30"], answer: "33", hints: ["Uji konsistensi usia di mana 2 pernyataan per orang benar."], explanation: "Joseph berusia 33 tahun." },
+                    { question: "Masalah berat trofi: 3 trofi beratnya 198 kg lebih berat dari 1 trofi. Berapa berat 1 trofi?", options: ["66 kg", "99 kg", "49.5 kg", "33 kg"], answer: "99 kg", hints: ["3T - 1T = 198 => 2T = 198."], explanation: "1 trofi = 99 kg." },
+                    { question: "Suatu angka dikurangi 4 lalu dikalikan 2 menghasilkan 12. Berapa angka tersebut?", options: ["8", "10", "12", "16"], answer: "10", hints: ["Bekerja mundur: 12 / 2 = 6, lalu 6 + 4."], explanation: "Angka tersebut adalah 10." },
+                    { question: "Ibu menyiapkan 208 permen untuk anak dan 3 temannya. Carla makan 22 lebih sedikit dari Matthew, Kelly 4 lebih sedikit dari Matthew, Jeremy 78 lebih sedikit dari 3× Matthew. Berapa lebih banyak permen yang dimakan teman-teman dibandingkan Jeremy?", options: ["52", "104", "130", "78"], answer: "104", hints: ["Misal Matthew = x, selesaikan total = 208."], explanation: "Selisihnya adalah 104." },
+                    { question: "Jika kemarin adalah hari Rabu, hari apakah 100 hari kemudian?", options: ["Senin", "Selasa", "Kamis", "Jumat"], answer: "Jumat", hints: ["100 mod 7 = sisa 2.", "Rabu + 2 hari."], explanation: "Jumat." }
                 ],
                 examPool: [
-                    { q: "Marcus, Joseph, Ryan age puzzle (2 true statements each). Joseph's age?", options: ["31", "33", "35", "30"], a: "33" },
-                    { q: "3 trophies weigh 198 kg more than 1 trophy. Weight of 1 trophy?", options: ["66 kg", "99 kg", "49.5 kg", "33 kg"], a: "99 kg" },
-                    { q: "A number decreased by 4 then multiplied by 2 gives 12. Number?", options: ["8", "10", "12", "16"], a: "10" },
-                    { q: "Mother prepared 208 sweets for son and 3 friends with specific relations. Friends vs Jeremy difference?", options: ["52", "104", "130", "78"], a: "104" },
-                    { q: "If July 7, 2018 is Saturday, what day of the week is 10 years later?", options: ["Thursday", "Friday", "Saturday", "Sunday"], a: "Thursday" }
+                    { q: "Teka-teki usia Marcus, Joseph, Ryan (masing-masing 2 pernyataan benar). Umur Joseph?", options: ["31", "33", "35", "30"], a: "33" },
+                    { q: "3 trofi 198 kg lebih berat dari 1 trofi. Berat 1 trofi?", options: ["66 kg", "99 kg", "49.5 kg", "33 kg"], a: "99 kg" },
+                    { q: "Angka dikurangi 4 lalu dikali 2 hasilnya 12. Angka berapa?", options: ["8", "10", "12", "16"], a: "10" },
+                    { q: "Ibu siapkan 208 permen dengan relasi tertentu. Selisih teman vs Jeremy?", options: ["52", "104", "130", "78"], a: "104" },
+                    { q: "Jika 7 Juli 2018 adalah Sabtu, hari apa 10 tahun kemudian?", options: ["Kamis", "Jumat", "Sabtu", "Minggu"], a: "Kamis" }
                 ]
             },
             8: {
-                lesson: { title: "Sequence, Series & Special Patterns", concept: "Telescoping series sums, Fibonacci number sequences, and arithmetic progression nth term formulas.", trick: "For telescoping fractions like 1/(5×9) + 1/(9×13) + ..., split into difference of unit fractions: 1/4 × (1/5 - 1/9 + 1/9 - 1/13 + ...).", q: "Find the sum of 235 × (1/(5×9) + 1/(9×13) + ... + 1/(2017×2021)) written as m/n in simplest form. Find m+n.", think: "Use telescoping sum formula for fractions with common differences in denominators (d=4).", step1: "Sum = 1/4 × (1/5 - 1/2021) = 1/4 × (2016 / 10105) = 504 / 10105.", step2: "Multiply by 235: 235 × (504 / 10105) = simplify ratio to m/n.", ans: "m + n calculation." },
+                lesson: { 
+                    title: "Barisan, Deret & Pola Khusus", 
+                    concept: "Jumlah deret teleskopik, barisan bilangan Fibonacci, dan rumus suku ke-n barisan aritmatika.", 
+                    trick: "Untuk pecahan teleskopik seperti 1/(5×9) + 1/(9×13) + ..., ubah menjadi selisih pecahan satuan: 1/4 × (1/5 - 1/9 + 1/9 - 1/13 + ...).", 
+                    examples: [{ 
+                        q: "Tentukan jumlah dari 235 × (1/(5×9) + 1/(9×13) + ... + 1/(2017×2021)) ditulis sebagai m/n dalam bentuk paling sederhana. Tentukan m+n.", 
+                        think: "Gunakan rumus jumlah teleskopik untuk pecahan dengan selisih penyebut yang sama (d=4).", 
+                        step1: "Jumlah = 1/4 × (1/5 - 1/2021) = 1/4 × (2016 / 10105) = 504 / 10105.", 
+                        step2: "Kalikan dengan 235: 235 × (504 / 10105) = sederhanakan rasio menjadi m/n.", 
+                        ans: "Perhitungan m + n." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "Find sum of 2008 + 2010 + 2012 + 2014 + 2016 + 2018", options: ["24156", "20130", "12078", "10065"], answer: "12078", hints: ["Use arithmetic series sum: (First + Last) / 2 × Number of terms."], explanation: "(2008 + 2018) / 2 × 6 = 12,078." },
-                    { question: "Sequence: first is 20, second is 19, next is sum of previous two. Find 6th number.", options: ["97", "155", "252", "407"], answer: "155", hints: ["Term 3: 20+19=39. Term 4: 19+39=58...", "Calculate up to 6th term."], explanation: "Terms: 20, 19, 39, 58, 97, 155." },
-                    { question: "Observe pattern: 1/1, 1/2, 2/2, 1/3, 2/3, 3/3... Find sum of 55th and 67th terms.", options: ["3/4", "1 10/11", "1 1/1", "2"], answer: "1 10/11", hints: ["Group by denominators."], explanation: "Sum equals 1 10/11." },
-                    { question: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], answer: "2019", hints: ["Factor out 2019: 2019 × (2019 - 2018)."], explanation: "2019 × 1 = 2019." },
-                    { question: "Fibonacci sequence variation: 1, 1, 2, 3, 5, 8, 13... What is the 10th term?", options: ["34", "55", "89", "144"], answer: "55", hints: ["Continue adding last two terms up to 10th."], explanation: "10th term is 55." }
+                    { question: "Tentukan jumlah dari 2008 + 2010 + 2012 + 2014 + 2016 + 2018", options: ["24156", "20130", "12078", "10065"], answer: "12078", hints: ["Gunakan rumus deret aritmatika: (Pertama + Terakhir) / 2 × Jumlah suku."], explanation: "(2008 + 2018) / 2 × 6 = 12.078." },
+                    { question: "Barisan: pertama 20, kedua 19, berikutnya adalah jumlah dua sebelumnya. Tentukan suku ke-6.", options: ["97", "155", "252", "407"], answer: "155", hints: ["Suku 3: 20+19=39. Suku 4: 19+39=58...", "Hitung sampai suku ke-6."], explanation: "Suku-suku: 20, 19, 39, 58, 97, 155." },
+                    { question: "Perhatikan pola: 1/1, 1/2, 2/2, 1/3, 2/3, 3/3... Tentukan jumlah suku ke-55 dan ke-67.", options: ["3/4", "1 10/11", "1 1/1", "2"], answer: "1 10/11", hints: ["Kelompokkan berdasarkan penyebut."], explanation: "Jumlahnya sama dengan 1 10/11." },
+                    { question: "Tentukan nilai dari 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], answer: "2019", hints: ["Faktorkan keluar 2019: 2019 × (2019 - 2018)."], explanation: "2019 × 1 = 2019." },
+                    { question: "Variasi barisan Fibonacci: 1, 1, 2, 3, 5, 8, 13... Berapa suku ke-10?", options: ["34", "55", "89", "144"], answer: "55", hints: ["Lanjutkan penjumlahan dua suku terakhir hingga suku ke-10."], explanation: "Suku ke-10 adalah 55." }
                 ],
                 examPool: [
-                    { q: "Find sum of 2008 + 2010 + 2012 + 2014 + 2016 + 2018", options: ["24156", "20130", "12078", "10065"], a: "12078" },
-                    { q: "Sequence: 20, 19, sum of previous two. 6th term?", options: ["97", "155", "252", "407"], a: "155" },
-                    { q: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], a: "2019" },
-                    { q: "Value of expression 235 × (1/(5×9) + ... + 1/(2017×2021)) written as m/n. Find m+n.", options: ["2541", "3420", "4150", "5210"], a: "2541" },
-                    { q: "Three friends Ann (every 5 days), Barbara (6 days), Carla (8 days) met on Thursday 2 days ago. Days until next Thursday meeting?", options: ["72", "842", "838", "840"], a: "840" }
+                    { q: "Tentukan jumlah dari 2008 + 2010 + 2012 + 2014 + 2016 + 2018", options: ["24156", "20130", "12078", "10065"], a: "12078" },
+                    { q: "Barisan: 20, 19, jumlah dua sebelumnya. Suku ke-6?", options: ["97", "155", "252", "407"], a: "155" },
+                    { q: "Tentukan nilai 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], a: "2019" },
+                    { q: "Nilai ekspresi 235 × (1/(5×9) + ... + 1/(2017×2021)) sebagai m/n. Cari m+n.", options: ["2541", "3420", "4150", "5210"], a: "2541" },
+                    { q: "Tiga teman Ann (tiap 5 hari), Barbara (6 hari), Carla (8 hari) bertemu pada hari Kamis 2 hari lalu. Hari hingga pertemuan Kamis berikutnya?", options: ["72", "842", "838", "840"], a: "840" }
                 ]
             },
             9: {
-                lesson: { title: "Olympiad Multi-Step Word Problems", concept: "Complex composite word problems combining simultaneous equations, Venn diagrams, and percentage/discount chains.", trick: "In set theory / Venn diagrams, use Principle of Inclusion-Exclusion: Total = A + B - Both + Neither.", q: "In a class of 50 students, 35 like basketball, 23 like soccer. Greatest possible number who dislike both?", think: "Maximize the outer region (dislike both) by minimizing overlap.", step1: "If soccer (23) is completely inside basketball (35), then basketball/soccer lovers total 35.", step2: "Remaining students who like neither = 50 - 35 = 15.", ans: "15 students." },
+                lesson: { 
+                    title: "Soal Cerita Multi-Tahap Olimpiade", 
+                    concept: "Soal cerita gabungan kompleks yang menggabungkan persamaan simultan, diagram Venn, dan rantai persentase/diskon.", 
+                    trick: "Dalam teori himpunan / diagram Venn, gunakan Prinsip Inklusi-Eksklusi: Total = A + B - Keduanya + Tidak Keduanya.", 
+                    examples: [{ 
+                        q: "Dalam kelas berisi 50 siswa, 35 suka basket, 23 suka sepak bola. Berapa kemungkinan terbesar siswa yang tidak menyukai keduanya?", 
+                        think: "Maksimalkan wilayah luar (tidak suka keduanya) dengan meminimalkan irisan.", 
+                        step1: "Jika sepak bola (23) berada sepenuhnya di dalam basket (35), maka pecinta basket/sepak bola total 35.", 
+                        step2: "Siswa tersisa yang tidak menyukai keduanya = 50 - 35 = 15.", 
+                        ans: "15 siswa." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "In class of 50, 35 like basketball, 23 like soccer. Greatest possible number disliking both?", options: ["15", "27", "38", "48"], answer: "15", hints: ["Minimize intersection by putting smaller set inside larger set."], explanation: "50 - 35 = 15." },
-                    { question: "850 students passed class 10. Commerce 41%, Art 37%, Science 22%. Students NOT choosing science?", options: ["500", "663", "298", "375"], answer: "663", hints: ["Non-science percentage = 100% - 22% = 78%.", "Calculate 78% of 850."], explanation: "0.78 × 850 = 663." },
-                    { question: "Two candles lit together. First takes 6h, second takes 4h. After 3.6h, ratio of first to second length?", options: ["2:1", "3:2", "4:3", "1:1"], answer: "2:1", hints: ["Calculate remaining fraction after 3.6 hours for each."], explanation: "Ratio is 2:1." },
-                    { question: "Jack and Jill start running from A to B (660m distance) back and forth. Jill runs faster. At 3rd meeting, how far has Jill run?", options: ["1320 m", "2640 m", "3960 m", "5280 m"], answer: "3960 m", hints: ["Each meeting corresponds to a combined multiple of distance."], explanation: "Jill has run 3960 m." },
-                    { question: "Three brothers talking about ages with conditional truths. Joseph's age?", options: ["31", "33", "35", "30"], answer: "33", hints: ["Verified through consistent age inequalities."], explanation: "Joseph is 33." }
+                    { question: "Dalam kelas 50, 35 suka basket, 23 suka sepak bola. Kemungkinan terbesar tidak suka keduanya?", options: ["15", "27", "38", "48"], answer: "15", hints: ["Minimalkan irisan dengan menempatkan himpunan kecil di dalam himpunan besar."], explanation: "50 - 35 = 15." },
+                    { question: "850 siswa lulus kelas 10. Perdagangan 41%, Seni 37%, Sains 22%. Siswa yang TIDAK memilih sains?", options: ["500", "663", "298", "375"], answer: "663", hints: ["Persentase non-sains = 100% - 22% = 78%.", "Hitung 78% dari 850."], explanation: "0.78 × 850 = 663." },
+                    { question: "Dua lilin dinyalakan bersamaan. Pertama habis 6 jam, kedua 4 jam. Setelah 3.6 jam, rasio panjang pertama dan kedua?", options: ["2:1", "3:2", "4:3", "1:1"], answer: "2:1", hints: ["Hitung sisa pecahan setelah 3.6 jam untuk masing-masing lilin."], explanation: "Rasionya adalah 2:1." },
+                    { question: "Jack dan Jill berlari dari A ke B (jarak 660m) bolak-balik. Jill berlari lebih cepat. Pada pertemuan ke-3, berapa jarak yang ditempuh Jill?", options: ["1320 m", "2640 m", "3960 m", "5280 m"], answer: "3960 m", hints: ["Setiap pertemuan berhubungan dengan kelipatan gabungan jarak."], explanation: "Jill telah berlari 3960 m." },
+                    { question: "Tiga bersaudara berbicara tentang usia dengan kebenaran bersyarat. Berapa umur Joseph?", options: ["31", "33", "35", "30"], answer: "33", hints: ["Diverifikasi melalui ketidaksamaan usia yang konsisten."], explanation: "Joseph berusia 33 tahun." }
                 ],
                 examPool: [
-                    { q: "In class of 50, 35 basketball, 23 soccer. Greatest number disliking both?", options: ["15", "27", "38", "48"], a: "15" },
-                    { q: "850 students passed. Commerce 41%, Art 37%, Science 22%. Students not choosing science?", options: ["500", "663", "298", "375"], a: "663" },
-                    { q: "Two candles (6h and 4h burn time). Ratio of lengths after 3.6 hours?", options: ["1:2", "2:1", "3:4", "4:3"], a: "2:1" },
-                    { q: "Jack and Jill run 660m track back and forth. At 3rd meeting, Jill distance?", options: ["1320 m", "2640 m", "3960 m", "5280 m"], a: "3960 m" },
-                    { q: "Find value of 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], a: "2019" }
+                    { q: "Kelas 50, 35 basket, 23 sepak bola. Terbesar tidak suka keduanya?", options: ["15", "27", "38", "48"], a: "15" },
+                    { q: "850 siswa lulus. Perdagangan 41%, Seni 37%, Sains 22%. Siswa tidak pilih sains?", options: ["500", "663", "298", "375"], a: "663" },
+                    { q: "Dua lilin (waktu bakar 6j dan 4j). Rasio panjang setelah 3.6 jam?", options: ["1:2", "2:1", "3:4", "4:3"], a: "2:1" },
+                    { q: "Jack & Jill lari trek 660m bolak-balik. Pertemuan ke-3, jarak Jill?", options: ["1320 m", "2640 m", "3960 m", "5280 m"], a: "3960 m" },
+                    { q: "Tentukan nilai 2019 × 2019 - 2019 × 2018", options: ["0", "2016", "2017", "2019"], a: "2019" }
                 ]
             },
             10: {
-                lesson: { title: "Global IMO Grand Master Exam", concept: "The highest tier of international mathematical olympiad challenges, uniting number theory, advanced geometry, algebraic identities, and combinatorial logic.", trick: "Stay calm, re-read complex problem statements twice, test edge cases, and use rigorous verification.", q: "In the cryptarithm SIMOC × SIMOC, find the value of S × I × M × O × C where different letters represent different digits.", think: "Analyze digit constraints and multiplication column carry-overs.", step1: "Test candidate values for 5-letter palindromic / multiplication patterns.", step2: "Product mapping yields unique digit assignments.", ans: "Calculated product." },
+                lesson: { 
+                    title: "Ujian Grand Master IMO Global", 
+                    concept: "Tingkat tertinggi tantangan olimpiade matematika internasional, menyatukan teori bilangan, geometri lanjutan, identitas aljabar, dan logika kombinatorial.", 
+                    trick: "Tetap tenang, baca kembali pernyataan soal yang kompleks dua kali, uji kasus ekstrem, dan gunakan verifikasi ketat.", 
+                    examples: [{ 
+                        q: "Dalam kriptaritma SIMOC × SIMOC, tentukan nilai dari S × I × M × O × C di mana huruf berbeda mewakili angka berbeda.", 
+                        think: "Analisis batasan digit dan simpanan kolom perkalian.", 
+                        step1: "Uji nilai kandidat untuk pola palindromik / perkalian 5 huruf.", 
+                        step2: "Pemetaan produk menghasilkan penugasan digit unik.", 
+                        ans: "Hasil perkalian dihitung." 
+                    }] 
+                },
                 practicePool: [
-                    { question: "Cryptarithm SIMOC × SIMOC: Find S × I × M × O × C", options: ["0", "120", "240", "360"], answer: "0", hints: ["Check if any letter must be 0 in multiplication product rows."], explanation: "Product evaluates such that one letter is 0, making product 0." },
-                    { question: "Find value of m+n for the telescoping series expression 235 × sum(1/(5×9)...)", options: ["2541", "3420", "4150", "5210"], answer: "2541", hints: ["Simplifies to fraction with m=504, n=2037... sum m+n = 2541."], explanation: "m + n = 2541." },
-                    { question: "Distance between A and B is 660m. Jack & Jill meet for 3rd time. Jill distance?", options: ["2640 m", "3960 m", "5280 m", "6600 m"], answer: "3960 m", hints: ["3rd meeting total distance covered = 6 × 660 = 3960m shared, Jill gets proportional share."], explanation: "Jill has run 3960 m." },
-                    { question: "What is the last digit of 2! + 0! + 1! + 8!?", options: ["2", "3", "4", "5"], answer: "4", hints: ["2! = 2, 0! = 1, 1! = 1, 8! ends in 0.", "2 + 1 + 1 + 0 = 4."], explanation: "Last digit is 4." },
-                    { question: "Find the 6th number in sequence: 20, 19, then sum of previous two.", options: ["97", "155", "252", "407"], answer: "155", hints: ["Terms: 20, 19, 39, 58, 97, 155."], explanation: "6th number is 155." }
+                    { question: "Kriptaritma SIMOC × SIMOC: Cari S × I × M × O × C", options: ["0", "120", "240", "360"], answer: "0", hints: ["Periksa apakah ada huruf yang harus bernilai 0 pada baris hasil perkalian."], explanation: "Produk bernilai sedemikian rupa sehingga salah satu huruf adalah 0, membuat hasil kali menjadi 0." },
+                    { question: "Tentukan nilai m+n untuk deret teleskopik 235 × jumlah(1/(5×9)...)", options: ["2541", "3420", "4150", "5210"], answer: "2541", hints: ["Disederhanakan ke pecahan dengan m=504, n=2037... jumlah m+n = 2541."], explanation: "m + n = 2541." },
+                    { question: "Jarak antara A dan B adalah 660m. Jack & Jill bertemu ke-3 kalinya. Jarak Jill?", options: ["2640 m", "3960 m", "5280 m", "6600 m"], answer: "3960 m", hints: ["Total jarak pertemuan ke-3 = 6 × 660 = 3960m bersama, Jill mendapat bagian proporsional."], explanation: "Jill telah berlari 3960 m." },
+                    { question: "Berapa angka satuan dari 2! + 0! + 1! + 8!?", options: ["2", "3", "4", "5"], answer: "4", hints: ["2! = 2, 0! = 1, 1! = 1, 8! berakhiran 0.", "2 + 1 + 1 + 0 = 4."], explanation: "Angka satuannya adalah 4." },
+                    { question: "Tentukan suku ke-6 dari barisan: 20, 19, lalu jumlah dua sebelumnya.", options: ["97", "155", "252", "407"], answer: "155", hints: ["Suku-suku: 20, 19, 39, 58, 97, 155."], explanation: "Suku ke-6 adalah 155." }
                 ],
                 examPool: [
-                    { q: "Cryptarithm SIMOC × SIMOC: Find S × I × M × O × C", options: ["0", "120", "240", "360"], a: "0" },
-                    { q: "Find value of m+n for 235 × (1/(5×9) + ... + 1/(2017×2021))", options: ["2541", "3420", "4150", "5210"], a: "2541" },
-                    { q: "Distance A to B 660m. Jack & Jill 3rd meeting distance for Jill?", options: ["2640 m", "3960 m", "5280 m", "6600 m"], a: "3960 m" },
-                    { q: "Find the last digit of 2! + 0! + 1! + 8!", options: ["2", "3", "4", "5"], a: "4" },
-                    { q: "Three friends Ann, Barbara, Carla swimming lesson overlap. Days until next Thursday meeting?", options: ["72", "842", "838", "840"], a: "840" }
+                    { q: "Kriptaritma SIMOC × SIMOC: Cari S × I × M × O × C", options: ["0", "120", "240", "360"], a: "0" },
+                    { q: "Cari nilai m+n untuk 235 × (1/(5×9) + ... + 1/(2017×2021))", options: ["2541", "3420", "4150", "5210"], a: "2541" },
+                    { q: "Jarak A ke B 660m. Jack & Jill pertemuan ke-3 jarak Jill?", options: ["2640 m", "3960 m", "5280 m", "6600 m"], a: "3960 m" },
+                    { q: "Berapa angka satuan dari 2! + 0! + 1! + 8!?", options: ["2", "3", "4", "5"], a: "4" },
+                    { q: "Tiga teman Ann, Barbara, Carla jadwal les renang. Hari hingga pertemuan Kamis berikutnya?", options: ["72", "842", "838", "840"], a: "840" }
                 ]
             }
         };
@@ -287,25 +396,30 @@
             const user = getActiveUser();
 
             if (user) {
-                document.getElementById('current-user-name').innerText = user.name;
-                document.getElementById('star-count').innerText = user.stars;
+                const userNameSpan = document.getElementById('current-user-name');
+                const starCountSpan = document.getElementById('star-count');
+                if (userNameSpan) userNameSpan.innerText = user.name;
+                if (starCountSpan) starCountSpan.innerText = user.stars;
             }
 
             if (['home', 'map', 'dashboard'].includes(currentView)) {
-                nav.classList.remove('hidden');
-                header.classList.remove('hidden');
+                if (nav) nav.classList.remove('hidden');
+                if (header) header.classList.remove('hidden');
             } else if (currentView === 'profiles') {
-                nav.classList.add('hidden');
-                header.classList.add('hidden');
+                if (nav) nav.classList.add('hidden');
+                if (header) header.classList.add('hidden');
             } else {
-                nav.classList.add('hidden');
-                header.classList.remove('hidden');
-                document.getElementById('btn-back').onclick = () => {
-                    if (currentView === 'lesson' || currentView === 'examIntro') router('levelIntro', activeLevelId);
-                    else if (currentView === 'levelIntro') router('map');
-                    else if (currentView === 'practice' || currentView === 'exam') router('lesson', activeLevelId);
-                    else router('map');
-                };
+                if (nav) nav.classList.add('hidden');
+                if (header) header.classList.remove('hidden');
+                const btnBack = document.getElementById('btn-back');
+                if (btnBack) {
+                    btnBack.onclick = () => {
+                        if (currentView === 'lesson' || currentView === 'examIntro') router('levelIntro', activeLevelId);
+                        else if (currentView === 'levelIntro') router('map');
+                        else if (currentView === 'practice' || currentView === 'exam') router('lesson', activeLevelId);
+                        else router('map');
+                    };
+                }
             }
 
             ['home', 'map', 'dashboard', 'profiles'].forEach(id => {
@@ -319,16 +433,18 @@
                 }
             });
 
-            main.innerHTML = '';
-            if (currentView === 'profiles') renderProfiles(main);
-            else if (currentView === 'home') renderHome(main);
-            else if (currentView === 'map') renderMap(main);
-            else if (currentView === 'dashboard') renderDashboard(main);
-            else if (currentView === 'levelIntro') renderLevelIntro(main);
-            else if (currentView === 'lesson') renderLesson(main);
-            else if (currentView === 'examIntro') renderExamIntro(main);
-            else if (currentView === 'practice' || currentView === 'exam') renderQuiz(main);
-            else if (currentView === 'examResult') renderExamResult(main);
+            if (main) {
+                main.innerHTML = '';
+                if (currentView === 'profiles') renderProfiles(main);
+                else if (currentView === 'home') renderHome(main);
+                else if (currentView === 'map') renderMap(main);
+                else if (currentView === 'dashboard') renderDashboard(main);
+                else if (currentView === 'levelIntro') renderLevelIntro(main);
+                else if (currentView === 'lesson') renderLesson(main);
+                else if (currentView === 'examIntro') renderExamIntro(main);
+                else if (currentView === 'practice' || currentView === 'exam') renderQuiz(main);
+                else if (currentView === 'examResult') renderExamResult(main);
+            }
         }
 
         function renderProfiles(container) {
@@ -355,8 +471,8 @@
                 <div class="p-6 animate-fade-in flex flex-col justify-center min-h-[90vh]">
                     <div class="bg-slate-800 p-7 rounded-[2rem] shadow-xl border border-slate-700 text-center">
                         <div class="w-16 h-16 mx-auto rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-3xl font-black mb-4 shadow">🏆</div>
-                        <h1 class="text-2xl font-black text-amber-400 mb-1">IMO OLYMPIAD USER</h1>
-                        <p class="text-slate-300 font-bold text-xs mb-6">Pilih profil atau buat baru untuk mulai belajar secara mandiri.</p>
+                        <h1 class="text-2xl font-black text-amber-400 mb-1">PROFIL PESERTA OLYMPIAD</h1>
+                        <p class="text-slate-300 font-bold text-xs mb-6">Pilih profil atau buat akun baru untuk mulai belajar.</p>
                         
                         <div class="space-y-3 mb-6 text-left max-h-60 overflow-y-auto">
                             ${profiles.length > 0 ? html : '<p class="text-xs text-slate-400 text-center py-4 italic">Belum ada profil. Buat akun di bawah!</p>'}
@@ -375,8 +491,12 @@
 
         function createNewProfile() {
             const input = document.getElementById('new-profile-name');
+            if (!input) return;
             const name = input.value.trim();
-            if (!name) return alert('Nama tidak boleh kosong!');
+            if (!name) {
+                alert('Nama tidak boleh kosong!');
+                return;
+            }
 
             const newId = 'user_' + Date.now();
             profiles.push({
@@ -416,7 +536,7 @@
                                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                             </div>
                         </div>
-                        <h1 class="text-2xl font-black text-amber-400 mb-1">INTERNATIONAL OLYMPIAD</h1>
+                        <h1 class="text-2xl font-black text-amber-400 mb-1">SEMUA BISA BELAJAR</h1>
                         <h2 class="text-xs font-bold text-slate-300 mb-4 uppercase tracking-widest">Halo, ${user ? user.name : 'Master'}!</h2>
                         <p class="text-slate-300 mb-6 font-medium text-xs bg-slate-900 p-4 rounded-2xl border border-slate-700 leading-relaxed">
                             Kumpulan soal kompetisi tingkat tinggi (IMO, SIMOC & CMO). Selesaikan 10 level tantangan dan raih medali emas!
@@ -426,7 +546,7 @@
                                 🚀 MULAI PETUALANGAN OLYMPIAD
                             </button>
                             <button onclick="router('profiles')" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold py-3 rounded-2xl transition text-xs">
-                                🔄 Ganti Profil Anak
+                                🔄 Ganti Profil Peserta
                             </button>
                         </div>
                     </div>
@@ -445,7 +565,7 @@
                     <div class="space-y-5 relative before:absolute before:inset-0 before:ml-10 before:w-1 before:bg-slate-700">
             `;
 
-            LEVELS.forEach((lvl, idx) => {
+            LEVELS.forEach((lvl) => {
                 const isUnlocked = user.unlockedLevels.includes(lvl.id);
                 const isCompleted = user.completedLevels.includes(lvl.id);
                 
@@ -507,7 +627,8 @@
         function renderLevelIntro(container) {
             const lvl = LEVELS.find(l => l.id === activeLevelId);
             const lesson = CONTENT[lvl.id].lesson;
-            document.getElementById('header-title').innerText = lvl.title;
+            const headerTitle = document.getElementById('header-title');
+            if (headerTitle) headerTitle.innerText = lvl.title;
 
             container.innerHTML = `
                 <div class="p-6 animate-fade-in flex flex-col justify-center">
@@ -533,7 +654,8 @@
 
         function renderLesson(container) {
             const lesson = CONTENT[activeLevelId].lesson;
-            document.getElementById('header-title').innerText = "Materi & Trik";
+            const headerTitle = document.getElementById('header-title');
+            if (headerTitle) headerTitle.innerText = "Materi & Trik";
 
             container.innerHTML = `
                 <div class="p-5 pb-28 animate-fade-in space-y-5">
@@ -587,7 +709,8 @@
 
         function renderExamIntro(container) {
             const lvl = LEVELS.find(l => l.id === activeLevelId);
-            document.getElementById('header-title').innerText = "Ujian Evaluasi";
+            const headerTitle = document.getElementById('header-title');
+            if (headerTitle) headerTitle.innerText = "Ujian Evaluasi";
 
             container.innerHTML = `
                 <div class="p-6 animate-fade-in flex flex-col justify-center">
@@ -619,7 +742,8 @@
         function renderQuiz(container) {
             const isExam = quizState.isExam;
             const q = quizState.questions[quizState.currentIndex];
-            document.getElementById('header-title').innerText = isExam ? "Ujian Level" : "Latihan Soal";
+            const headerTitle = document.getElementById('header-title');
+            if (headerTitle) headerTitle.innerText = isExam ? "Ujian Level" : "Latihan Soal";
 
             let optionsHtml = '';
             q.options.forEach((opt, idx) => {
@@ -664,6 +788,7 @@
 
             q.options.forEach((opt, idx) => {
                 const btn = document.getElementById(`opt-btn-${idx}`);
+                if (!btn) return;
                 btn.disabled = true;
                 if (opt === correctAnswer) {
                     btn.className = "w-full p-3.5 rounded-2xl font-bold text-left text-xs sm:text-sm border border-emerald-500 bg-emerald-600 text-white shadow";
@@ -675,29 +800,34 @@
             });
 
             const nextBtn = document.getElementById('btn-next-quiz');
-            nextBtn.disabled = false;
-            nextBtn.className = "w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-2xl shadow transition text-xs cursor-pointer";
+            if (nextBtn) {
+                nextBtn.disabled = false;
+                nextBtn.className = "w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-2xl shadow transition text-xs cursor-pointer";
+            }
 
             if (!isExam) {
                 const feedbackArea = document.getElementById('feedback-area');
-                if (selected === correctAnswer) {
-                    quizState.score++;
-                    user.stars += 15;
-                    saveProfiles();
-                    document.getElementById('star-count').innerText = user.stars;
-                    feedbackArea.innerHTML = `
-                        <div class="bg-emerald-950 border border-emerald-800 p-4 rounded-2xl text-emerald-300 font-bold text-xs animate-fade-in">
-                            <p class="font-black text-sm mb-1">✓ Jawaban Tepat!</p>
-                            <p>${q.explanation}</p>
-                        </div>
-                    `;
-                } else {
-                    feedbackArea.innerHTML = `
-                        <div class="bg-amber-950 border border-amber-800 p-4 rounded-2xl text-amber-200 font-bold text-xs animate-fade-in">
-                            <p class="font-black text-sm mb-1">💡 Belum Tepat</p>
-                            <p>${q.hints ? q.hints[0] : 'Perhatikan kembali trik penyelesaiannya.'}</p>
-                        </div>
-                    `;
+                if (feedbackArea) {
+                    if (selected === correctAnswer) {
+                        quizState.score++;
+                        user.stars += 15;
+                        saveProfiles();
+                        const starSpan = document.getElementById('star-count');
+                        if (starSpan) starSpan.innerText = user.stars;
+                        feedbackArea.innerHTML = `
+                            <div class="bg-emerald-950 border border-emerald-800 p-4 rounded-2xl text-emerald-300 font-bold text-xs animate-fade-in">
+                                <p class="font-black text-sm mb-1">✓ Jawaban Tepat!</p>
+                                <p>${q.explanation}</p>
+                            </div>
+                        `;
+                    } else {
+                        feedbackArea.innerHTML = `
+                            <div class="bg-amber-950 border border-amber-800 p-4 rounded-2xl text-amber-200 font-bold text-xs animate-fade-in">
+                                <p class="font-black text-sm mb-1">💡 Belum Tepat</p>
+                                <p>${q.hints ? q.hints[0] : 'Perhatikan kembali trik penyelesaiannya.'}</p>
+                            </div>
+                        `;
+                    }
                 }
             } else {
                 if (selected === correctAnswer) quizState.score++;
@@ -732,9 +862,9 @@
                 user.stars += 100;
 
                 const badgesMap = {
-                    1: "🏅 Number Theory Expert", 2: "📊 Ratio Pro", 3: "🧮 Algebra Master", 4: "📐 Geometry Master",
-                    5: "🏎️ Speed Elite", 6: "🎲 Combinatorics Genius", 7: "💡 Logic Grandmaster", 8: "🔥 Series Pro",
-                    9: "🧠 Gold Medalist", 10: "🏆 IMO GRAND MASTER"
+                    1: "🏅 Pakar Teori Bilangan", 2: "📊 Ahli Rasio & Pecahan", 3: "🧮 Master Aljabar", 4: "📐 Master Geometri",
+                    5: "🏎️ Elit Kecepatan & Waktu", 6: "🎲 Jenius Kombinatorika", 7: "💡 Grandmaster Logika", 8: "🔥 Pakar Deret",
+                    9: "🧠 Peraih Medali Emas", 10: "🏆 GRAND MASTER IMO"
                 };
                 if (badgesMap[activeLevelId] && !user.badges.includes(badgesMap[activeLevelId])) {
                     user.badges.push(badgesMap[activeLevelId]);
