@@ -432,7 +432,7 @@
                 if (starCountSpan) starCountSpan.innerText = user.stars;
             }
 
-            if (['home', 'map', 'dashboard', 'slimeGame', 'slimeLevelSelect'].includes(currentView)) {
+            if (['home', 'map', 'dashboard', 'slimeGame', 'slimeArena', 'slimeResult'].includes(currentView)) {
                 if (nav) nav.classList.remove('hidden');
                 if (header) header.classList.remove('hidden');
             } else if (currentView === 'profiles') {
@@ -456,7 +456,7 @@
             ['home', 'map', 'slimeGame', 'profiles', 'dashboard'].forEach(id => {
                 const btn = document.getElementById(`nav-${id}`);
                 if (btn) {
-                    if (id === currentView || (id === 'slimeGame' && currentView.startsWith('slime'))) {
+                    if (id === currentView || (id === 'slimeGame' && (currentView === 'slimeGame' || currentView === 'slimeArena' || currentView === 'slimeResult'))) {
                         btn.className = "flex flex-col items-center p-2 rounded-xl text-amber-400 font-bold transform scale-105 transition";
                     } else {
                         btn.className = "flex flex-col items-center p-2 rounded-xl text-slate-400 transition";
