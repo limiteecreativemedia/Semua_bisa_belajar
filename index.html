@@ -48,6 +48,10 @@
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
                 <span class="text-[10px] font-bold">Level</span>
             </button>
+            <button onclick="router('slimeGame')" id="nav-slimeGame" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8 4-8-4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                <span class="text-[10px] font-bold">Slime Game</span>
+            </button>
             <button onclick="router('profiles')" id="nav-profiles" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 <span class="text-[10px] font-bold">Ganti Profil</span>
@@ -382,19 +386,30 @@
             timerInterval: null
         };
 
-        function shuffleArray(array) {
-            let arr = [...array];
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
-        }
+        // Slime Math Game State
+        let slimeGameState = {
+            level: 1,
+            questionIndex: 0,
+            maxQuestions: 10,
+            score: 0,
+            hp: 3,
+            timeLeft: 10,
+            timerInterval: null,
+            currentQ: null,
+            slimeColor: '#10b981',
+            slimeName: 'Slime Hijau Cupu',
+            slimeEmoji: '🟢',
+            slimePos: 100 // position percentage for visual attack
+        };
 
         function router(viewName, levelId = null) {
             if (quizState.timerInterval) {
                 clearInterval(quizState.timerInterval);
                 quizState.timerInterval = null;
+            }
+            if (slimeGameState.timerInterval) {
+                clearInterval(slimeGameState.timerInterval);
+                slimeGameState.timerInterval = null;
             }
 
             if (viewName !== 'profiles' && !getActiveUser()) {
@@ -417,7 +432,7 @@
                 if (starCountSpan) starCountSpan.innerText = user.stars;
             }
 
-            if (['home', 'map', 'dashboard'].includes(currentView)) {
+            if (['home', 'map', 'dashboard', 'slimeGame', 'slimeLevelSelect'].includes(currentView)) {
                 if (nav) nav.classList.remove('hidden');
                 if (header) header.classList.remove('hidden');
             } else if (currentView === 'profiles') {
@@ -432,15 +447,16 @@
                         if (currentView === 'lesson' || currentView === 'examIntro') router('levelIntro', activeLevelId);
                         else if (currentView === 'levelIntro') router('map');
                         else if (currentView === 'practice' || currentView === 'exam') router('lesson', activeLevelId);
+                        else if (currentView === 'slimeArena' || currentView === 'slimeResult') router('slimeGame');
                         else router('map');
                     };
                 }
             }
 
-            ['home', 'map', 'dashboard', 'profiles'].forEach(id => {
+            ['home', 'map', 'slimeGame', 'profiles', 'dashboard'].forEach(id => {
                 const btn = document.getElementById(`nav-${id}`);
                 if (btn) {
-                    if (id === currentView) {
+                    if (id === currentView || (id === 'slimeGame' && currentView.startsWith('slime'))) {
                         btn.className = "flex flex-col items-center p-2 rounded-xl text-amber-400 font-bold transform scale-105 transition";
                     } else {
                         btn.className = "flex flex-col items-center p-2 rounded-xl text-slate-400 transition";
@@ -459,6 +475,9 @@
                 else if (currentView === 'examIntro') renderExamIntro(main);
                 else if (currentView === 'practice' || currentView === 'exam') renderQuiz(main);
                 else if (currentView === 'examResult') renderExamResult(main);
+                else if (currentView === 'slimeGame') renderSlimeHome(main);
+                else if (currentView === 'slimeArena') renderSlimeArena(main);
+                else if (currentView === 'slimeResult') renderSlimeResult(main);
             }
         }
 
@@ -951,6 +970,331 @@
                 router('home');
             }
         };
+
+        // --- SLIME MATH SHOOTER GAME LOGIC ---
+        function renderSlimeHome(container) {
+            container.innerHTML = `
+                <div class="p-6 animate-fade-in flex flex-col items-center text-center">
+                    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 p-6 rounded-3xl shadow-xl w-full border border-emerald-500/40 mb-6 text-white">
+                        <div class="text-5xl mb-2 animate-bounce">🟢⚔️🧙‍♂️</div>
+                        <h1 class="text-2xl font-black text-amber-300">SLIME MATH SHOOTER</h1>
+                        <p class="text-xs text-emerald-100 mt-1 font-semibold">Tembak monster slime dengan menghitung cepat sebelum mereka mendekat!</p>
+                    </div>
+
+                    <div class="w-full space-y-4">
+                        <h3 class="text-sm font-black text-left text-slate-300 uppercase tracking-wider px-2">Pilih Level Pertempuran:</h3>
+                        
+                        <div onclick="startSlimeLevel(1)" class="bg-slate-800 hover:bg-slate-700 p-4 rounded-2xl border border-slate-700 flex items-center justify-between cursor-pointer transition">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🟢</span>
+                                <div class="text-left">
+                                    <h4 class="font-black text-sm text-white">Level 1: Slime Hijau Dasar</h4>
+                                    <p class="text-xs text-slate-400">Penjumlahan & Pengurangan ringan (Waktu: 12s)</p>
+                                </div>
+                            </div>
+                            <span class="text-amber-400 font-bold text-xs bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">MAIN ➔</span>
+                        </div>
+
+                        <div onclick="startSlimeLevel(2)" class="bg-slate-800 hover:bg-slate-700 p-4 rounded-2xl border border-slate-700 flex items-center justify-between cursor-pointer transition">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🔵</span>
+                                <div class="text-left">
+                                    <h4 class="font-black text-sm text-white">Level 2: Slime Biru Pejuang</h4>
+                                    <p class="text-xs text-slate-400">Perkalian & Pembagian sedang (Waktu: 10s)</p>
+                                </div>
+                            </div>
+                            <span class="text-amber-400 font-bold text-xs bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">MAIN ➔</span>
+                        </div>
+
+                        <div onclick="startSlimeLevel(3)" class="bg-slate-800 hover:bg-slate-700 p-4 rounded-2xl border border-slate-700 flex items-center justify-between cursor-pointer transition">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🟣</span>
+                                <div class="text-left">
+                                    <h4 class="font-black text-sm text-white">Level 3: Slime Ungu Master</h4>
+                                    <p class="text-xs text-slate-400">Kombinasi Operasi Hitung & Modulo (Waktu: 8s)</p>
+                                </div>
+                            </div>
+                            <span class="text-amber-400 font-bold text-xs bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">MAIN ➔</span>
+                        </div>
+
+                        <div onclick="startSlimeLevel(4)" class="bg-slate-800 hover:bg-slate-700 p-4 rounded-2xl border border-slate-700 flex items-center justify-between cursor-pointer transition">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">👑</span>
+                                <div class="text-left">
+                                    <h4 class="font-black text-sm text-white">Level 4: Slime Raja Merah (Boss)</h4>
+                                    <p class="text-xs text-slate-400">Soal Cerita Olimpiade & Hitung Cepat Ekstrem (Waktu: 6s)</p>
+                                </div>
+                            </div>
+                            <span class="text-amber-400 font-bold text-xs bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">MAIN ➔</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function startSlimeLevel(lvl) {
+            const slimeTypes = [
+                { name: 'Slime Hijau Cupu', emoji: '🟢', color: '#10b981', time: 12 },
+                { name: 'Slime Biru Pejuang', emoji: '🔵', color: '#3b82f6', time: 10 },
+                { name: 'Slime Ungu Master', emoji: '🟣', color: '#a855f7', time: 8 },
+                { name: 'Raja Slime Merah', emoji: '👑', color: '#ef4444', time: 6 }
+            ];
+
+            const type = slimeTypes[lvl - 1];
+            slimeGameState = {
+                level: lvl,
+                questionIndex: 0,
+                maxQuestions: 10,
+                score: 0,
+                hp: 3,
+                timeLeft: type.time,
+                maxTime: type.time,
+                timerInterval: null,
+                currentQ: null,
+                slimeName: type.name,
+                slimeEmoji: type.emoji,
+                slimePos: 15
+            };
+
+            router('slimeArena');
+        }
+
+        function generateSlimeQuestion() {
+            let qText = "";
+            let correctAns = 0;
+            let lvl = slimeGameState.level;
+
+            if (lvl === 1) {
+                let a = Math.floor(Math.random() * 50) + 10;
+                let b = Math.floor(Math.random() * 50) + 10;
+                let isAdd = Math.random() > 0.5;
+                if (isAdd) {
+                    qText = `${a} + ${b} = ?`;
+                    correctAns = a + b;
+                } else {
+                    if (a < b) [a, b] = [b, a];
+                    qText = `${a} - ${b} = ?`;
+                    correctAns = a - b;
+                }
+            } else if (lvl === 2) {
+                let a = Math.floor(Math.random() * 12) + 2;
+                let b = Math.floor(Math.random() * 12) + 2;
+                let isMul = Math.random() > 0.4;
+                if (isMul) {
+                    qText = `${a} × ${b} = ?`;
+                    correctAns = a * b;
+                } else {
+                    let prod = a * b;
+                    qText = `${prod} ÷ ${a} = ?`;
+                    correctAns = b;
+                }
+            } else if (lvl === 3) {
+                let a = Math.floor(Math.random() * 15) + 3;
+                let b = Math.floor(Math.random() * 10) + 2;
+                let c = Math.floor(Math.random() * 10) + 1;
+                qText = `(${a} × ${b}) + ${c} = ?`;
+                correctAns = (a * b) + c;
+            } else {
+                let a = Math.floor(Math.random() * 25) + 5;
+                let b = Math.floor(Math.random() * 20) + 5;
+                let c = Math.floor(Math.random() * 10) + 2;
+                qText = `(${a} + ${b}) × 2 - ${c} = ?`;
+                correctAns = (a + b) * 2 - c;
+            }
+
+            // Generate 3 wrong options and 1 correct option
+            let options = [correctAns];
+            while (options.length < 4) {
+                let offset = (Math.floor(Math.random() * 10) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                let wrong = correctAns + offset;
+                if (wrong >= 0 && !options.includes(wrong)) {
+                    options.push(wrong);
+                }
+            }
+            options = shuffleArray(options);
+
+            return { q: qText, answer: correctAns, options: options };
+        }
+
+        function renderSlimeArena(container) {
+            if (!slimeGameState.currentQ) {
+                slimeGameState.currentQ = generateSlimeQuestion();
+            }
+
+            if (!slimeGameState.timerInterval) {
+                slimeGameState.timerInterval = setInterval(() => {
+                    slimeGameState.timeLeft--;
+                    const timerBar = document.getElementById('slime-timer-bar');
+                    const timerText = document.getElementById('slime-timer-text');
+                    if (timerBar && timerText) {
+                        let pct = (slimeGameState.timeLeft / slimeGameState.maxTime) * 100;
+                        timerBar.style.width = pct + '%';
+                        timerText.innerText = slimeGameState.timeLeft + 's';
+                    }
+
+                    // Slime moves closer
+                    slimeGameState.slimePos += (70 / slimeGameState.maxTime);
+                    const slimeEl = document.getElementById('slime-monster-div');
+                    if (slimeEl) {
+                        slimeEl.style.left = slimeGameState.slimePos + '%';
+                    }
+
+                    if (slimeGameState.timeLeft <= 0) {
+                        handleSlimeWrongTimeout();
+                    }
+                }, 1000);
+            }
+
+            let q = slimeGameState.currentQ;
+            let hpHearts = '❤️'.repeat(slimeGameState.hp) + '🖤'.repeat(3 - slimeGameState.hp);
+
+            container.innerHTML = `
+                <div class="p-5 flex flex-col min-h-[85vh] justify-between animate-fade-in text-white">
+                    <!-- TOP STATUS BAR -->
+                    <div class="flex justify-between items-center bg-slate-800 p-3.5 rounded-2xl border border-slate-700 shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black text-amber-400">Level ${slimeGameState.level}</span>
+                            <span class="text-xs text-slate-400">| Soal ${slimeGameState.questionIndex + 1}/10</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-black text-emerald-400">⭐ ${slimeGameState.score}</span>
+                            <span class="text-sm">${hpHearts}</span>
+                        </div>
+                    </div>
+
+                    <!-- BATTLE ARENA -->
+                    <div class="bg-gradient-to-b from-slate-800 to-slate-900 rounded-3xl p-6 border border-slate-700 relative h-56 flex flex-col items-center justify-center overflow-hidden my-4 shadow-inner">
+                        <!-- Timer Bar -->
+                        <div class="absolute top-3 left-4 right-4 bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-700">
+                            <div id="slime-timer-bar" class="bg-rose-500 h-full transition-all duration-1000" style="width: 100%"></div>
+                        </div>
+                        <span id="slime-timer-text" class="absolute top-6 text-[10px] font-black text-rose-400 uppercase tracking-widest">Waktu: ${slimeGameState.timeLeft}s</span>
+
+                        <!-- Monster Slime -->
+                        <div id="slime-monster-div" class="absolute transition-all duration-500 flex flex-col items-center" style="left: 15%; top: 40%;">
+                            <div class="text-5xl animate-bounce filter drop-shadow-[0_10px_8px_rgba(0,0,0,0.5)]">${slimeGameState.slimeEmoji}</div>
+                            <span class="text-[10px] font-extrabold bg-slate-900/80 px-2 py-0.5 rounded-lg border border-slate-700 text-slate-300 mt-1 whitespace-nowrap">${slimeGameState.slimeName}</span>
+                        </div>
+
+                        <!-- Player Hero -->
+                        <div class="absolute left-[80%] top-[45%] flex flex-col items-center">
+                            <div class="text-4xl animate-pulse">🧙‍♂️⚔️</div>
+                            <span class="text-[10px] font-extrabold bg-slate-900/80 px-2 py-0.5 rounded-lg border border-slate-700 text-amber-400 mt-1">Pahlawan</span>
+                        </div>
+                    </div>
+
+                    <!-- QUESTION & OPTIONS -->
+                    <div class="bg-slate-800 rounded-3xl p-5 border border-slate-700 shadow-sm text-center mb-4">
+                        <span class="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest bg-blue-950 px-3 py-1 rounded-full border border-blue-800 inline-block mb-3">Tembak Jawaban Benar!</span>
+                        <h2 class="text-2xl font-black text-amber-300 mb-5 tracking-wide">${q.q}</h2>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            ${q.options.map((opt, idx) => `
+                                <button onclick="handleSlimeAnswer(${opt})" class="p-3.5 bg-slate-900 hover:bg-blue-600 border border-slate-700 hover:border-blue-500 rounded-2xl font-black text-base text-white shadow transition-transform active:scale-95">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleSlimeAnswer(chosen) {
+            if (!slimeGameState.currentQ) return;
+            clearInterval(slimeGameState.timerInterval);
+            slimeGameState.timerInterval = null;
+
+            let q = slimeGameState.currentQ;
+            if (chosen === q.answer) {
+                // Correct! Attack slime
+                slimeGameState.score += 15;
+                // Reset position backward
+                slimeGameState.slimePos = 15;
+                nextSlimeTurn();
+            } else {
+                // Wrong! Take damage
+                slimeGameState.hp--;
+                slimeGameState.slimePos = Math.min(slimeGameState.slimePos + 15, 70);
+                if (slimeGameState.hp <= 0) {
+                    endSlimeGame(false);
+                } else {
+                    nextSlimeTurn();
+                }
+            }
+        }
+
+        function handleSlimeWrongTimeout() {
+            clearInterval(slimeGameState.timerInterval);
+            slimeGameState.timerInterval = null;
+            slimeGameState.hp--;
+            slimeGameState.slimePos = Math.min(slimeGameState.slimePos + 20, 70);
+            if (slimeGameState.hp <= 0) {
+                endSlimeGame(false);
+            } else {
+                nextSlimeTurn();
+            }
+        }
+
+        function nextSlimeTurn() {
+            slimeGameState.questionIndex++;
+            if (slimeGameState.questionIndex >= slimeGameState.maxQuestions) {
+                endSlimeGame(true);
+            } else {
+                slimeGameState.timeLeft = slimeGameState.maxTime;
+                slimeGameState.currentQ = generateSlimeQuestion();
+                router('slimeArena');
+            }
+        }
+
+        function endSlimeGame(isWin) {
+            if (slimeGameState.timerInterval) {
+                clearInterval(slimeGameState.timerInterval);
+                slimeGameState.timerInterval = null;
+            }
+
+            const user = getActiveUser();
+            if (user && isWin) {
+                user.stars += slimeGameState.score;
+                if (!user.badges.includes("🛡️ Pemburu Slime")) {
+                    user.badges.push("🛡️ Pemburu Slime");
+                }
+                saveProfiles();
+            }
+
+            router('slimeResult', { isWin, score: slimeGameState.score });
+        }
+
+        function renderSlimeResult(container) {
+            // we passed params via global or state
+            let isWin = slimeGameState.hp > 0 && slimeGameState.questionIndex >= slimeGameState.maxQuestions;
+            let finalScore = slimeGameState.score;
+
+            container.innerHTML = `
+                <div class="p-6 animate-fade-in flex flex-col justify-center text-center min-h-[85vh]">
+                    <div class="bg-slate-800 p-8 rounded-[2rem] shadow-2xl border border-slate-700">
+                        <div class="text-6xl mb-3">${isWin ? '🏆' : '💀'}</div>
+                        <h2 class="text-2xl font-black text-white mb-2">${isWin ? 'KEMENANGAN GEMILANG!' : 'KALAH DITAKLUKKAN SLIME'}</h2>
+                        <p class="text-slate-300 font-medium mb-6 text-xs">${isWin ? 'Kamu berhasil mengalahkan pasukan monster slime dengan hitungan cepat!' : 'Slime berhasil mendekat dan mengalahkanmu. Coba tingkatkan kecepatan hitungmu!'}</p>
+                        
+                        <div class="bg-slate-900 p-5 rounded-2xl mb-6 border border-slate-700">
+                            <span class="text-[10px] text-slate-400 font-black uppercase">Poin Dikumpulkan</span>
+                            <div class="text-5xl font-black my-2 text-amber-400">+${finalScore}</div>
+                            <span class="text-xs font-bold text-slate-300">⭐ Ditambahkan ke Profil</span>
+                        </div>
+
+                        <div class="space-y-3">
+                            <button onclick="router('slimeGame')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-2xl shadow transition text-xs">
+                                PILIH LEVEL LAIN ➔
+                            </button>
+                            <button onclick="router('home')" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold py-3 rounded-2xl transition text-xs">
+                                KEMBALI KE UTAMA
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>
