@@ -34,7 +34,7 @@
         </header>
 
         <!-- MAIN CONTAINER -->
-        <main id="main-content" class="flex-grow overflow-y-auto pb-32">
+        <main id="main-content" class="flex-grow overflow-y-auto pb-36">
             <!-- Dynamic Content loaded by JS -->
         </main>
 
@@ -60,7 +60,7 @@
     </div>
 
     <script>
-        // --- DATA LEVEL KHUSUS ANAK SD ---
+        // --- DATA LEVEL KHUSUS ANAK SD (MUDAH, SERU, DAN MUDAH DIPAHAMI) ---
         const LEVELS = [
             { id: 1, title: "LEVEL 1", name: "Penjumlahan & Pengurangan Seru", color: "bg-emerald-600", desc: "Belajar hitung cepat angka puluhan & ratusan dengan asyik." },
             { id: 2, title: "LEVEL 2", name: "Perkalian & Pembagian Dasar", color: "bg-teal-600", desc: "Tabel perkalian 1 sampai 10 dan pembagian sederhana." },
@@ -227,7 +227,7 @@
                     { question: "Umur Ibu 3 kali umur Ani. Jika umur Ani 12 tahun, berapa umur ibu?", options: ["32 tahun", "36 tahun", "40 tahun", "42 tahun"], answer: "36 tahun", hints: ["3 × 12 = ..."], explanation: "3 × 12 = 36 tahun." },
                     { question: "Di dalam kandang ada ayam dan kambing. Total ada 10 kepala dan 28 kaki. Berapa jumlah kambing?", options: ["3", "4", "5", "6"], answer: "4", hints: ["Jika kambing 4, kaki 4×4=16. Sisa 12 kaki untuk 6 ayam (6×2=12). Total 4 kambing + 6 ayam = 10 kepala."], explanation: "Jumlah kambing adalah 4 ekor." },
                     { question: "Hari ini hari Senin. Hari apakah 10 hari lagi?", options: ["Rabu", "Kamis", "Jumat", "Sabtu"], answer: "Kamis", hints: ["10 dibagi 7 sisa 3 hari. Senin + 3 hari = Kamis."], explanation: "Hari Kamis." },
-                    { question: "Tiga tahun lalu umur Rina 7 tahun. Berapa umur Rina 5 tahun yang akan datang?", options: ["12 tahun", "14. tahun", "15 tahun", "16 tahun"], answer: "15 tahun", hints: ["Umur Rina sekarang = 7 + 3 = 10 tahun. 5 tahun lagi = 10 + 5."], explanation: "15 tahun." },
+                    { question: "Tiga tahun lalu umur Rina 7 tahun. Berapa umur Rina 5 tahun yang akan datang?", options: ["12 tahun", "14 tahun", "15 tahun", "16 tahun"], answer: "15 tahun", hints: ["Umur Rina sekarang = 7 + 3 = 10 tahun. 5 tahun lagi = 10 + 5."], explanation: "15 tahun." },
                     { question: "Dalam lomba lari, posisi Doni tepat di belakang Rian, dan Rian berada di urutan ke-3. Urutan Doni ke berapa?", options: ["Ke-2", "Ke-4", "Ke-5", "Ke-6"], answer: "Ke-4", hints: ["Rian ke-3, Doni di belakangnya berarti ke-4."], explanation: "Urutan ke-4." }
                 ],
                 examPool: [
@@ -589,7 +589,7 @@
         function renderMap(container) {
             const user = getActiveUser();
             let html = `
-                <div class="p-5 animate-fade-in pb-24">
+                <div class="p-5 animate-fade-in pb-28">
                     <div class="text-center mb-6 bg-slate-800 p-4 rounded-2xl border border-slate-700">
                         <h2 class="text-xl font-black text-amber-400">Peta Level Matematika SD</h2>
                         <p class="text-slate-400 text-xs mt-1">10 Level Seru & Mudah Dipahami</p>
@@ -632,7 +632,7 @@
         function renderDashboard(container) {
             const user = getActiveUser();
             container.innerHTML = `
-                <div class="p-5 animate-fade-in bg-slate-900 min-h-screen text-white pb-24">
+                <div class="p-5 animate-fade-in bg-slate-900 min-h-screen text-white pb-28">
                     <h2 class="text-xl font-black text-amber-400 mb-6 flex items-center gap-2">👤 Profil Siswa: ${user.name}</h2>
                     <div class="grid grid-cols-2 gap-4 mb-6">
                         <div class="bg-slate-800 rounded-3xl p-5 border border-slate-700 flex flex-col items-center text-center">
@@ -663,7 +663,7 @@
             if (headerTitle) headerTitle.innerText = lvl.title;
 
             container.innerHTML = `
-                <div class="p-6 animate-fade-in flex flex-col justify-center pb-24">
+                <div class="p-6 animate-fade-in flex flex-col justify-center pb-28">
                     <div class="bg-slate-800 p-7 rounded-[2rem] shadow-xl border border-slate-700 text-center">
                         <div class="w-20 h-20 mx-auto rounded-full ${lvl.color} text-white flex items-center justify-center text-2xl font-black mb-4 shadow">
                             ${lvl.id}
@@ -690,7 +690,7 @@
             if (headerTitle) headerTitle.innerText = "Materi & Contoh";
 
             container.innerHTML = `
-                <div class="p-5 pb-32 animate-fade-in space-y-5">
+                <div class="p-5 pb-36 animate-fade-in space-y-5">
                     <div class="bg-slate-800 rounded-3xl p-6 border border-slate-700 shadow-sm">
                         <span class="text-blue-400 font-extrabold text-[10px] uppercase bg-blue-950 px-2.5 py-1 rounded-lg border border-blue-800">Penjelasan Mudah</span>
                         <h3 class="text-lg font-black text-white mt-2 mb-2">${lesson.title}</h3>
@@ -747,7 +747,7 @@
             if (headerTitle) headerTitle.innerText = "Ujian Evaluasi";
 
             container.innerHTML = `
-                <div class="p-6 animate-fade-in flex flex-col justify-center pb-24">
+                <div class="p-6 animate-fade-in flex flex-col justify-center pb-28">
                     <div class="bg-slate-800 p-7 rounded-[2rem] shadow-xl border border-slate-700 text-center">
                         <div class="w-20 h-20 mx-auto rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl mb-4 shadow">⏱️</div>
                         <h2 class="text-xl font-black text-white mb-2">Ujian Level ${lvl.id} (Waktu 60 Detik/Soal)</h2>
@@ -805,7 +805,7 @@
             });
 
             container.innerHTML = `
-                <div class="p-5 pb-32 animate-fade-in flex flex-col">
+                <div class="p-5 pb-36 animate-fade-in flex flex-col">
                     <div class="flex justify-between items-center mb-3">
                         <span class="text-[10px] font-black text-blue-400 bg-blue-950 border border-blue-800 px-2.5 py-1 rounded-lg">Soal ${quizState.currentIndex + 1} / 5</span>
                         ${isExam ? `<span id="exam-timer-display" class="text-xs font-black px-3 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800 animate-pulse">⏳ ${quizState.timeLeft}s</span>` : ''}
@@ -869,14 +869,14 @@
                         const starSpan = document.getElementById('star-count');
                         if (starSpan) starSpan.innerText = user.stars;
                         feedbackArea.innerHTML = `
-                            <div class="bg-emerald-950 border border-emerald-800 p-4 rounded-2xl text-emerald-300 font-bold text-xs animate-fade-in">
+                            <div class="bg-emerald-950 border border-emerald-800 p-4 rounded-2xl text-emerald-300 font-bold text-xs animate-fade-in mb-4">
                                 <p class="font-black text-sm mb-1">✓ Jawaban Tepat!</p>
                                 <p>${q.explanation}</p>
                             </div>
                         `;
                     } else {
                         feedbackArea.innerHTML = `
-                            <div class="bg-amber-950 border border-amber-800 p-4 rounded-2xl text-amber-200 font-bold text-xs animate-fade-in">
+                            <div class="bg-amber-950 border border-amber-800 p-4 rounded-2xl text-amber-200 font-bold text-xs animate-fade-in mb-4">
                                 <p class="font-black text-sm mb-1">💡 Belum Tepat</p>
                                 <p>${q.hints ? q.hints[0] : 'Perhatikan kembali cara hitungnya.'}</p>
                             </div>
@@ -934,7 +934,7 @@
             }
 
             container.innerHTML = `
-                <div class="p-6 animate-fade-in flex flex-col justify-center text-center pb-24">
+                <div class="p-6 animate-fade-in flex flex-col justify-center text-center pb-28">
                     <div class="bg-slate-800 p-8 rounded-[2rem] shadow-2xl border border-slate-700">
                         <div class="text-6xl mb-3">${passed ? '🏆' : '💪'}</div>
                         <h2 class="text-xl font-black text-white mb-2">${passed ? 'HEBAT, UJIAN LULUS!' : 'BELUM LULUS'}</h2>
@@ -1134,7 +1134,7 @@
             let hpHearts = '❤️'.repeat(slimeGameState.hp) + '🖤'.repeat(3 - slimeGameState.hp);
 
             container.innerHTML = `
-                <div class="p-4 flex flex-col min-h-[82vh] justify-between animate-fade-in text-white pb-24">
+                <div class="p-4 flex flex-col min-h-[82vh] justify-between animate-fade-in text-white pb-28">
                     <div class="flex justify-between items-center bg-slate-800 p-3 rounded-2xl border border-slate-700 shadow-sm">
                         <div class="flex items-center gap-2">
                             <span class="text-xs font-black text-amber-400">Level ${slimeGameState.level}</span>
@@ -1249,7 +1249,7 @@
             if (headerTitle) headerTitle.innerText = "Hasil Pertempuran";
 
             container.innerHTML = `
-                <div class="p-6 animate-fade-in flex flex-col justify-center text-center min-h-[82vh] pb-24">
+                <div class="p-6 animate-fade-in flex flex-col justify-center text-center min-h-[82vh] pb-28">
                     <div class="bg-slate-800 p-7 rounded-[2rem] shadow-2xl border border-slate-700">
                         <div class="text-6xl mb-3">${isWin ? '🏆' : '💀'}</div>
                         <h2 class="text-xl font-black text-white mb-2">${isWin ? 'KEMENANGAN GEMILANG!' : 'KALAH DITAKLUKKAN SLIME'}</h2>
