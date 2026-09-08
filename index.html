@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semua Bisa Belajar - Matematika Seru SD</title>
+    <title>Semua Bisa Belajar - Matematika Seru SD & Olimpiade</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Nunito', sans-serif; background-color: #0f172a; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
     </style>
 </head>
 <body class="bg-slate-900 text-white selection:bg-amber-500 selection:text-slate-950">
@@ -39,7 +39,7 @@
         </main>
 
         <!-- BOTTOM NAVIGATION -->
-        <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around p-3 z-50 max-w-md mx-auto pb-safe shadow-lg">
+        <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-t border-slate-800 flex justify-around p-3 z-50 max-w-md mx-auto pb-safe shadow-lg">
             <button onclick="router('home')" id="nav-home" class="flex flex-col items-center p-2 rounded-xl text-slate-400 transition">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 <span class="text-[10px] font-bold">Utama</span>
@@ -61,29 +61,28 @@
 
     <script>
         const LEVELS = [
-            { id: 1, title: "LEVEL 1", name: "Penjumlahan & Pengurangan Seru", color: "bg-emerald-600", desc: "Belajar hitung cepat angka puluhan & ratusan dengan asyik." },
-            { id: 2, title: "LEVEL 2", name: "Perkalian & Pembagian Dasar", color: "bg-teal-600", desc: "Tabel perkalian 1 sampai 10 dan pembagian sederhana." },
-            { id: 3, title: "LEVEL 3", name: "Pecahan Sederhana", color: "bg-cyan-600", desc: "Mengenal setengah, seperempat, dan penjumlahan pecahan berpenyebut sama." },
-            { id: 4, title: "LEVEL 4", name: "Keliling & Luas Bangun Datar", color: "bg-blue-600", desc: "Menghitung luas persegi, persegi panjang, dan segitiga." },
-            { id: 5, title: "LEVEL 5", name: "Kecepatan & Waktu Perjalanan", color: "bg-indigo-600", desc: "Rumus jarak = kecepatan × waktu untuk anak SD." },
-            { id: 6, title: "LEVEL 6", name: "Soal Cerita Logika & Umur", color: "bg-violet-600", desc: "Teka-teki logika umur keluarga dan kelereng." },
-            { id: 7, title: "LEVEL 7", name: "Pola Bilangan & Barisan Asyik", color: "bg-purple-600", desc: "Mencari angka selanjutnya dalam barisan bilangan." },
-            { id: 8, title: "LEVEL 8", name: "Statistika Data Sederhana", color: "bg-fuchsia-600", desc: "Mencari rata-rata (mean), modus, dan nilai tengah." },
-            { id: 9, title: "LEVEL 9", name: "Teka-Teki Gabungan SD Juara", color: "bg-rose-600", desc: "Kombinasi soal cerita olimpiade tingkat SD." },
-            { id: 10, title: "LEVEL 10", name: "Grand Master SD Champion", color: "bg-amber-600", desc: "Ujian akhir matematika paling seru tingkat SD!" }
+            { id: 1, title: "LEVEL 1", name: "Penjumlahan & Pengurangan Dasar", color: "bg-emerald-600", desc: "Fondasi hitung cepat angka puluhan & ratusan dengan asyik." },
+            { id: 2, title: "LEVEL 2", name: "Perkalian & Pembagian Dasar", color: "bg-teal-600", desc: "Tabel perkalian dan pembagian sederhana untuk pemula." },
+            { id: 3, title: "LEVEL 3", name: "Pecahan Sederhana & Sehari-hari", color: "bg-cyan-600", desc: "Mengenal pecahan senilai, penjumlahan dan pengurangan pecahan." },
+            { id: 4, title: "LEVEL 4", name: "Keliling & Luas Bangun Datar", color: "bg-blue-600", desc: "Menghitung keliling dan luas persegi, persegi panjang, serta segitiga." },
+            { id: 5, title: "LEVEL 5", name: "Kecepatan, Jarak & Waktu Perjalanan", color: "bg-indigo-600", desc: "Penerapan rumus Jarak = Kecepatan × Waktu dalam kehidupan." },
+            { id: 6, title: "LEVEL 6", name: "Logika Kombinatorika & Jabat Tangan", color: "bg-violet-600", desc: "Teka-teki logika kombinasi, rute jalan, dan rumus jabat tangan n(n-1)/2." },
+            { id: 7, title: "LEVEL 7", name: "Logika Umur & Bekerja Mundur", color: "bg-purple-600", desc: "Penyelesaian masalah bertahap dan soal cerita umur keluarga." },
+            { id: 8, title: "LEVEL 8", name: "Pola Bilangan, Barisan & Deret", color: "bg-fuchsia-600", desc: "Menganalisis barisan aritmatika dan pola angka lanjutan." },
+            { id: 9, title: "LEVEL 9", name: "Kriptaritma & Aljabar Sandi Angka", color: "bg-rose-600", desc: "Teka-teki huruf mewakili angka dan persamaan simultan." },
+            { id: 10, title: "LEVEL 10", name: "Grand Master Olimpiade Matematika", color: "bg-amber-600", desc: "Ujian komprehensif tingkat tinggi gabungan seluruh materi olimpiade!" }
         ];
 
         const CONTENT = {
             1: {
                 lesson: { 
                     title: "Penjumlahan & Pengurangan Cepat", 
-                    concept: "Belajar menghitung bilangan puluhan dan ratusan dengan cepat menggunakan cara bersusun pendek atau pengelompokan puluhan.", 
+                    concept: "Memahami konsep dasar bilangan bulat dan cara bersusun pendek yang teliti untuk angka puluhan dan ratusan.", 
                     trick: "Jika menjumlahkan angka seperti 48 + 27, hitung 50 + 27 lalu kurangi 2 (= 75).", 
                     examples: [{ 
                         q: "Ibu membeli 125 buah jeruk, lalu membeli lagi 75 buah. Berapa jumlah seluruh jeruk ibu?", 
                         think: "Jumlahkan buah jeruk pertama dan kedua secara bersusun.", 
-                        step1: "125 + 75 = ...", 
-                        step2: "5+5 = 10 (tulis 0 simpan 1). 2+7+1 = 10 (tulis 0 simpan 1). 1+1 = 2 (200).", 
+                        step1: "125 + 75 = 200.", 
                         ans: "Jumlah seluruh jeruk ibu adalah 200 buah." 
                     }] 
                 }
@@ -91,250 +90,240 @@
             2: {
                 lesson: { 
                     title: "Perkalian & Pembagian Dasar", 
-                    concept: "Perkalian adalah penjumlahan berulang, sedangkan pembagian adalah pengurangan berulang atau membagi rata ke beberapa kelompok.", 
-                    trick: "Untuk perkalian 9, gunakan jari tangan atau pastikan angka puluhan selalu naik dan satuan turun (misal 9×3 = 27).", 
+                    concept: "Perkalian adalah penjumlahan berulang, sedangkan pembagian adalah kebalikannya.", 
+                    trick: "Untuk perkalian 9, jumlah angka hasilnya selalu 9 (misal 9 × 4 = 36, 3+6=9).", 
                     examples: [{ 
-                        q: "Ani memasukkan 6 buah kue ke dalam setiap 8 kotak. Berapa total kue seluruhnya?", 
-                        think: "Kalikan jumlah kotak dengan isi kue per kotak.", 
-                        step1: "8 kotak × 6 kue = 48.", 
-                        ans: "Total kue seluruhnya adalah 48 buah." 
+                        q: "Budi menyusun 6 kotak kue, setiap kotak berisi 8 kue. Berapa total kue?", 
+                        think: "Kalikan jumlah kotak dengan isi per kotak.", 
+                        step1: "6 × 8 = 48.", 
+                        ans: "Total kue adalah 48 buah." 
                     }] 
                 }
             },
             3: {
                 lesson: { 
                     title: "Pecahan Sederhana", 
-                    concept: "Mengenal bentuk pecahan seperti 1/2, 1/4, dan 3/4 serta cara menjumlahkan pecahan dengan penyebut yang sama.", 
-                    trick: "Jika penyebutnya sama, tinggal jumlahkan pembilang di bagian atasnya saja!", 
+                    concept: "Mengenal pembilang (atas) dan penyebut (bawah). Pecahan senilai dan operasi hitung berpenyebut sama.", 
+                    trick: "Jika penyebut sudah sama, tinggal operasikan pembilangnya saja!", 
                     examples: [{ 
-                        q: "Berapa hasil dari 2/5 + 1/5?", 
-                        think: "Penyebut sudah sama (5), jumlahkan pembilang 2 + 1.", 
-                        step1: "2 + 1 = 3.", 
-                        ans: "Hasilnya adalah 3/5." 
+                        q: "Berapa hasil dari 3/7 + 2/7?", 
+                        think: "Penyebut sama (7), jumlahkan pembilang 3 + 2.", 
+                        step1: "3 + 2 = 5.", 
+                        ans: "Hasilnya adalah 5/7." 
                     }] 
                 }
             },
             4: {
                 lesson: { 
                     title: "Keliling & Luas Bangun Datar", 
-                    concept: "Belajar menghitung keliling (jumlah semua sisi) dan luas (panjang × lebar untuk persegi panjang atau sisi × sisi untuk persegi).", 
-                    trick: "Keliling ibarat berjalan mengelilingi pagar luar taman, sedangkan luas adalah lantai rumput di dalamnya.", 
+                    concept: "Keliling adalah jumlah panjang seluruh sisi luar, luas adalah bidang di dalamnya.", 
+                    trick: "Persegi panjang: Luas = p × l, Keliling = 2 × (p + l).", 
                     examples: [{ 
-                        q: "Sebuah lantai berbentuk persegi panjang memiliki panjang 8 meter dan lebar 5 meter. Berapa luas lantai tersebut?", 
-                        think: "Luas persegi panjang = Panjang × Lebar.", 
-                        step1: "8 meter × 5 meter = 40.", 
-                        ans: "Luas lantai adalah 40 meter persegi." 
+                        q: "Sebuah taman persegi panjang berukuran 8 m × 5 m. Berapa luasnya?", 
+                        think: "Kalikan panjang dengan lebar.", 
+                        step1: "8 × 5 = 40.", 
+                        ans: "Luasnya adalah 40 m²." 
                     }] 
                 }
             },
             5: {
                 lesson: { 
-                    title: "Kecepatan & Waktu Perjalanan", 
-                    concept: "Mengenal hubungan antara Jarak, Kecepatan, dan Waktu (J = K × W).", 
-                    trick: "Gunakan rumus segitiga JKW: Jarak di atas, Kecepatan dan Waktu di bawah.", 
+                    title: "Kecepatan, Jarak & Waktu", 
+                    concept: "Memahami hubungan Jarak = Kecepatan × Waktu (JKW).", 
+                    trick: "Gunakan segitiga JKW: Jarak di atas, Kecepatan dan Waktu di bawah.", 
                     examples: [{ 
-                        q: "Sebuah mobil melaju dengan kecepatan 60 km/jam selama 2 jam. Berapa jarak yang ditempuh mobil tersebut?", 
+                        q: "Mobil melaju 60 km/jam selama 2 jam. Berapa jaraknya?", 
                         think: "Jarak = Kecepatan × Waktu.", 
-                        step1: "60 km/jam × 2 jam = 120 km.", 
+                        step1: "60 × 2 = 120 km.", 
                         ans: "Jarak yang ditempuh adalah 120 km." 
                     }] 
                 }
             },
             6: {
                 lesson: { 
-                    title: "Soal Cerita Logika & Umur", 
-                    concept: "Mengasah penalaran logika sehari-hari seperti teka-teki umur keluarga, kelereng, dan hewan.", 
-                    trick: "Uraikan kalimat soal cerita satu persatu dari belakang atau gunakan pemisalan sederhana.", 
+                    title: "Logika Kombinatorika & Jabat Tangan", 
+                    concept: "Menghitung kemungkinan susunan, rute perjalanan, dan rumus jabat tangan dalam ruangan.", 
+                    trick: "Rumus total jabat tangan untuk n orang adalah n × (n - 1) / 2.", 
                     examples: [{ 
-                        q: "Umur ayah sekarang 4 kali umur Budi. Jika umur Budi 10 tahun, berapa umur ayah?", 
-                        think: "Kalikan umur Budi dengan 4.", 
-                        step1: "4 × 10 tahun = 40 tahun.", 
-                        ans: "Umur ayah adalah 40 tahun." 
+                        q: "Ada 20 orang dalam ruangan. Setiap orang saling berjabat tangan sekali. Berapa total jabat tangan?", 
+                        think: "Gunakan rumus kombinasi 2 orang dari 20 orang.", 
+                        step1: "20 × 19 / 2 = 190.", 
+                        ans: "Total jabat tangan adalah 190 kali." 
                     }] 
                 }
             },
             7: {
                 lesson: { 
-                    title: "Pola Bilangan & Barisan Asyik", 
-                    concept: "Mencari aturan perubahan dalam barisan angka dan melengkapi angka yang hilang.", 
-                    trick: "Perhatikan apakah angkanya bertambah tetap (tambah 2, tambah 3) atau dikali (kali 2, kali 3).", 
+                    title: "Logika Umur & Bekerja Mundur", 
+                    concept: "Menyelesaikan teka-teki umur keluarga atau menghitung angka awal dengan bekerja mundur dari hasil akhir.", 
+                    trick: "Ubah operasi hitung menjadi kebalikannya dari belakang (+ jadi -, × jadi ÷).", 
                     examples: [{ 
-                        q: "Tentukan angka selanjutnya dari barisan: 3, 6, 9, 12, ...", 
-                        think: "Perhatikan selisih antar angka selalu bertambah 3.", 
-                        step1: "12 + 3 = 15.", 
-                        ans: "Angka selanjutnya adalah 15." 
+                        q: "Umur ayah 4 kali umur Budi. Jika umur Budi 10 tahun, berapa umur ayah?", 
+                        think: "Kalikan umur Budi dengan 4.", 
+                        step1: "4 × 10 = 40.", 
+                        ans: "Umur ayah adalah 40 tahun." 
                     }] 
                 }
             },
             8: {
                 lesson: { 
-                    title: "Statistika Data Sederhana", 
-                    concept: "Mengenal rata-rata (mean), nilai yang sering muncul (modus), dan nilai tengah (median).", 
-                    trick: "Rata-rata = (Jumlah seluruh data) dibagi (Banyaknya data).", 
+                    title: "Pola Bilangan & Barisan Asyik", 
+                    concept: "Mencari aturan perubahan dalam barisan angka aritmatika maupun geometri.", 
+                    trick: "Cek selisih antar angka (beda tetap) atau rasio perkalian antar suku.", 
                     examples: [{ 
-                        q: "Nilai ulangan matematika Andi adalah 80, 90, dan 70. Berapa rata-rata nilai Andi?", 
-                        think: "Jumlahkan semua nilai lalu bagi dengan banyaknya ulangan (3).", 
-                        step1: "80 + 90 + 70 = 240.", 
-                        step2: "240 ÷ 3 = 80.", 
-                        ans: "Rata-rata nilai Andi adalah 80." 
+                        q: "Tentukan angka selanjutnya dari barisan: 3, 7, 11, 15, ...", 
+                        think: "Perhatikan selisih antar angka selalu bertambah 4 (+4).", 
+                        step1: "15 + 4 = 19.", 
+                        ans: "Angka selanjutnya adalah 19." 
                     }] 
                 }
             },
             9: {
                 lesson: { 
-                    title: "Teka-Teki Gabungan SD Juara", 
-                    concept: "Menggabungkan logika pecahan, umur, uang, dan kecepatan dalam satu cerita seru.", 
-                    trick: "Baca soal secara teliti dan buat catatan kecil untuk setiap informasi yang diketahui.", 
+                    title: "Kriptaritma & Aljabar Sandi Angka", 
+                    concept: "Puzzles matematika di mana huruf mewakili digit angka unik dari 0 sampai 9.", 
+                    trick: "Analisis digit satuan, carry-over (simpanan), dan batasan angka.", 
                     examples: [{ 
-                        q: "Uang Rani Rp20.000. Ia membeli buku seharga Rp8.000 dan pensil Rp3.000. Berapa sisa uang Rani?", 
-                        think: "Kurangkan total belanjaan dari uang awal Rani.", 
-                        step1: "Total belanja = 8.000 + 3.000 = 11.000.", 
-                        step2: "20.000 - 11.000 = 9.000.", 
-                        ans: "Sisa uang Rani adalah Rp9.000." 
+                        q: "Jika A + A + A = 297, berapa nilai A?", 
+                        think: "Bagi 297 dengan 3.", 
+                        step1: "297 ÷ 3 = 99.", 
+                        ans: "Nilai A adalah 99." 
                     }] 
                 }
             },
             10: {
                 lesson: { 
-                    title: "Grand Master SD Champion", 
-                    concept: "Ujian komprehensif penutup tingkat SD untuk menguji seluruh kemampuan hitung cepat dan logika juara.", 
-                    trick: "Tetap tenang, baca soal dengan cermat, dan periksa kembali hasil hitunganmu!", 
+                    title: "Grand Master Olimpiade Matematika", 
+                    concept: "Ujian komprehensif tingkat tinggi yang menggabungkan seluruh logika dan trik cepat olimpiade.", 
+                    trick: "Baca soal dengan teliti, gunakan coret-coretan analitis, dan periksa kembali langkah hitung.", 
                     examples: [{ 
-                        q: "Berapa hasil dari 50 + 50 × 0 + 50?", 
-                        think: "Ingat aturan operasi hitung: kerjakan perkalian terlebih dahulu!", 
-                        step1: "50 × 0 = 0.", 
-                        step2: "50 + 0 + 50 = 100.", 
-                        ans: "Hasilnya adalah 100." 
+                        q: "Berapa hasil dari 100 + 50 × 0 + 50?", 
+                        think: "Dahulukan operasi perkalian sebelum penjumlahan!", 
+                        step1: "50 × 0 = 0, lalu 100 + 0 + 50 = 150.", 
+                        ans: "Hasilnya adalah 150." 
                     }] 
                 }
             }
         };
 
-        // --- DYNAMIC SMART QUESTION GENERATOR ---
         function generateDynamicQuestions(levelId, count = 5) {
             let questions = [];
             for (let i = 0; i < count; i++) {
                 let qObj = {};
                 if (levelId === 1) {
-                    let a = Math.floor(Math.random() * 200) + 50;
-                    let b = Math.floor(Math.random() * 150) + 20;
+                    let a = Math.floor(Math.random() * 300) + 100;
+                    let b = Math.floor(Math.random() * 200) + 50;
                     if (i % 2 === 0) {
                         let ans = a + b;
-                        qObj.question = `Berapakah hasil dari ${a} + ${b}?`;
-                        qObj.answer = ans.toString();
-                        qObj.hints = [`Jumlahkan angka satuan, puluhan, dan ratusan secara bersusun.`];
-                        qObj.explanation = `${a} + ${b} = ${ans}.`;
+                        qObj.question = `Berapakah hasil dari ${a} + ${b} - 45?`;
+                        let correct = ans - 45;
+                        qObj.answer = correct.toString();
+                        qObj.hints = [`Jumlahkan dulu ${a} + ${b}, lalu kurangi dengan 45.`];
+                        qObj.explanation = `${a} + ${b} = ${ans}, kemudian ${ans} - 45 = ${correct}.`;
                     } else {
                         if (a < b) [a, b] = [b, a];
                         let ans = a - b;
-                        qObj.question = `Berapakah hasil dari ${a} - ${b}?`;
-                        qObj.answer = ans.toString();
-                        qObj.hints = [`Kurangkan angka dari belakang secara teliti.`];
-                        qObj.explanation = `${a} - ${b} = ${ans}.`;
+                        qObj.question = `Berapakah hasil dari ${a} - ${b} + 25?`;
+                        let correct = (a - b) + 25;
+                        qObj.answer = correct.toString();
+                        qObj.hints = [`Kurangkan ${a} dengan ${b}, lalu tambahkan 25.`];
+                        qObj.explanation = `${a} - ${b} = ${a - b}, lalu ditambah 25 menghasilkan ${correct}.`;
                     }
                 } else if (levelId === 2) {
-                    let a = Math.floor(Math.random() * 8) + 3;
-                    let b = Math.floor(Math.random() * 8) + 3;
-                    if (i % 2 === 0) {
-                        let ans = a * b;
-                        qObj.question = `Berapakah hasil perkalian dari ${a} × ${b}?`;
-                        qObj.answer = ans.toString();
-                        qObj.hints = [`Perkalian adalah penjumlahan berulang: ${a} sebanyak ${b} kali.`];
-                        qObj.explanation = `${a} × ${b} = ${ans}.`;
-                    } else {
-                        let prod = a * b;
-                        qObj.question = `Berapakah hasil pembagian dari ${prod} ÷ ${a}?`;
-                        qObj.answer = b.toString();
-                        qObj.hints = [`Cari perkalian ${a} yang hasilnya ${prod}.`];
-                        qObj.explanation = `${prod} ÷ ${a} = ${b}.`;
-                    }
+                    let a = Math.floor(Math.random() * 8) + 4;
+                    let b = Math.floor(Math.random() * 8) + 4;
+                    let prod = a * b;
+                    qObj.question = `Jika ${prod} kue dibagi rata ke dalam ${a} kotak, berapa isi kue di setiap kotak?`;
+                    qObj.answer = b.toString();
+                    qObj.hints = [`Lakukan pembagian: ${prod} ÷ ${a}.`];
+                    qObj.explanation = `${prod} dibagi ${a} adalah ${b} kue per kotak.`;
                 } else if (levelId === 3) {
-                    let denom = [4, 6, 8, 10][Math.floor(Math.random() * 4)];
-                    let num1 = Math.floor(Math.random() * (denom - 2)) + 1;
+                    let denom = [6, 8, 10, 12][Math.floor(Math.random() * 4)];
+                    let num1 = Math.floor(Math.random() * (denom - 3)) + 1;
                     let num2 = Math.floor(Math.random() * (denom - num1 - 1)) + 1;
                     let sumNum = num1 + num2;
-                    qObj.question = `Berapakah hasil dari ${num1}/${denom} + ${num2}/${denom}?`;
+                    qObj.question = `Berapakah hasil penjumlahan pecahan dari ${num1}/${denom} + ${num2}/${denom}?`;
                     qObj.answer = `${sumNum}/${denom}`;
-                    qObj.hints = [`Karena penyebut sudah sama (${denom}), jumlahkan pembilangnya saja!`];
-                    qObj.explanation = `${num1}/${denom} + ${num2}/${denom} = ${sumNum}/${denom}.`;
+                    qObj.hints = [`Karena penyebut sudah sama (${denom}), jumlahkan pembilang di atasnya (${num1} + ${num2}).`];
+                    qObj.explanation = `Pembilang dijumlahkan: ${num1} + ${num2} = ${sumNum}. Hasilnya ${sumNum}/${denom}.`;
                 } else if (levelId === 4) {
-                    let side = Math.floor(Math.random() * 15) + 5;
+                    let p = Math.floor(Math.random() * 10) + 6;
+                    let l = Math.floor(Math.random() * 6) + 4;
                     if (i % 2 === 0) {
-                        let ans = 4 * side;
-                        qObj.question = `Berapa keliling sebuah persegi yang memiliki panjang sisi ${side} cm?`;
-                        qObj.answer = `${ans} cm`;
-                        qObj.hints = [`Keliling persegi = 4 × sisi.`];
-                        qObj.explanation = `4 × ${side} = ${ans} cm.`;
+                        let area = p * l;
+                        qObj.question = `Sebuah lapangan berbentuk persegi panjang memiliki panjang ${p} meter dan lebar ${l} meter. Berapa luas lapangan tersebut?`;
+                        qObj.answer = `${area} m²`;
+                        qObj.hints = [`Luas persegi panjang = Panjang × Lebar.`];
+                        qObj.explanation = `${p} m × ${l} m = ${area} m².`;
                     } else {
-                        let ans = side * side;
-                        qObj.question = `Berapa luas persegi dengan panjang sisi ${side} cm?`;
-                        qObj.answer = `${ans} cm²`;
-                        qObj.hints = [`Luas persegi = sisi × sisi.`];
-                        qObj.explanation = `${side} × ${side} = ${ans} cm².`;
+                        let keliling = 2 * (p + l);
+                        qObj.question = `Berapa keliling kebun persegi panjang dengan panjang ${p} meter dan lebar ${l} meter?`;
+                        qObj.answer = `${keliling} m`;
+                        qObj.hints = [`Keliling = 2 × (Panjang + Lebar).`];
+                        qObj.explanation = `2 × (${p} + ${l}) = 2 × ${p + l} = ${keliling} m.`;
                     }
                 } else if (levelId === 5) {
-                    let speed = (Math.floor(Math.random() * 6) + 4) * 10;
-                    let time = Math.floor(Math.random() * 4) + 2;
+                    let speed = (Math.floor(Math.random() * 5) + 4) * 10;
+                    let time = Math.floor(Math.random() * 3) + 2;
                     let dist = speed * time;
-                    qObj.question = `Sebuah mobil melaju dengan kecepatan ${speed} km/jam selama ${time} jam. Berapa jarak yang ditempuh?`;
+                    qObj.question = `Sebuah kereta melaju dengan kecepatan konstan ${speed} km/jam selama ${time} jam. Berapa total jarak yang ditempuh kereta tersebut?`;
                     qObj.answer = `${dist} km`;
-                    qObj.hints = [`Jarak = Kecepatan × Waktu.`];
-                    qObj.explanation = `${speed} × ${time} = ${dist} km.`;
+                    qObj.hints = [`Gunakan rumus Jarak = Kecepatan × Waktu.`];
+                    qObj.explanation = `${speed} km/jam × ${time} jam = ${dist} km.`;
                 } else if (levelId === 6) {
-                    let childAge = Math.floor(Math.random() * 8) + 6;
-                    let multiplier = Math.floor(Math.random() * 3) + 3;
-                    let parentAge = childAge * multiplier;
-                    qObj.question = `Umur ayah sekarang ${multiplier} kali umur Budi. Jika umur Budi ${childAge} tahun, berapa umur ayah?`;
-                    qObj.answer = `${parentAge} tahun`;
-                    qObj.hints = [`Kalikan umur Budi dengan ${multiplier}.`];
-                    qObj.explanation = `${multiplier} × ${childAge} = ${parentAge} tahun.`;
+                    let people = Math.floor(Math.random() * 6) + 15; // 15 to 20
+                    let handshakes = (people * (people - 1)) / 2;
+                    qObj.question = `Di dalam sebuah ruangan terdapat ${people} orang. Jika setiap orang saling berjabat tangan tepat sekali dengan orang lainnya, berapa total jabat tangan yang terjadi?`;
+                    qObj.answer = handshakes.toString();
+                    qObj.hints = [`Gunakan rumus kombinasi jabat tangan: n × (n - 1) / 2 dengan n = ${people}.`];
+                    qObj.explanation = `${people} × ${people - 1} ÷ 2 = ${handshakes} jabat tangan.`;
                 } else if (levelId === 7) {
-                    let start = Math.floor(Math.random() * 10) + 2;
-                    let step = Math.floor(Math.random() * 5) + 2;
-                    let seq = [start, start + step, start + step*2, start + step*3];
-                    let nextVal = start + step*4;
-                    qObj.question = `Tentukan angka selanjutnya dari barisan: ${seq.join(', ')}, ...`;
-                    qObj.answer = nextVal.toString();
-                    qObj.hints = [`Perhatikan selisih tetap antar angka yaitu +${step}.`];
-                    qObj.explanation = `${seq[3]} + ${step} = ${nextVal}.`;
+                    let child = Math.floor(Math.random() * 6) + 8;
+                    let mult = Math.floor(Math.random() * 2) + 3; // 3 or 4
+                    let parent = child * mult;
+                    qObj.question = `Umur ayah saat ini ${mult} kali umur Andi. Jika umur Andi sekarang ${child} tahun, berapa umur ayah 5 tahun yang akan datang?`;
+                    qObj.answer = `${parent + 5} tahun`;
+                    qObj.hints = [`Hitung umur ayah sekarang (${mult} × ${child}), lalu tambahkan 5 tahun.`];
+                    qObj.explanation = `Umur ayah sekarang = ${parent}. 5 tahun lagi = ${parent} + 5 = ${parent + 5} tahun.`;
                 } else if (levelId === 8) {
-                    let n1 = Math.floor(Math.random() * 20) + 60;
-                    let n2 = n1 + 10;
-                    let n3 = n2 + 10;
-                    let mean = (n1 + n2 + n3) / 3;
-                    qObj.question = `Berapa rata-rata dari tiga angka berikut: ${n1}, ${n2}, ${n3}?`;
-                    qObj.answer = mean.toString();
-                    qObj.hints = [`Jumlahkan ketiga angka lalu bagi dengan 3.`];
-                    qObj.explanation = `(${n1} + ${n2} + ${n3}) / 3 = ${mean}.`;
+                    let start = Math.floor(Math.random() * 5) + 3;
+                    let diff = Math.floor(Math.random() * 4) + 3;
+                    let seq = [start, start + diff, start + diff*2, start + diff*3];
+                    let nextVal = start + diff*4;
+                    qObj.question = `Perhatikan barisan bilangan berikut: ${seq.join(', ')}, ... Tentukan angka selanjutnya!`;
+                    qObj.answer = nextVal.toString();
+                    qObj.hints = [`Cari selisih tetap antar suku dalam barisan yaitu +${diff}.`];
+                    qObj.explanation = `Suku terakhir ${seq[3]} ditambah ${diff} menghasilkan ${nextVal}.`;
                 } else if (levelId === 9) {
-                    let initial = Math.floor(Math.random() * 20) + 30;
-                    let buy1 = Math.floor(Math.random() * 10) + 5;
-                    let buy2 = Math.floor(Math.random() * 10) + 5;
-                    let left = initial * 1000 - (buy1 * 1000 + buy2 * 1000);
-                    qObj.question = `Uang Rani Rp${initial}.000. Ia membeli buku Rp${buy1}.000 dan pensil Rp${buy2}.000. Berapa sisa uang Rani?`;
-                    qObj.answer = `Rp${left / 1000}.000`;
-                    qObj.hints = [`Kurangkan total belanjaan dari uang awal.`];
-                    qObj.explanation = `Rp${initial}.000 - (Rp${buy1}.000 + Rp${buy2}.000) = Rp${left / 1000}.000.`;
+                    let x = Math.floor(Math.random() * 20) + 50;
+                    qObj.question = `Jika 3 bintang ditambah 12 sama dengan ${x + 12}, berapa nilai satu bintang?`;
+                    qObj.answer = (x / 3).toString();
+                    qObj.hints = [`Kurangi ${x + 12} dengan 12, lalu bagi dengan 3.`];
+                    qObj.explanation = `3 bintang = ${x}, sehingga satu bintang adalah ${x} ÷ 3 = ${x / 3}.`;
                 } else {
-                    let x = Math.floor(Math.random() * 10) + 5;
-                    let y = Math.floor(Math.random() * 10) + 5;
-                    let ans = 100 + x * y;
-                    qObj.question = `Berapa hasil dari 100 + ${x} × ${y}?`;
+                    let a = Math.floor(Math.random() * 10) + 10;
+                    let b = Math.floor(Math.random() * 5) + 2;
+                    let ans = a * b + 150;
+                    qObj.question = `Berapakah hasil dari ${a} × ${b} + 150 dalam ujian grand master ini?`;
                     qObj.answer = ans.toString();
-                    qObj.hints = [`Kerjakan operasi perkalian terlebih dahulu!`];
-                    qObj.explanation = `${x} × ${y} = ${x*y}, lalu 100 + ${x*y} = ${ans}.`;
+                    qObj.hints = [`Dahulukan perkalian ${a} × ${b}, baru tambahkan 150.`];
+                    qObj.explanation = `${a} × ${b} = ${a * b}, lalu ${a * b} + 150 = ${ans}.`;
                 }
 
-                // Generate 3 plausible wrong options
+                // Generate smart plausible wrong options (creative distractors)
                 let wrongOptions = [];
                 let correctNum = parseFloat(qObj.answer) || 0;
                 while (wrongOptions.length < 3) {
-                    let offset = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                    let offset = (Math.floor(Math.random() * 6) + 1) * (Math.random() > 0.5 ? 1 : -1);
                     let fake = isNaN(correctNum) ? qObj.answer : (correctNum + offset).toString();
-                    if (qObj.answer.includes('cm') || qObj.answer.includes('tahun') || qObj.answer.includes('km') || qObj.answer.includes('Rp')) {
+                    if (qObj.answer.includes('m²') || qObj.answer.includes('m') || qObj.answer.includes('tahun') || qObj.answer.includes('km')) {
                         let suffix = qObj.answer.replace(/[0-9]/g, '');
                         let baseVal = parseInt(qObj.answer) || 10;
                         fake = (baseVal + offset) + suffix;
+                    } else if (qObj.answer.includes('/')) {
+                        let parts = qObj.answer.split('/');
+                        let num = parseInt(parts[0]) + (Math.random() > 0.5 ? 1 : -1);
+                        fake = `${Math.max(1, num)}/${parts[1]}`;
                     }
                     if (fake !== qObj.answer && !wrongOptions.includes(fake)) {
                         wrongOptions.push(fake);
@@ -497,7 +486,7 @@
                     <div class="bg-slate-800 p-7 rounded-[2rem] shadow-xl border border-slate-700 text-center">
                         <div class="w-16 h-16 mx-auto rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-3xl font-black mb-4 shadow">🎒</div>
                         <h1 class="text-2xl font-black text-amber-400 mb-1">SEMUA BISA BELAJAR</h1>
-                        <p class="text-slate-300 font-bold text-xs mb-6">Pilih namamu atau buat akun baru untuk mulai bermain!</p>
+                        <p class="text-slate-300 font-bold text-xs mb-6">Pilih namamu atau buat akun baru untuk mulai bermain bergantian!</p>
                         
                         <div class="space-y-3 mb-6 text-left max-h-60 overflow-y-auto">
                             ${profiles.length > 0 ? html : '<p class="text-xs text-slate-400 text-center py-4 italic">Belum ada profil siswa. Buat di bawah!</p>'}
@@ -506,7 +495,7 @@
                         <div class="border-t border-slate-700 pt-4 space-y-3">
                             <input type="text" id="new-profile-name" placeholder="Ketik nama siswa..." class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 font-bold text-sm text-white focus:outline-none focus:border-amber-500">
                             <button onclick="createNewProfile()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-xl shadow transition text-sm">
-                                + BUAT PROFIL SISWA
+                                + BUAT PROFIL SISWA BARU
                             </button>
                         </div>
                     </div>
@@ -519,7 +508,7 @@
             if (!input) return;
             const name = input.value.trim();
             if (!name) {
-                alert('Nama tidak boleh kosong!');
+                alert('Nama siswa tidak boleh kosong!');
                 return;
             }
 
@@ -564,7 +553,7 @@
                         <h1 class="text-2xl font-black text-amber-400 mb-1">SEMUA BISA BELAJAR</h1>
                         <h2 class="text-xs font-bold text-slate-300 mb-4 uppercase tracking-widest">Halo, ${user ? user.name : 'Siswa'}!</h2>
                         <p class="text-slate-300 mb-6 font-medium text-xs bg-slate-900 p-4 rounded-2xl border border-slate-700 leading-relaxed">
-                            Belajar matematika SD jadi seru, mudah dipahami, dilengkapi latihan soal dinamis, ujian berbatas waktu, dan mini game tembak monster slime!
+                            Matematika SD bertahap dari dasar hingga logika olimpiade, lengkap dengan latihan dinamis, ujian berbatas waktu, dan mini game tembak monster slime!
                         </p>
                         <div class="space-y-3">
                             <button onclick="router('map')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-4 rounded-2xl shadow transition text-sm flex justify-center items-center gap-2">
@@ -588,7 +577,7 @@
                 <div class="p-5 animate-fade-in pb-28">
                     <div class="text-center mb-6 bg-slate-800 p-4 rounded-2xl border border-slate-700">
                         <h2 class="text-xl font-black text-amber-400">Peta Level Matematika SD</h2>
-                        <p class="text-slate-400 text-xs mt-1">10 Level Seru & Mudah Dipahami</p>
+                        <p class="text-slate-400 text-xs mt-1">Level 1-5 Dasar & 6-10 Logika Olimpiade</p>
                     </div>
                     <div class="space-y-5 relative before:absolute before:inset-0 before:ml-10 before:w-1 before:bg-slate-700">
             `;
@@ -643,7 +632,7 @@
                         </div>
                     </div>
                     <div class="bg-slate-800 rounded-3xl p-6 border border-slate-700">
-                        <h3 class="font-bold text-slate-200 text-sm mb-3">🏆 Badge Juara SD</h3>
+                        <h3 class="font-bold text-slate-200 text-sm mb-3">🏆 Badge Juara Matematika</h3>
                         <div class="flex flex-wrap gap-2">
                             ${user.badges.length > 0 ? user.badges.map(b => `<span class="bg-slate-900 text-amber-300 px-3 py-2 rounded-xl text-xs font-black border border-amber-500/30">${b}</span>`).join('') : '<p class="text-xs text-slate-400 italic">Selesaikan level untuk meraih badge juara!</p>'}
                         </div>
@@ -695,7 +684,7 @@
 
                     <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-3xl p-1 shadow-lg">
                         <div class="bg-slate-900 rounded-[1.4rem] p-5">
-                            <h3 class="text-amber-400 font-black mb-2 text-xs uppercase">💡 TIPS CEPAT</h3>
+                            <h3 class="text-amber-400 font-black mb-2 text-xs uppercase">💡 TIPS & TRICK</h3>
                             <p class="text-slate-200 font-bold text-xs leading-relaxed">${lesson.trick}</p>
                         </div>
                     </div>
@@ -706,7 +695,6 @@
                         <div class="space-y-2 text-xs text-slate-300">
                             <p>💭 <em>"${lesson.examples[0].think}"</em></p>
                             <p>1. ${lesson.examples[0].step1}</p>
-                            ${lesson.examples[0].step2 ? `<p>2. ${lesson.examples[0].step2}</p>` : ''}
                             <div class="mt-3 bg-emerald-950 text-emerald-300 p-3 rounded-xl border border-emerald-800 font-black">
                                 ✓ ${lesson.examples[0].ans}
                             </div>
@@ -801,7 +789,7 @@
             });
 
             container.innerHTML = `
-                <div class="p-5 pb-44 animate-fade-in flex flex-col">
+                <div class="p-5 pb-48 animate-fade-in flex flex-col">
                     <div class="flex justify-between items-center mb-3">
                         <span class="text-[10px] font-black text-blue-400 bg-blue-950 border border-blue-800 px-2.5 py-1 rounded-lg">Soal ${quizState.currentIndex + 1} / 5</span>
                         ${isExam ? `<span id="exam-timer-display" class="text-xs font-black px-3 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800 animate-pulse">⏳ ${quizState.timeLeft}s</span>` : ''}
@@ -919,9 +907,9 @@
                 user.stars += 100;
 
                 const badgesMap = {
-                    1: "⭐ Jagoan Penjumlahan", 2: "✖️ Master Perkalian", 3: "🍰 Ahli Pecahan", 4: "📐 Juara Bangun Datar",
-                    5: "🚗 Pintar Kecepatan", 6: "🧠 Detektif Logika", 7: "🔢 Raja Pola Angka", 8: "📊 Ahli Data",
-                    9: "🥇 Juara Matematika SD", 10: "🏆 GRAND MASTER SD CHAMPION"
+                    1: "⭐ Master Dasar 1", 2: "✖️ Master Perkalian", 3: "🍰 Ahli Pecahan", 4: "📐 Juara Bangun Datar",
+                    5: "🚗 Ahli Kecepatan", 6: "🧠 Pakar Logika", 7: "🔢 Ahli Pola & Umur", 8: "📊 Deret Matematika",
+                    9: "🥇 Master Kriptaritma", 10: "🏆 GRAND MASTER OLYMPIAD"
                 };
                 if (badgesMap[activeLevelId] && !user.badges.includes(badgesMap[activeLevelId])) {
                     user.badges.push(badgesMap[activeLevelId]);
@@ -956,7 +944,6 @@
             `;
         }
 
-        // --- SLIME MATH SHOOTER GAME LOGIC ---
         function renderSlimeHome(container) {
             const headerTitle = document.getElementById('header-title');
             if (headerTitle) headerTitle.innerText = "Slime Math Shooter";
@@ -1010,7 +997,7 @@
                                 <span class="text-2xl">👑</span>
                                 <div class="text-left">
                                     <h4 class="font-black text-sm text-white">Level 4: Raja Slime Merah (Boss)</h4>
-                                    <p class="text-[11px] text-slate-400">Tantangan Cepat SD (Waktu: 8s)</p>
+                                    <p class="text-[11px] text-slate-400">Tantangan Cepat (Waktu: 8s)</p>
                                 </div>
                             </div>
                             <span class="text-amber-400 font-bold text-xs bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">MAIN ➔</span>
@@ -1053,8 +1040,8 @@
             let lvl = slimeGameState.level;
 
             if (lvl === 1) {
-                let a = Math.floor(Math.random() * 30) + 5;
-                let b = Math.floor(Math.random() * 30) + 5;
+                let a = Math.floor(Math.random() * 40) + 10;
+                let b = Math.floor(Math.random() * 40) + 10;
                 if (Math.random() > 0.5) {
                     qText = `${a} + ${b} = ?`;
                     correctAns = a + b;
@@ -1069,15 +1056,15 @@
                 qText = `${a} × ${b} = ?`;
                 correctAns = a * b;
             } else if (lvl === 3) {
-                let a = Math.floor(Math.random() * 10) + 2;
-                let b = Math.floor(Math.random() * 5) + 2;
+                let a = Math.floor(Math.random() * 12) + 3;
+                let b = Math.floor(Math.random() * 6) + 2;
                 let c = Math.floor(Math.random() * 10) + 1;
                 qText = `(${a} + ${b}) - ${c} = ?`;
                 correctAns = (a + b) - c;
             } else {
                 let a = Math.floor(Math.random() * 10) + 5;
                 let b = Math.floor(Math.random() * 5) + 2;
-                let c = Math.floor(Math.random() * 10) + 5;
+                let c = Math.floor(Math.random() * 15) + 5;
                 qText = `(${a} × ${b}) - ${c} = ?`;
                 correctAns = (a * b) - c;
             }
